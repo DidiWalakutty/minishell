@@ -30,9 +30,7 @@ int	main(int argc, char **argv, char **env)
 	data.env = copy_env(env);
 	while (1)
 	{
-		// !!! TODO: Currently needs to receive input twice, before going into lexer.
 		init_shell(&data); // TODO: Set PATH + pwd
-		// prompt_shellname(&data); // Not necessary if we use line below.
 		input = readline(SHELL_NAME); // No need to fix *readline*-leaks.
 		if (!input)
 			return (1);

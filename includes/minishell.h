@@ -74,9 +74,6 @@ typedef struct s_data
 // Environment and paths;
 char	**copy_env(char **env);
 
-// Prompt
-// int	prompt(t_data *data);
-char	*prompt_shellname(t_data *data);
 // Lexer
 int		lexer(t_data *data);
 bool	all_quotes_closed(char *str);

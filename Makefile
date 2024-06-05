@@ -18,7 +18,6 @@ IFLAGS	= -I includes -I $(HOME)/.brew/Cellar/readline/8.2.1/include
 SRC =	./src/main.c \
 				./src/environment/env.c \
 				./src/nodes/nodes.c \
-				./src/prompt/prompt.c \
 				./src/utils/free_and_error.c\
 				./src/tokenize/lexer.c \
 				./src/tokenize/quotes.c \
@@ -59,9 +58,6 @@ $(OBJDIR)/%.o: ./src/environment/%.c
 		@$(CC) $(CFLAGS) $(HEADERS) -c -o $@ $<
 
 $(OBJDIR)/%.o: ./src/nodes/%.c
-		@$(CC) $(CFLAGS) $(HEADERS) -c -o $@ $<
-
-$(OBJDIR)/%.o: ./src/prompt/%.c
 		@$(CC) $(CFLAGS) $(HEADERS) -c -o $@ $<
 
 $(OBJDIR)/%.o: ./src/tokenize/%.c
