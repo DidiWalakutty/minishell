@@ -12,8 +12,8 @@
 
 #include "minishell.h"
 
-// checks if the char is a quote
-// or a non-token.
+// checks for the length of the add_quote node,
+// searches for the closing quote.
 int	quote_length(char *str, char c)
 {
 	int	i;
@@ -22,14 +22,15 @@ int	quote_length(char *str, char c)
 	if (c == '\'' || c == '\"')
 	{
 		while (str[i] && str[i] != c)
-		{
-			printf("str[%i] is: %c\n", i, str[i]);
 			i++;
-		}
 		return (i);
 	}
+	return (i);
 }
 
+// Only checks for the closing given quote.
+// If it encounters the non-given quote, it'll iterate over it, since
+// it has no value between the given quotes.
 static int	count_quotes(char *str, int i, int *quote_nb, char q)
 {
 	*quote_nb += 1;
@@ -39,13 +40,15 @@ static int	count_quotes(char *str, int i, int *quote_nb, char q)
 		if (str[i] == q)
 		{
 			*quote_nb += 1;
-			break ;
+			return (i);
 		}
 		i++;
 	}
-	return (i);
+	return (i - 1);	// return the last index if closing quote isn't found.
 }
 
+// Checks if all quotes in the string are properly closed.
+// Keeps track of the number 
 bool	all_quotes_closed(char *str)
 {
 	int	i;
@@ -60,9 +63,9 @@ bool	all_quotes_closed(char *str)
 	while (str[i])
 	{
 		if (str[i] == '\'')
-			i += count_quotes(str, i, &single_q, '\'');
+			i = count_quotes(str, i, &single_q, '\'');
 		else if (str[i] == '\"')
-			i += count_quotes(str, i, &double_q, '\"');
+			i = count_quotes(str, i, &double_q, '\"');
 		i++;
 	}
 	if (single_q % 2 != 0 || double_q % 2 != 0)
@@ -73,22 +76,36 @@ bool	all_quotes_closed(char *str)
 	return (true);
 }
 
-void	skip_quotedstring(char *str, int *i)
+// Checks if the quoted string is closed with the same quote.
+// CHECK: Return at end of function should return true (error is found), because if it doesn't 
+// go into either return statements of the if-loops, it's still an error???
+bool	skip_quotedstring(char *str, int *i)
 {
 	if (str[*i] == '\'')
 	{
-		*i += 1;
+		(*i)++;
 		while (str[*i] && str[*i] != '\'')
-			*i += 1;
+			(*i)++;
 		if (str[*i] == '\'')
-			*i += 1;
+		{
+			(*i)++;
+			return (false);
+		}
+		else
+			return (error_msg("syntax error: missing closing quote", str[*i]));
 	}
 	else if (str[*i] == '\"')
 	{
-		*i += 1;
+		(*i)++;
 		while (str[*i] && str[*i] != '\"')
-			*i += 1;
+			(*i)++;
 		if (str[*i] == '\"')
-			*i += 1;
+		{
+			(*i)++;
+			return (false);
+		}
+		else
+			return (error_msg("syntax error: missing closing quote", str[*i]));
 	}
+	return (true);
 }

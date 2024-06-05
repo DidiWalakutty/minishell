@@ -38,12 +38,12 @@ typedef enum s_token
 	PIPE,			// |  pipe
 	REDIR_IN,		// <  in
 	REDIR_OUT,		// >  out
-	HERE_DOC,			// << heredoc
-	APPEND,				// >> append
-	DOUBLE_QUOTE,		// "  double qyote
-	SINGLE_QUOTE,		// ' single quote
-	// SPACE,			// save just one space
-	DOLLAR,				// $ dollar = do it during expanding
+	HERE_DOC,		// << heredoc
+	APPEND,			// >> append
+	DOUBLE_QUOTE,	// "  double qyote
+	SINGLE_QUOTE,	// ' single quote
+	WH_SPACE,			// save just one space
+	DOLLAR,			// $ dollar = do it during expanding
 }  t_token;
 
 // word: 	a pointer to the string stored in a node
@@ -61,6 +61,7 @@ typedef struct s_node
 
 typedef struct s_data
 {
+	char	*minishell_name;
 	char	*input;
 	char	**env;
 	t_node	*list;
@@ -75,11 +76,11 @@ char	**copy_env(char **env);
 
 // Prompt
 // int	prompt(t_data *data);
-char	*prompt(t_data *data);
+char	*prompt_shellname(t_data *data);
 // Lexer
 int		lexer(t_data *data);
 bool	all_quotes_closed(char *str);
-void	skip_quotedstring(char *str, int *i);
+bool	skip_quotedstring(char *str, int *i);
 t_node	*tokenize_input(char *str);
 
 // Tokenize
@@ -87,12 +88,13 @@ int	add_quote(char *str, int i, char c, t_node **list);
 int	add_redir(char *str, int i, char c, t_node **list);
 int	add_one_token(char *str, int i, char c, t_node **list);
 int	add_dollar(char *str, int i, t_node **list);
+int	add_space(char *str, int i, t_node **list);
 
 // Utils
 bool	one_of_tokens(char c);
 void 	skip_to_token(char *str, int *i);
 void	skip_whitespace(char *str, int *i);
-int		token_length(char *str, char c);
+int		quote_length(char *str, char c);
 int		add_one_token(char *str, int i, char c, t_node **list);
 int		variable_len(char *str);
 
@@ -105,7 +107,7 @@ t_node	*create_node(char *str);
 void	node_to_list(t_node **list, t_node *new);
 
 // Free and exit
-// void	exit_error(char *str); probably not needed
+// exit_error(char *str); probably not needed
 void		free_array(char **str);
 bool		error_msg(char *message, char c);
 const char 	*type_to_string(t_token type);

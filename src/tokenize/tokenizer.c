@@ -12,19 +12,21 @@
 
 #include "minishell.h"
 
-// add 2 for the opening and closing quote.
+// Add 2 for the opening and closing quote.
+// Returns i - 1, so the i in tokenize_input immediately follows
+// the closing quote's position that we return.
+// Should we consider "" as an empty string and add it to the node-list?
 int	add_quote(char *str, int i, char c, t_node **list)
 {
+	t_node	*new;
 	int		start;
 	int		len;
 	char	*line;
-	t_node	*new;
 
 	start = i;
 	len = quote_length(&str[start + 1], c) + 2;
-	printf("len is: %i\n", len);
-	if (len == 2)
-		return (len + start + 1);
+	if (len == 2)	// TODO: add to node-list as empty string? echo "" gives \n.
+		return (len + start);	// If so, create a new type: empty quote?
 	else
 		line = ft_substr(str, start, len);
 	i = len + start + 1;
@@ -34,13 +36,15 @@ int	add_quote(char *str, int i, char c, t_node **list)
 	else
 		new->type = DOUBLE_QUOTE;
 	node_to_list(list, new);
-	return (i);
+	return (i - 1);
 }
 
+// We add a token, either >> or <<.
+// It the i + 1 isn't equal, it adds one token.
 int	add_redir(char *str, int i, char c, t_node **list)
 {
-	char	*line;
 	t_node	*new;
+	char	*line;
 
 	if (str[i + 1] == c)
 	{
@@ -71,6 +75,8 @@ int	add_pipe(char *str, int i, t_node **list)
 	return (i);
 }
 
+// This adds a space to the token list.
+// It returns i past all consecutive whitespace.
 int	add_space(char *str, int i, t_node **list)
 {
 	char	*line;
@@ -78,30 +84,39 @@ int	add_space(char *str, int i, t_node **list)
 
 	line = ft_substr(str, i, 1);
 	new = create_node(line);
-	new->type = SPACE;
+	new->type = WH_SPACE;
 	node_to_list(list, new);
 	while (iswhitespace(str[i]) == true)
-		i += 1;
+		i++;
 	return (i);
 }
 
+// !in_quote toggles the value of the current in_quote flag during the while-loop.
 int	add_word(char *str, int i, t_node **list)
 {
-	char	*line;
 	t_node	*new;
+	char	*line;
 	int		start;
-	int		len;	
+	int		len;
+	bool	in_quote;
 
 	start = i;
 	len = i;
+	in_quote = false;
 	while (str[len] && !one_of_tokens(str[len]) && \
 			!iswhitespace(str[len]))
+	{
+		if (str[len] == '\'' || str[len] == '\"')
+			in_quote = !in_quote;
+		while (str[len] && in_quote && str[len] != str[start])
 			len++;
-	line = ft_substr(str, start, len);
+		len++;
+	}
+	line = ft_substr(str, start, len - start);
 	new = create_node(line);
 	new->type = WORD;
 	node_to_list(list, new);
-	i = start + len;
+	i = len;
 	return (i);
 }
 

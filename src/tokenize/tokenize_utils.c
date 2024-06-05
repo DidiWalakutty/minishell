@@ -24,19 +24,21 @@ void	skip_to_token(char *str, int *i)
 {
 	while (str[*i] != '\0' && str[*i] != '\'' && str[*i] != '\"' && \
 			str[*i] != '|' && str[*i] != '>' && str[*i] != '<')
-		*i += 1;
+		(*i)++;
 }
 
 void	skip_whitespace(char *str, int *i)
 {
 	while (str[*i] && (str[*i] == ' ' || str[*i] == '\t'))
-		*i += 1;
+		(*i)++;
 }
 
+// Add one token to the list: either |, < or >.
+// Return i + 1, so we get the i immediately after the token.
 int	add_one_token(char *str, int i, char c, t_node **list)
 {
-	char	*line;
 	t_node	*new;
+	char	*line;
 
 	line = ft_substr(str, i, 1);
 	new = create_node(line);

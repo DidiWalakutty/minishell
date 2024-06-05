@@ -16,14 +16,13 @@ static bool	check_syntax_errors(char *str);
 t_node		*tokenize_input(char *str);
 static bool	token_syntax_error(char *str, int *i);
 
-// This function checks if all quotes are even/closed
-// and if there are any syntax errors in the given string.
+// This function checks if there are any syntax errors in the given string
+// and if all quotes are closed.
+// We then tokenize the input.
 int	lexer(t_data *data)
 {
 	t_node	*temp;
-	int		i;
 
-	i = 0;
 	if (!data)
 		return (1);
 	if (check_syntax_errors(data->input) == true)
@@ -32,14 +31,12 @@ int	lexer(t_data *data)
 		return (1);
 	}
 	if ((all_quotes_closed(data->input) == false))
-	{	
-		printf("unclosed quote error\n");
 		return (1);
-	}
 	temp = tokenize_input(data->input);
 	return (0);
 }
 
+// Checks the string for syntax errors.
 static bool	check_syntax_errors(char *str)
 {
 	int	i;
@@ -63,20 +60,23 @@ static bool	check_syntax_errors(char *str)
 	return (false);
 }
 
+// When |, it's next token can't be a | or \0.
+// When < or >, it checks if +1 is the same.
+// Its next token can't be <, > or a |.
 static bool	token_syntax_error(char *str, int *i)
 {
 	if (str[*i] == '|')
 	{
-		*i += 1;
+		(*i)++;
 		skip_whitespace(str, i);
 		if (str[*i] == '|' || str[*i] == '\0')
 			return (error_msg("syntax error near unexpected token", str[*i]));
 	}
 	if (str[*i] == '<' || str[*i] == '>')
 	{
-		*i += 1;
+		(*i)++;
 		if (str[*i] == str[*i - 1])
-			*i += 1;
+			(*i)++;
 		skip_whitespace(str, i);
 		if (str[*i] == '<' || str[*i] == '>' || \
 			str[*i] == '|' || str[*i] == '\0')
@@ -89,49 +89,52 @@ static void	print_linked_list(t_node *head)
 {
     while (head != NULL)
     {
-        printf("string is: %s, type is: %s | \n", head->str, type_to_string(head->type));
+        printf("Node is: %s - type is: %s \n", head->str, type_to_string(head->type));
         head = head->next;
     }
     printf("\n");
 }
 
+// Tokenizes input into nodes.
 // currently iterates beyond the \0.
+// For |; Just pipes, right? Not |&?
 t_node	*tokenize_input(char *str)
 {
-	int		i;
 	t_node	*list;
+	int		i;
 
 	i = 0;
 	list = NULL;
 	if (!str)
 		return (create_node(NULL));
+	while (iswhitespace(str[i]))
+		i++;
 	while (str[i])
 	{
-		printf("i at begin while loop is: %i\n", i);
 		if (str[i] == '\'')
-			i = add_quote(str, i, '\'', &list) - 1;
+			i = add_quote(str, i, '\'', &list);
 		else if (str[i] == '\"')
-			i = add_quote(str, i, '\"', &list) - 1;
+			i = add_quote(str, i, '\"', &list);
 		else if (str[i] == '<' || str[i] == '>')
 			i = add_redir(str, i, str[i], &list);
 		else if (str[i] == '|')
-			i = add_pipe(str, i, )
+			i = add_one_token(str, i, str[i], &list);
 		else if (iswhitespace(str[i]))
 			i = add_space(str, i, &list);
 		else
 			i = add_word(str, i, &list);
-		// else if (str[i] == '$')	// add it as word and check for expansiona ($) after lexing.
+		// else if (str[i] == '$')	// add it as word and check for expansions ($) after lexing.
 		// 	i = add_dollar(str, i, &list);
-		if (str[i] != '\0')
-		{
-			printf("str[%i] is: %c\n", i, str[i]);
-			printf("it's not a NULL terminator\n");
-			i++;
-			printf("after i++: %i\n", i);
-		}
+		// if (str[i] != '\0')
+		// {
+		// 	printf("str[%i] is: %c\n", i, str[i]);
+		// 	printf("it's not a NULL terminator\n");
+		// 	i++;
+		// 	printf("after i++: %i\n", i);
+		// }
 	}
-	printf("print list:\n");
+	printf("\nprint list:\n");
 	print_linked_list(list);
-	printf("last i is %i\n", i);
+	printf("last i is %i, char: %c\n", i, str[i]);
 	return (list);
 }

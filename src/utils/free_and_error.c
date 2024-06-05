@@ -13,15 +13,15 @@
 #include "minishell.h"
 
 // probably not needed
-void	exit_error(char *str)
-{
-	ft_printf("ERROR\n%s\n", str);
-	exit(EXIT_FAILURE);
-}
+// void	exit_error(char *str)
+// {
+// 	ft_printf("ERROR\n%s\n", str);
+// 	exit(EXIT_FAILURE);
+// }
 
 bool	error_msg(char *message, char c)
 {
-	ft_printf("Minishell: %s `%c'\n", message, c);
+	ft_printf("%s `%c'\n", message, c);
 	return (true);
 }
 
@@ -45,6 +45,7 @@ const char *type_to_string(t_token type)
 	{
         case EMPTY: return "EMPTY";
         case WORD: return "WORD";
+		case WH_SPACE: return "WH_SPACE";
         case PIPE: return "PIPE";
         case REDIR_IN: return "REDIR_IN";
 		case REDIR_OUT: return "REDIR_OUT";

@@ -13,6 +13,7 @@
 #include "minishell.h"
 
 // split on '=' and name + value?
+// Copies current env. Should eventually also update ShellLevel
 char	**copy_env(char **env)
 {
 	char	**copy;
@@ -37,9 +38,3 @@ char	**copy_env(char **env)
 	}
 	return (copy);
 }
-
-// void	init_all()
-// {
-// 	// needs to set certain structs to NULL or false;
-// 	// path stuff, pwd
-// }

@@ -18,16 +18,16 @@ IFLAGS	= -I includes -I $(HOME)/.brew/Cellar/readline/8.2.1/include
 SRC =	./src/main.c \
 				./src/environment/env.c \
 				./src/nodes/nodes.c \
+				./src/prompt/prompt.c \
 				./src/utils/free_and_error.c\
 				./src/tokenize/lexer.c \
 				./src/tokenize/quotes.c \
 				./src/tokenize/tokenize_utils.c \
 				./src/tokenize/tokenizer.c \
-				./src/expanding/expander.c \
-				./src/expanding/expander_utils.c \
-				./src/expanding/expander_checks.c \
-				./src/expanding/expander_handler.c \
-				# ./src/prompt/prompt.c \
+				# ./src/expanding/expander.c \
+				# ./src/expanding/expander_utils.c \
+				# ./src/expanding/expander_checks.c \
+				# ./src/expanding/expander_handler.c \
 
 # Object files and directories
 # obj folder in src?: src/obj 
