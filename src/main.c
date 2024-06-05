@@ -28,10 +28,17 @@ int	main(int argc, char **argv, char **env)
 	(void)argc;
 	(void)argv;
 	data.env = copy_env(env);
+	int i = 0;
+	// Check if env is copied.
+	while (data.env[i])
+	{
+		printf("env_list[i] is: %s\n", data.env[i]);
+		i++;
+	}
 	while (1)
 	{
 		init_shell(&data); // TODO: Set tools to NULL or false, PATH + pwd
-		// prompt(&data); // prompt + history. strtrim gives leaks!
+		prompt(&data); // prompt + history. strtrim gives leaks!
 		input = readline(SHELL_NAME);
 		if (!input) // check for [0]?
 			exit_error("exit");
