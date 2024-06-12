@@ -75,22 +75,6 @@ int	add_pipe(char *str, int i, t_node **list)
 	return (i);
 }
 
-// This adds a space to the token list.
-// It returns i past all consecutive whitespace.
-int	add_space(char *str, int i, t_node **list)
-{
-	char	*line;
-	t_node	*new;
-
-	line = ft_substr(str, i, 1);
-	new = create_node(line);
-	new->type = WH_SPACE;
-	node_to_list(list, new);
-	while (iswhitespace(str[i]) == true)
-		i++;
-	return (i);
-}
-
 // !in_quote toggles the value of the current in_quote flag during the while-loop.
 int	add_word(char *str, int i, t_node **list)
 {

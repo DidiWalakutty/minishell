@@ -40,9 +40,8 @@ typedef enum s_token
 	REDIR_OUT,		// >  out
 	HERE_DOC,		// << heredoc
 	APPEND,			// >> append
-	DOUBLE_QUOTE,	// "  double qyote
+	DOUBLE_QUOTE,	// "  double qyote = expandable
 	SINGLE_QUOTE,	// ' single quote
-	WH_SPACE,			// save just one space
 	DOLLAR,			// $ dollar = do it during expanding
 }  t_token;
 
@@ -61,11 +60,11 @@ typedef struct s_node
 
 typedef struct s_data
 {
-	char	*minishell_name;
 	char	*input;
 	char	**env;
 	t_node	*list;
 	t_token	*token;
+	size_t	pipe_num;
 }	t_data;
 
 
@@ -78,7 +77,7 @@ char	**copy_env(char **env);
 int		lexer(t_data *data);
 bool	all_quotes_closed(char *str);
 bool	skip_quotedstring(char *str, int *i);
-t_node	*tokenize_input(char *str);
+t_node	*tokenize_input(t_data *data, char *str);
 
 // Tokenize
 int	add_quote(char *str, int i, char c, t_node **list);

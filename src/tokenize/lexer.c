@@ -13,7 +13,7 @@
 #include "minishell.h"
 
 static bool	check_syntax_errors(char *str);
-t_node		*tokenize_input(char *str);
+t_node	*tokenize_input(t_data *data, char *str);
 static bool	token_syntax_error(char *str, int *i);
 
 // This function checks if there are any syntax errors in the given string
@@ -32,7 +32,7 @@ int	lexer(t_data *data)
 	}
 	if ((all_quotes_closed(data->input) == false))
 		return (1);
-	temp = tokenize_input(data->input);
+	temp = tokenize_input(data, data->input);
 	return (0);
 }
 
@@ -98,7 +98,7 @@ static void	print_linked_list(t_node *head)
 // Tokenizes input into nodes.
 // currently iterates beyond the \0.
 // For |; Just pipes, right? Not |&?
-t_node	*tokenize_input(char *str)
+t_node	*tokenize_input(t_data *data, char *str)
 {
 	t_node	*list;
 	int		i;
@@ -111,6 +111,8 @@ t_node	*tokenize_input(char *str)
 		i++;
 	while (str[i])
 	{
+		while (iswhitespace(str[i]))
+			i++;
 		if (str[i] == '\'')
 			i = add_quote(str, i, '\'', &list);
 		else if (str[i] == '\"')
@@ -118,23 +120,14 @@ t_node	*tokenize_input(char *str)
 		else if (str[i] == '<' || str[i] == '>')
 			i = add_redir(str, i, str[i], &list);
 		else if (str[i] == '|')
+		{
 			i = add_one_token(str, i, str[i], &list);
-		else if (iswhitespace(str[i]))
-			i = add_space(str, i, &list);
+			data->pipe_num += 1;
+		}
 		else
 			i = add_word(str, i, &list);
-		// else if (str[i] == '$')	// add it as word and check for expansions ($) after lexing.
-		// 	i = add_dollar(str, i, &list);
-		// if (str[i] != '\0')
-		// {
-		// 	printf("str[%i] is: %c\n", i, str[i]);
-		// 	printf("it's not a NULL terminator\n");
-		// 	i++;
-		// 	printf("after i++: %i\n", i);
-		// }
 	}
 	printf("\nprint list:\n");
 	print_linked_list(list);
-	printf("last i is %i, char: %c\n", i, str[i]);
 	return (list);
 }
