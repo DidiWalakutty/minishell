@@ -18,6 +18,7 @@ static void	init_shell(t_data *data)
 	data->input = NULL;
 	data->list = NULL;
 	data->token = NULL;
+	data->pipe_num = 0;
 }
 
 int	main(int argc, char **argv, char **env)
@@ -38,9 +39,8 @@ int	main(int argc, char **argv, char **env)
 		if (input != NULL)
 			add_history(data.input);
 		lexer(&data);
-		// expanding: check for $
+		// expanding: check for $ and replace in string
 		// build commands: concatenate 
-		// parsing();
 		// executor();
 		//free(data->input);
 	}
