@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-// Add 2 for the opening and closing quote.
+// Add 2 for the opening and closing quote, remove 2 for line (we don't want to include the quotes).
 // Returns i - 1, so the i in tokenize_input immediately follows
 // the closing quote's position that we return.
 // Should we consider "" as an empty string and add it to the node-list?
@@ -23,12 +23,12 @@ int	add_quote(char *str, int i, char c, t_node **list)
 	int		len;
 	char	*line;
 
-	start = i;
-	len = quote_length(&str[start + 1], c) + 2;
-	if (len == 2)	// TODO: add to node-list as empty string? echo "" gives \n.
-		return (len + start);	// If so, create a new type: empty quote?
+	start = i + 1;
+	len = quote_length(&str[start], c) + 2;
+	if (len == 2)	// TODO: add to node-list as empty string? echo "" gives \n ???
+		return (len + start);
 	else
-		line = ft_substr(str, start, len);
+		line = ft_substr(str, start, len - 2);
 	i = len + start + 1;
 	new = create_node(line);
 	if (c == '\'')
