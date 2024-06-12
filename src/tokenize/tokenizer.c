@@ -25,7 +25,7 @@ int	add_quote(char *str, int i, char c, t_node **list)
 
 	start = i + 1;
 	len = quote_length(&str[start], c) + 2;
-	if (len == 2)	// TODO: add to node-list as empty string? echo "" gives \n ???
+	if (len == 2)
 		return (len + start);
 	else
 		line = ft_substr(str, start, len - 2);
