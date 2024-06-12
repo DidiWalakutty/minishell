@@ -60,7 +60,8 @@ static bool	check_syntax_errors(char *str)
 	return (false);
 }
 
-// When |, it's next token can't be a | or \0.
+// ??? When |, it's next token can't be a | or \0.
+// Bash accepts || or  nothing behind |, makes it a heredoc.
 // When < or >, it checks if +1 is the same.
 // Its next token can't be <, > or a |.
 static bool	token_syntax_error(char *str, int *i)
