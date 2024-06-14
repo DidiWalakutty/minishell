@@ -6,12 +6,13 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:36:22 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/06/14 18:37:24 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/06/14 19:50:06 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+// WORKING HERE
 void	expander(t_token **tokens, t_data *env)
 {
     t_expander  *var;

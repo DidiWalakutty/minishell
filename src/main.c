@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:40:07 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/06/14 19:43:42 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/06/14 19:49:49 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	main(int argc, char **argv, char **env)
 		if (input != NULL)
 			add_history(data.input);
 		lexer(&data);
-		// expander(data.token, data.env);
+		expander(data.token, data.env);
 		// expanding: check for $ and replace in string
 		// build commands: concatenate 
 		// executor();
