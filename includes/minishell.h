@@ -43,7 +43,7 @@ typedef enum s_token
 	DOUBLE_QUOTE,	// "  double qyote = expandable
 	SINGLE_QUOTE,	// ' single quote
 	DOLLAR,			// $ dollar = do it during expanding
-}  t_token;
+}	t_token;
 
 // word: 	a pointer to the string stored in a node
 // len: 	the content length
@@ -56,10 +56,11 @@ typedef struct s_node
 	t_node			*previous;
 	// state?
 	// set i?
-}  t_node;
+}	t_node;
 
 typedef struct s_data
 {
+	// int		i; add for iterating with data->i in tokenize_input?
 	char	*input;
 	char	**env;
 	t_node	*list;
@@ -67,9 +68,7 @@ typedef struct s_data
 	size_t	pipe_num;
 }	t_data;
 
-
 // Functions //
-
 // Environment and paths;
 char	**copy_env(char **env);
 
@@ -79,19 +78,25 @@ bool	all_quotes_closed(char *str);
 bool	skip_quotedstring(char *str, int *i);
 t_node	*tokenize_input(t_data *data, char *str);
 
+// TRIAL:
+int	add_redir_or_pipe(char *str, int i, t_data *data, t_node **list);
+int		add_one_token(char *str, int i, t_data *data, t_node **list);
+
 // Tokenize
-int	add_quote(char *str, int i, char c, t_node **list);
-int	add_redir(char *str, int i, char c, t_node **list);
-int	add_one_token(char *str, int i, char c, t_node **list);
-int	add_dollar(char *str, int i, t_node **list);
-int	add_space(char *str, int i, t_node **list);
+int		add_quote(char *str, int i, char c, t_node **list);
+// int		add_redir(char *str, int i, char c, t_node **list);
+// int		add_one_token(char *str, int i, char c, t_node **list);
+int		add_dollar(char *str, int i, t_node **list);
+int		add_space(char *str, int i, t_node **list);
+
+// Expander
+void	expander(t_token **tokens, t_data *env);
 
 // Utils
 bool	one_of_tokens(char c);
-void 	skip_to_token(char *str, int *i);
+void	skip_to_token(char *str, int *i);
 void	skip_whitespace(char *str, int *i);
 int		quote_length(char *str, char c);
-int		add_one_token(char *str, int i, char c, t_node **list);
 int		variable_len(char *str);
 
 // still needed?
@@ -104,8 +109,10 @@ void	node_to_list(t_node **list, t_node *new);
 
 // Free and exit
 // exit_error(char *str); probably not needed
-void		free_array(char **str);
-bool		error_msg(char *message, char c);
-const char 	*type_to_string(t_token type);
+void	free_array(char **str);
+bool	error_msg(char *message, char c);
+
+// For Testing
+const char	*type_to_string(t_token type);
 
 #endif

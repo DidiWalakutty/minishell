@@ -5,8 +5,8 @@
 /*                                                     +:+                    */
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2023/11/20 16:40:26 by diwalaku      #+#    #+#                 */
-/*   Updated: 2023/12/05 20:28:23 by diwalaku      ########   odam.nl         */
+/*   Created: 2024/06/14 18:40:07 by diwalaku      #+#    #+#                 */
+/*   Updated: 2024/06/14 19:43:42 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ static void	init_shell(t_data *data)
 	data->list = NULL;
 	data->token = NULL;
 	data->pipe_num = 0;
+	// data->i = 0;
 }
 
 int	main(int argc, char **argv, char **env)
@@ -31,14 +32,15 @@ int	main(int argc, char **argv, char **env)
 	data.env = copy_env(env);
 	while (1)
 	{
-		init_shell(&data); // TODO: Set PATH + pwd
-		input = readline(SHELL_NAME); // No need to fix *readline*-leaks.
+		init_shell(&data);
+		input = readline(SHELL_NAME);
 		if (!input)
 			return (1);
 		data.input = input;
 		if (input != NULL)
 			add_history(data.input);
 		lexer(&data);
+		// expander(data.token, data.env);
 		// expanding: check for $ and replace in string
 		// build commands: concatenate 
 		// executor();

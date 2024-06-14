@@ -5,8 +5,8 @@
 /*                                                     +:+                    */
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2023/11/20 16:40:07 by diwalaku      #+#    #+#                 */
-/*   Updated: 2023/11/27 15:59:20 by diwalaku      ########   odam.nl         */
+/*   Created: 2024/06/14 18:43:19 by diwalaku      #+#    #+#                 */
+/*   Updated: 2024/06/14 19:43:18 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,18 +35,21 @@ void	skip_whitespace(char *str, int *i)
 
 // Add one token to the list: either |, < or >.
 // Return i + 1, so we get the i immediately after the token.
-int	add_one_token(char *str, int i, char c, t_node **list)
+int	add_one_token(char *str, int i, t_data *data, t_node **list)
 {
 	t_node	*new;
 	char	*line;
 
 	line = ft_substr(str, i, 1);
 	new = create_node(line);
-	if (c == '|')
+	if (str[i] == '|')
+	{
 		new->type = PIPE;
-	else if (c == '<')
+		data->pipe_num += 1;
+	}
+	else if (str[i] == '<')
 		new->type = REDIR_IN;
-	else if (c == '>')
+	else if (str[i] == '>')
 		new->type = REDIR_OUT;
 	node_to_list(list, new);
 	return (i + 1);

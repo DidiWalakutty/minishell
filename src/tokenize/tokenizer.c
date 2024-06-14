@@ -5,8 +5,8 @@
 /*                                                     +:+                    */
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2023/11/20 16:40:15 by diwalaku      #+#    #+#                 */
-/*   Updated: 2023/12/05 17:04:27 by diwalaku      ########   odam.nl         */
+/*   Created: 2024/06/14 18:43:34 by diwalaku      #+#    #+#                 */
+/*   Updated: 2024/06/14 19:42:50 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,12 @@ int	add_quote(char *str, int i, char c, t_node **list)
 
 // We add a token, either >> or <<.
 // It the i + 1 isn't equal, it adds one token.
-int	add_redir(char *str, int i, char c, t_node **list)
+int	add_redir_or_pipe(char *str, int i, t_data *data, t_node **list)
 {
 	t_node	*new;
 	char	*line;
 
-	if (str[i + 1] == c)
+	if (str[i + 1] == str[i])
 	{
 		line = ft_substr(str, i, 2);
 		new = create_node(line);
@@ -58,7 +58,7 @@ int	add_redir(char *str, int i, char c, t_node **list)
 		i += 2;
 	}
 	else
-		i = add_one_token(str, i, c, list);
+		i = add_one_token(str, i, data, list);
 	return (i);
 }
 

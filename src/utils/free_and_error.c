@@ -1,23 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   free_and_error.c                                   :+:    :+:            */
+/*   free_and_errors.c                                  :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2023/11/20 16:40:20 by diwalaku      #+#    #+#                 */
-/*   Updated: 2023/11/28 15:15:51 by diwalaku      ########   odam.nl         */
+/*   Created: 2024/06/14 18:41:04 by diwalaku      #+#    #+#                 */
+/*   Updated: 2024/06/14 18:41:47 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-// probably not needed
-// void	exit_error(char *str)
-// {
-// 	ft_printf("ERROR\n%s\n", str);
-// 	exit(EXIT_FAILURE);
-// }
 
 bool	error_msg(char *message, char c)
 {
