@@ -45,6 +45,11 @@ typedef enum s_token
 	DOLLAR,			// $ dollar = do it during expanding
 }	t_token;
 
+typedef struct s_command
+{
+
+}	t_command;
+
 // word: 	a pointer to the string stored in a node
 // len: 	the content length
 // type: 	the content token
@@ -64,7 +69,7 @@ typedef struct s_data
 	char	*input;
 	char	**env;
 	t_node	*list;
-	t_token	*token;
+	t_token	*token;	// needed for expansion??
 	size_t	pipe_num;
 }	t_data;
 
@@ -79,7 +84,7 @@ bool	skip_quotedstring(char *str, int *i);
 t_node	*tokenize_input(t_data *data, char *str);
 
 // TRIAL:
-int	add_redir_or_pipe(char *str, int i, t_data *data, t_node **list);
+int		add_redir_or_pipe(char *str, int i, t_data *data, t_node **list);
 int		add_one_token(char *str, int i, t_data *data, t_node **list);
 
 // Tokenize

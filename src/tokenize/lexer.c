@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:42:29 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/06/14 19:47:01 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/06/15 19:33:35 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,7 @@ static bool	check_syntax_errors(char *str)
 	return (false);
 }
 
-// ??? When |, it's next token can't be a | or \0.
-// Bash accepts || or  nothing behind |, makes it a heredoc.
+// Nothing behind | makes it a heredoc, TODO???
 // When < or >, it checks if +1 is the same.
 // Its next token can't be <, > or a |.
 static bool	token_syntax_error(char *str, int *i)
@@ -120,9 +119,9 @@ t_node	*tokenize_input(t_data *data, char *str)
 			i = add_redir_or_pipe(str, i, data, &list);
 		else
 			i = add_word(str, i, &list);
-		// printf("\nprint list:\n");
-		// print_linked_list(list);
-		// printf("Num of pipes is: %zu\n", data->pipe_num);
+		printf("\nprint list:\n");
+		print_linked_list(list);
+		printf("Num of pipes is: %zu\n", data->pipe_num);
 	}
 	return (list);
 }

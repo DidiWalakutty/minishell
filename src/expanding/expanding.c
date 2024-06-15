@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:36:22 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/06/14 19:50:06 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/06/15 14:47:38 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,20 +15,18 @@
 // WORKING HERE
 void	expander(t_token **tokens, t_data *env)
 {
-    t_expander  *var;
-    char    *type;
+	t_expander	*var;
+	char		*type;
 
-    var = init_var(tokens);
-    while (*tokens)
-    {
-        if_expandable(var, (*tokens)->type);
-        if (dollar_questionmark(tokens, var) == true)
-            handle_error(tokens, &(var->head), var, env);
-        // single dollar
-        // double dollar
-                
-    }
-    
+	var = init_var(tokens);
+	while (*tokens)
+	{
+		if_expandable(var, (*tokens)->type);
+		if (dollar_questionmark(tokens, var) == true)
+			handle_error(tokens, &(var->head), var, env);
+		// single dollar
+		// double dollar
+	}
 }
 
 int	is_error_code(t_token **tokens, bool if_expand)
