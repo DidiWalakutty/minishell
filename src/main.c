@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   main.c                                             :+:    :+:            */
+/*   main.c                                            :+:    :+:             */
 /*                                                     +:+                    */
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/20 16:40:26 by diwalaku      #+#    #+#                 */
-/*   Updated: 2023/12/05 20:28:23 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/06/26 17:23:12 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./minishell.h"
+#include "../includes/minishell.h"
 
 // Set all variable to NULL.
 static void	init_shell(t_data *data)
