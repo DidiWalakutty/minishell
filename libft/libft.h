@@ -27,10 +27,17 @@ char	*ft_strdup(const char *s1);
 char	*ft_strndup(const char *s1, int len);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 char	**ft_split(char const *str, char c);
-bool	iswhitespace(char c);
 char	*ft_strchr(const char *s, int d);
 char	*ft_strtrim(char const *s1, char const *set);
 char	*ft_strnstr(const char *haystack, const char *needle, size_t len);
+int		ft_strncmp(const char *s1, const char *s2, size_t d);
+char	*ft_strjoin(char const *s1, char const *s2);
+size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize);
+size_t	ft_strlcat(char *dst, const char *src, size_t size);
+bool	iswhitespace(char c);
+int		ft_isdigit(int c);
+int		ft_isalpha(int c);
+int		is_alph_or_num(char c);
 
 // printf
 int		ft_printf(const char *format, ...);

@@ -2,7 +2,7 @@ NAME	=	minishell
 
 # Libraries and Headers
 LIBFT	= ./libft/libft.a
-HEADERS	= -I includes -I $(LIBFT)/headers
+HEADERS	= -I includes -I libft/HEADERS
 
 # Configuration
 CC		= 	cc
@@ -23,10 +23,9 @@ SRC =	./src/main.c \
 				./src/tokenize/quotes.c \
 				./src/tokenize/tokenize_utils.c \
 				./src/tokenize/tokenizer.c \
-				# ./src/expanding/expander.c \
-				# ./src/expanding/expander_utils.c \
-				# ./src/expanding/expander_checks.c \
-				# ./src/expanding/expander_handler.c \
+				./src/expanding/expander.c \
+				./src/expanding/expand_dollar.c \
+				./src/expanding/expander_utils.c \
 
 # Object files and directories
 # obj folder in src?: src/obj 
@@ -63,8 +62,12 @@ $(OBJDIR)/%.o: ./src/nodes/%.c
 $(OBJDIR)/%.o: ./src/tokenize/%.c
 		@$(CC) $(CFLAGS) $(HEADERS) -c -o $@ $<
 
+$(OBJDIR)/%.o: ./src/expanding/%.c
+		@$(CC) $(CFLAGS) $(HEADERS) -c -o $@ $<
+
 $(OBJDIR)/%.o: ./src/utils/%.c
 		@$(CC) $(CFLAGS) $(HEADERS) -c -o $@ $<
+
 
 # Cleaning
 clean:

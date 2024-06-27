@@ -1,20 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   expander_handler1.c                                :+:    :+:            */
+/*   ft_strlcat.c                                       :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2024/06/14 18:46:45 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/06/14 18:47:11 by diwalaku      ########   odam.nl         */
+/*   Created: 2022/11/02 21:32:28 by diwalaku      #+#    #+#                 */
+/*   Updated: 2022/11/12 19:34:52 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./minishell.h"
+#include "libft.h"
 
-void    handle_error(t_token **tokens, t_token **head, \
-        t_expander *var, t_env *env)
+size_t	ft_strlcat(char *dst, const char *src, size_t size)
 {
-	error_code_expansion(*tokens, head, var->i, env);
-	
+	size_t	len_s;
+	size_t	len_d;
+	size_t	i;
+
+	len_s = ft_strlen(src);
+	len_d = ft_strlen(dst);
+	i = 0;
+	if (size == 0)
+		return (len_s);
+	while (len_d + i < size - 1 && i < len_s)
+	{
+		dst[len_d + i] = src[i];
+		i++;
+	}
+	dst[len_d + i] = '\0';
+	if (len_d < size)
+		return (len_d + len_s);
+	else
+		return (size + len_s);
 }

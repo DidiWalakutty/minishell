@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   free_and_errors.c                                  :+:    :+:            */
+/*   free_and_error.c                                   :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:41:04 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/06/14 18:41:47 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/06/19 15:50:18 by anonymous     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,4 +48,16 @@ const char *type_to_string(t_token type)
 		case DOLLAR: return "DOLLAR";
         default: return "UNKNOWN";
     }
+}
+
+void	print_linked_list(t_node *head)
+{
+	int i = 1;
+	while (head != NULL)
+	{
+		printf("Node %i is: %s - type is: %s \n", i, head->str, type_to_string(head->type));
+		head = head->next;
+		i++;
+	}
+	printf("\n");
 }

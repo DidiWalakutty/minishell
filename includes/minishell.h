@@ -26,6 +26,8 @@
 # define SHELL_NAME "Minishell$ " // which name, colors?
 
 typedef enum s_token		t_token;
+typedef struct s_expand		t_expand;
+typedef struct s_command	t_command;
 typedef struct s_list		t_list;
 typedef struct s_node		t_node;
 typedef struct s_data		t_data;
@@ -45,8 +47,26 @@ typedef enum s_token
 	DOLLAR,			// $ dollar = do it during expanding
 }	t_token;
 
-typedef struct s_command
+typedef struct s_expand
 {
+	int		i;
+	bool	expandable;
+	t_node	*head;
+	t_token	prev_type;
+}	t_expand;
+
+typedef struct s_dollar
+{
+	char	*expanded;
+	char	*env_name;
+	int		end;
+	int		start;			// position after $ and/or ${
+	int		dollar_pos;
+	bool	brackets;
+}	t_dollar;
+
+typedef struct s_command
+{	
 
 }	t_command;
 
@@ -69,6 +89,7 @@ typedef struct s_data
 	char	*input;
 	char	**env;
 	t_node	*list;
+	t_command *commands;
 	t_token	*token;	// needed for expansion??
 	size_t	pipe_num;
 }	t_data;
@@ -78,24 +99,19 @@ typedef struct s_data
 char	**copy_env(char **env);
 
 // Lexer
-int		lexer(t_data *data);
+int		lexer_and_parser(t_data *data);
 bool	all_quotes_closed(char *str);
 bool	skip_quotedstring(char *str, int *i);
 t_node	*tokenize_input(t_data *data, char *str);
 
-// TRIAL:
+// Tokenize and Expanding
+int		add_quote(char *str, int i, char c, t_node **list);
 int		add_redir_or_pipe(char *str, int i, t_data *data, t_node **list);
 int		add_one_token(char *str, int i, t_data *data, t_node **list);
-
-// Tokenize
-int		add_quote(char *str, int i, char c, t_node **list);
-// int		add_redir(char *str, int i, char c, t_node **list);
-// int		add_one_token(char *str, int i, char c, t_node **list);
 int		add_dollar(char *str, int i, t_node **list);
-int		add_space(char *str, int i, t_node **list);
-
-// Expander
-void	expander(t_token **tokens, t_data *env);
+int		add_word(char *str, int i, t_node **list);
+void	expand_input(t_node *list, char **env);
+// t_node	*expander(t_node *list, char **env);
 
 // Utils
 bool	one_of_tokens(char c);
@@ -104,9 +120,12 @@ void	skip_whitespace(char *str, int *i);
 int		quote_length(char *str, char c);
 int		variable_len(char *str);
 
-// still needed?
-int		add_word(char *str, int i, t_node **list);
-int		add_tokens(char *str, int i, t_node **list);
+// Utils - Expanding
+char	*copy_env_input(char **env, char *to_find);
+int		if_valid_char(char c);
+bool	is_dollar(t_node *node, bool is_expandable);
+void	set_dollar(t_node *node, char **env, t_expand *info);
+void	replace_string(t_node *node, t_dollar *var);
 
 // Nodes
 t_node	*create_node(char *str);
@@ -119,5 +138,6 @@ bool	error_msg(char *message, char c);
 
 // For Testing
 const char	*type_to_string(t_token type);
+void		print_linked_list(t_node *head);
 
 #endif

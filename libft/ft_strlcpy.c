@@ -1,23 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   expander_checks1.c                                 :+:    :+:            */
+/*   ft_strlcpy.c                                       :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2024/06/14 18:46:48 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/06/14 18:46:58 by diwalaku      ########   odam.nl         */
+/*   Created: 2022/10/14 17:42:31 by diwalaku      #+#    #+#                 */
+/*   Updated: 2023/07/31 13:03:17 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./minishell.h"
+#include "libft.h"
 
-bool	dollar_questionmark(t_token **tokens t_token *var)
+size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
 {
-    if (var->if_expand == false)
-        return (false);
-    else if (((*tokens)->type = DOUBLE_QUOTE || (*tokens)->type == WORD) && \
-        ft_strnstr((*tokens)->str, "$?", ft_strlen((*tokens)->str)))
-        return (true);
-    return (false);
+	size_t	x;
+
+	x = 0;
+	if (src == 0)
+		return (0);
+	if (dstsize == 0)
+		return (ft_strlen(src));
+	while ((src[x]) && (x < dstsize - 1))
+	{
+		dst[x] = src[x];
+		x++;
+	}
+	dst[x] = '\0';
+	return (ft_strlen(src));
 }

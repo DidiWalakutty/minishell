@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:42:29 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/06/15 19:33:35 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/06/26 21:15:48 by anonymous     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,8 @@ static bool	token_syntax_error(char *str, int *i);
 // This function checks if there are any syntax errors in the given string
 // and if all quotes are closed.
 // We then tokenize the input.
-int	lexer(t_data *data)
+int	lexer_and_parser(t_data *data)
 {
-	t_node	*temp;
-
 	if (!data)
 		return (1);
 	if (check_syntax_errors(data->input) == true)
@@ -32,7 +30,12 @@ int	lexer(t_data *data)
 	}
 	if ((all_quotes_closed(data->input) == false))
 		return (1);
-	temp = tokenize_input(data, data->input);
+	data->list = tokenize_input(data, data->input);
+	// printf("Before expanding:\n");
+	// print_linked_list(data->list);
+	expand_input(data->list, data->env);
+	// printf("After expanding:\n");
+	// print_linked_list(data->list);
 	return (0);
 }
 
@@ -85,15 +88,15 @@ static bool	token_syntax_error(char *str, int *i)
 	return (false);
 }
 
-static void	print_linked_list(t_node *head)
-{
-	while (head != NULL)
-	{
-		printf("Node is: %s - type is: %s \n", head->str, type_to_string(head->type));
-		head = head->next;
-	}
-	printf("\n");
-}
+// static void	print_linked_list(t_node *head)
+// {
+// 	while (head != NULL)
+// 	{
+// 		printf("Node is: %s - type is: %s \n", head->str, type_to_string(head->type));
+// 		head = head->next;
+// 	}
+// 	printf("\n");
+// }
 
 // Tokenizes input into nodes.
 // currently iterates beyond the \0.
@@ -119,11 +122,11 @@ t_node	*tokenize_input(t_data *data, char *str)
 			i = add_redir_or_pipe(str, i, data, &list);
 		else
 			i = add_word(str, i, &list);
-		printf("\nprint list:\n");
-		print_linked_list(list);
-		printf("Num of pipes is: %zu\n", data->pipe_num);
 	}
 	return (list);
 }
 
 // Check linked list:
+	// printf("\nprint list:\n");
+	// print_linked_list(list);
+	// printf("Num of pipes is: %zu\n", data->pipe_num);
