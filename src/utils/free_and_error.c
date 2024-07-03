@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   free_and_error.c                                   :+:    :+:            */
+/*   free_and_error.c                                  :+:    :+:             */
 /*                                                     +:+                    */
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/20 16:40:20 by diwalaku      #+#    #+#                 */
-/*   Updated: 2023/11/28 15:15:51 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/06/12 20:26:00 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../includes/minishell.h"
 
 // probably not needed
 // void	exit_error(char *str)

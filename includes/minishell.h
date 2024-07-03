@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   minishell.h                                        :+:    :+:            */
+/*   minishell.h                                       :+:    :+:             */
 /*                                                     +:+                    */
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/20 16:38:50 by diwalaku      #+#    #+#                 */
-/*   Updated: 2023/12/05 20:27:40 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/07/03 22:46:14 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 # include "../libft/libft.h"
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <fcntl.h>
+# include <sys/wait.h>
 
 // Defining ANSI colors
 //
@@ -27,6 +29,7 @@
 
 typedef enum s_token		t_token;
 typedef struct s_list		t_list;
+typedef struct s_cmd		t_cmd;
 typedef struct s_node		t_node;
 typedef struct s_data		t_data;
 
@@ -48,6 +51,19 @@ typedef enum s_token
 // word: 	a pointer to the string stored in a node
 // len: 	the content length
 // type: 	the content token
+
+typedef struct s_cmd
+{
+	pid_t	pid;
+	char	*cmd;
+	char	*path;
+	char	**args;
+	char	*redirect_in;
+	char	*redirect_out;
+	char	**env;
+	t_cmd	*next;
+} t_cmd;
+
 typedef struct s_node
 {
 	char			*str;
@@ -64,6 +80,7 @@ typedef struct s_data
 	char	**env;
 	t_node	*list;
 	t_token	*token;
+	t_cmd	*cmd_process;
 	size_t	pipe_num;
 }	t_data;
 
@@ -107,5 +124,8 @@ void	node_to_list(t_node **list, t_node *new);
 void		free_array(char **str);
 bool		error_msg(char *message, char c);
 const char 	*type_to_string(t_token type);
+
+// Executing
+int	make_processes(t_data *data);
 
 #endif

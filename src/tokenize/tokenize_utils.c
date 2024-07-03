@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   tokenize_utils.c                                   :+:    :+:            */
+/*   tokenize_utils.c                                  :+:    :+:             */
 /*                                                     +:+                    */
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/20 16:40:07 by diwalaku      #+#    #+#                 */
-/*   Updated: 2023/11/27 15:59:20 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/06/12 20:26:00 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../includes/minishell.h"
 
 bool	one_of_tokens(char c)
 {

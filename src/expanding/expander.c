@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expander.c                                         :+:      :+:    :+:   */
+/*   expander.c                                        :+:    :+:             */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 14:58:18 by marvin            #+#    #+#             */
-/*   Updated: 2023/12/15 14:58:18 by marvin           ###   ########.fr       */
+/*   Updated: 2024/06/12 20:26:00 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./minishell.h"
+#include "../../includes/minishell.h"
 
 // Tilde ~ not mandatory
 void expander(t_token **tokens, t_env *env)

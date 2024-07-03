@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   lexer.c                                            :+:    :+:            */
+/*   lexer.c                                           :+:    :+:             */
 /*                                                     +:+                    */
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/20 16:39:51 by diwalaku      #+#    #+#                 */
-/*   Updated: 2023/12/05 16:58:39 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/06/12 20:26:00 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../includes/minishell.h"
 
 static bool	check_syntax_errors(char *str);
 t_node	*tokenize_input(t_data *data, char *str);

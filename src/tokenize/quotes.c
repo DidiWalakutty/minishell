@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   quotes.c                                           :+:    :+:            */
+/*   quotes.c                                          :+:    :+:             */
 /*                                                     +:+                    */
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/20 16:40:02 by diwalaku      #+#    #+#                 */
-/*   Updated: 2023/12/05 16:02:28 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/06/12 20:26:00 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../includes/minishell.h"
 
 // checks for the length of the add_quote node,
 // searches for the closing quote.

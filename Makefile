@@ -23,6 +23,7 @@ SRC =	./src/main.c \
 				./src/tokenize/quotes.c \
 				./src/tokenize/tokenize_utils.c \
 				./src/tokenize/tokenizer.c \
+				./src/execute/pipes.c
 				# ./src/expanding/expander.c \
 				# ./src/expanding/expander_utils.c \
 				# ./src/expanding/expander_checks.c \
@@ -64,6 +65,9 @@ $(OBJDIR)/%.o: ./src/tokenize/%.c
 		@$(CC) $(CFLAGS) $(HEADERS) -c -o $@ $<
 
 $(OBJDIR)/%.o: ./src/utils/%.c
+		@$(CC) $(CFLAGS) $(HEADERS) -c -o $@ $<
+
+$(OBJDIR)/%.o: ./src/execute/%.c
 		@$(CC) $(CFLAGS) $(HEADERS) -c -o $@ $<
 
 # Cleaning

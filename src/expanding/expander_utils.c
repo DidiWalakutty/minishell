@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expander_utils.c                                   :+:      :+:    :+:   */
+/*   expander_utils.c                                  :+:    :+:             */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/16 18:25:21 by marvin            #+#    #+#             */
-/*   Updated: 2023/12/16 18:25:21 by marvin           ###   ########.fr       */
+/*   Updated: 2024/06/12 20:24:33 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./minishell.h"
+#include "../../includes/minishell.h"
 
 void if_expandable(t_expander *var, t_token *type)
 {
