@@ -59,9 +59,12 @@ typedef struct s_dollar
 {
 	char	*expanded;
 	char	*env_name;
-	int		end;
-	int		start;			// position after $ and/or ${
-	int		dollar_pos;
+	int		i;
+	int		str_len;			// Length of full node->str
+	int		dollar_pos;			// Position where $ is.
+	int		start_env;			// Position after $ and/or ${
+	int		end_var;			// Position where env-name ends.
+	int		env_length;			// Length of found env.
 	bool	brackets;
 }	t_dollar;
 
@@ -124,17 +127,22 @@ int		variable_len(char *str);
 char	*copy_env_input(char **env, char *to_find);
 int		if_valid_char(char c);
 bool	is_dollar(t_node *node, bool is_expandable);
-void	set_dollar(t_node *node, char **env, t_expand *info);
+int		set_dollar(t_node *node, char **env, t_expand *info);
+t_node	*expand_node(t_node *node, t_dollar *var);
 void	replace_string(t_node *node, t_dollar *var);
 
 // Nodes
 t_node	*create_node(char *str);
 void	node_to_list(t_node **list, t_node *new);
+t_node	*attach_list_token(t_node **head, t_node *new_node);
 
 // Free and exit
 // exit_error(char *str); probably not needed
 void	free_array(char **str);
 bool	error_msg(char *message, char c);
+
+// List_utils
+t_node	*attach_list_token(t_node **head, t_node *new_node);
 
 // For Testing
 const char	*type_to_string(t_token type);

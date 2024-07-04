@@ -47,62 +47,83 @@ static t_dollar	*init_dollar(int pos)
 
 	dollar = malloc(sizeof(t_dollar));
 	dollar->expanded = NULL;
-	dollar->start = 0;
-	dollar->end = 0;
+	dollar->env_name = NULL;
+	dollar->i = 0;
+	dollar->str_len = 0;
 	dollar->dollar_pos = pos;
+	dollar->start_env = 0;
+	dollar->end_var = 0;
+	dollar->env_length = 0;
 	dollar->brackets = false;
 	return (dollar);
 }
 
+// start_env is $ +1, where EVN-name starts.
+// end is where env_name ends.
 static void	expand_dollar(t_node *node, t_dollar *var, char **env)
 {
-	var->start = var->dollar_pos + 1;
-	if (node->str[var->end] == '{')
+	// t_node	*expanded_part;
+
+	// expanded_part = NULL;
+	var->start_env = var->dollar_pos + 1;
+	if (node->str[var->start_env] == '{')
 	{
 		var->brackets = true;
-		var->start++;
+		var->start_env++;
 	}
-	var->end = var->start;
-	while (node->str[var->end] && (is_alph_or_num(node->str[var->end]) || \
-			node->str[var->end] == '_'))
-		var->end++;
-	var->env_name = ft_substr(node->str, var->start, var->end - var->start);
+	var->end_var = var->start_env;
+	while (node->str[var->end_var] && (is_alph_or_num(node->str[var->end_var]) || \
+			node->str[var->end_var] == '_'))
+		var->end_var++;
+	var->env_name = ft_substr(node->str, var->start_env, var->end_var - var->start_env);
+	printf("env_name is: %s|\n", var->env_name);
 	var->expanded = copy_env_input(env, var->env_name);
+	var->env_length = ft_strlen(var->expanded);
 	if (var->brackets == true)
 	{
-			var->start--;
-			var->end++;
+			var->start_env--;
+			var->end_var++;
 	}
-	replace_string(node, var);
+	// expanded_part = expand_node(node, var);
+	// printf("exp part: %s\n", expanded_part->str);
+	replace_string(node, var); 
+	// Replace string is just to check if expanding worked. 
+	// We need expand_node to truly replace it. ^^
+	printf("replacing is: %s|\n", node->str);
 	// replace_node(replacer) // need to add position in list?
 }
 
-void	set_dollar(t_node *node, char **env, t_expand *info)
+int	set_dollar(t_node *node, char **env, t_expand *info)
 {
 	t_dollar	*dol_var;
-	int			i;
 
 	dol_var = init_dollar(info->i);
-	i = 0;
-	while (node->str[i])
-	{	
-		// if (node->str[i] == '$' && !node->str[i + 1])
-		// 	return (free(dol_var));
-		if (node->str[i] == '$' && (if_valid_char(node->str[i + 1]) || \
-			node->str[i + 1] == '{'))
+	dol_var->str_len = ft_strlen(node->str);
+	while (dol_var->i < dol_var->str_len)
+	{
+		if (node->str[dol_var->i] == '$' && !node->str[dol_var->i + 1])
 		{
-			// HERE: Make sure the string is concactenated.
-			dol_var->dollar_pos = i;
-			// printf("Original string is: %s\n", node->str);
+			free(dol_var);
+			return (0);
+		}
+		else if (node->str[dol_var->i] == '$' && (if_valid_char(node->str[dol_var->i + 1]) || \
+			node->str[dol_var->i + 1] == '{'))
+		{
+			dol_var->dollar_pos = dol_var->i;
 			expand_dollar(node, dol_var, env);
-			// printf("Expanded env string is: %s\n", dol_var->expanded);
-			// printf("New string is: %s\n", node->str);
-			break ;
+			printf("Expanded env string is: %s|\n", dol_var->expanded);
+			continue;
 		}
 		else
 		{
-			i++;
-			// while != '$', i++;
+			dol_var->i++;
+			// while (node->str[dol_var->i] && node->str[dol_var->i] != '$')
+			// {
+			// 	dol_var->i++;
+			// 	// printf("Else statement: char is: %c|\n", node->str[dol_var->i]);
+			// }
+			// printf("char end else-loop: %c|\n", node->str[dol_var->i]);
 		}
 	}
+	return (0);
 }

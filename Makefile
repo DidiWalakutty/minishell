@@ -19,6 +19,7 @@ SRC =	./src/main.c \
 				./src/environment/env.c \
 				./src/nodes/nodes.c \
 				./src/utils/free_and_error.c\
+				./src/utils/list_utils.c \
 				./src/tokenize/lexer.c \
 				./src/tokenize/quotes.c \
 				./src/tokenize/tokenize_utils.c \

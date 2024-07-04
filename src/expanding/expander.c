@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:36:22 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/06/26 21:16:07 by anonymous     ########   odam.nl         */
+/*   Updated: 2024/07/04 11:28:26 by anonymous     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,18 +37,22 @@ void	expand_input(t_node *list, char **env)
 	t_expand	*info;
 
 	info = init_info(list);
-	if (list)
+	while (list)
 	{
+		// check tilde ~
 		expandable_type(info, list->type);
-		if (is_double_dollar(list, info->expendable) == true)
-			set_pid(list, env, info);
+		// if (is_double_dollar(list, info->expendable) == true)
+		// 	set_pid(list, env, info);
 		if (is_dollar(list, info->expandable) == true)
 			set_dollar(list, env, info);
-		// check tilde ~
 		else
-			return ;
+		{
+			// needs to iterate, but first check if set_dollar works properly.
+			break ;
+		}
 	}
 }
+
 // Modifies only the types D_Q and WORD, if it's expandable.
 // Frees current->str and replaces it.
 // t_node	*expand_input(t_node *list, char **env)
