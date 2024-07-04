@@ -38,6 +38,7 @@ bool	iswhitespace(char c);
 int		ft_isdigit(int c);
 int		ft_isalpha(int c);
 int		is_alph_or_num(char c);
+char	*ft_strconcat(char *s1, char *s2);
 
 // printf
 int		ft_printf(const char *format, ...);

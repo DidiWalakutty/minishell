@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   expand_doube_dollar.c                              :+:    :+:            */
+/*   expand_double_dollar.c                             :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: diwalaku <diwalaku@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2024/06/26 21:11:40 by anonymous     #+#    #+#                 */
-/*   Updated: 2024/06/26 21:11:40 by anonymous     ########   odam.nl         */
+/*   Created: 2024/07/04 15:27:10 by diwalaku      #+#    #+#                 */
+/*   Updated: 2024/07/04 15:27:10 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ bool	is_double_dollar(t_node *node, bool is_expandable)
 	if (is_expandable == false || (node->type != WORD && \
 		node->type != DOUBLE_QUOTE))
 		return (false);
-	i = find_dollar_position(node->str)
+	i = find_dollar_position(node->str);
 	if (node->str[i + 1] == '$')
 		return (true);
 	return (false);

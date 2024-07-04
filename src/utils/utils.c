@@ -1,40 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: diwalaku <diwalaku@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/04 15:37:19 by diwalaku          #+#    #+#             */
-/*   Updated: 2024/07/04 15:37:23 by diwalaku         ###   ########.fr       */
+/*   Created: 2024/07/04 17:06:02 by diwalaku          #+#    #+#             */
+/*   Updated: 2024/07/04 17:07:39 by diwalaku         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// split on '=' and name + value?
-// Copies current env. Should eventually also update ShellLevel
-char	**copy_env(char **env)
+int	if_valid_char(char c)
 {
-	char	**copy;
-	int		i;
+	if (is_alph_or_num(c) || c == '_')
+		return (1);
+	return (0);
+}
+
+int	find_dollar_position(char *str)
+{
+	int	i;
 
 	i = 0;
-	while (env[i])
-		i++;
-	copy = ft_calloc(sizeof(char *), i + 1);
-	if (!copy)
-		return (NULL);
-	i = 0;
-	while (env[i])
+	while (str[i])
 	{
-		copy[i] = ft_strdup(env[i]);
-		if (copy[i] == NULL)
-		{
-			free_array(copy);
-			return (copy);
-		}
+		if (str[i] == '$')
+			return (i);
 		i++;
 	}
-	return (copy);
+	return (-1);
 }

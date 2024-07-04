@@ -20,6 +20,7 @@ SRC =	./src/main.c \
 				./src/nodes/nodes.c \
 				./src/utils/free_and_error.c\
 				./src/utils/list_utils.c \
+				./src/utils/utils.c \
 				./src/tokenize/lexer.c \
 				./src/tokenize/quotes.c \
 				./src/tokenize/tokenize_utils.c \
@@ -27,6 +28,7 @@ SRC =	./src/main.c \
 				./src/expanding/expander.c \
 				./src/expanding/expand_dollar.c \
 				./src/expanding/expander_utils.c \
+				# ./src/expanding/expand_double_dollar.c \
 
 # Object files and directories
 # obj folder in src?: src/obj 

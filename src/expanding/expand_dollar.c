@@ -5,26 +5,12 @@
 /*                                                     +:+                    */
 /*   By: diwalaku <diwalaku@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2024/06/23 22:00:24 by anonymous     #+#    #+#                 */
-/*   Updated: 2024/06/23 22:00:24 by anonymous     ########   odam.nl         */
+/*   Created: 2024/07/04 15:24:51 by diwalaku      #+#    #+#                 */
+/*   Updated: 2024/07/04 15:24:51 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	find_dollar_position(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == '$')
-			return (i);
-		i++;
-	}
-	return (-1);
-}
 
 bool	is_dollar(t_node *node, bool is_expandable)
 {
@@ -62,9 +48,9 @@ static t_dollar	*init_dollar(int pos)
 // end is where env_name ends.
 static void	expand_dollar(t_node *node, t_dollar *var, char **env)
 {
-	// t_node	*expanded_part;
+	t_node	*expanded_part;
 
-	// expanded_part = NULL;
+	expanded_part = NULL;
 	var->start_env = var->dollar_pos + 1;
 	if (node->str[var->start_env] == '{')
 	{
@@ -72,24 +58,23 @@ static void	expand_dollar(t_node *node, t_dollar *var, char **env)
 		var->start_env++;
 	}
 	var->end_var = var->start_env;
-	while (node->str[var->end_var] && (is_alph_or_num(node->str[var->end_var]) || \
-			node->str[var->end_var] == '_'))
+	while (node->str[var->end_var] && (is_alph_or_num(node->str[var->end_var]) \
+			|| node->str[var->end_var] == '_'))
 		var->end_var++;
-	var->env_name = ft_substr(node->str, var->start_env, var->end_var - var->start_env);
-	printf("env_name is: %s|\n", var->env_name);
+	var->env_name = ft_substr(node->str, var->start_env, \
+					var->end_var - var->start_env);
 	var->expanded = copy_env_input(env, var->env_name);
 	var->env_length = ft_strlen(var->expanded);
 	if (var->brackets == true)
 	{
-			var->start_env--;
-			var->end_var++;
+		var->start_env--;
+		var->end_var++;
 	}
-	// expanded_part = expand_node(node, var);
+	expanded_part = expand_node(node, var);
 	// printf("exp part: %s\n", expanded_part->str);
-	replace_string(node, var); 
+	// replace_string(node, var);
 	// Replace string is just to check if expanding worked. 
 	// We need expand_node to truly replace it. ^^
-	printf("replacing is: %s|\n", node->str);
 	// replace_node(replacer) // need to add position in list?
 }
 
@@ -111,7 +96,6 @@ int	set_dollar(t_node *node, char **env, t_expand *info)
 		{
 			dol_var->dollar_pos = dol_var->i;
 			expand_dollar(node, dol_var, env);
-			printf("Expanded env string is: %s|\n", dol_var->expanded);
 			continue;
 		}
 		else

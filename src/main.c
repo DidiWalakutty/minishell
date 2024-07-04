@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   main.c                                             :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/06/14 18:40:07 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/06/28 12:23:20 by anonymous     ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: diwalaku <diwalaku@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/14 18:40:07 by diwalaku          #+#    #+#             */
+/*   Updated: 2024/07/04 16:07:52 by diwalaku         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 // Copies env, unsets old PWD and increments shlvl.
 // Sets all variables to NULL.
 // Termcaps???
+// process al op 1 ivm child
 static void	init_shell(t_data *data, char **env)
 {
 	// if (!isatty(STDIN_FILENO))
@@ -25,7 +26,7 @@ static void	init_shell(t_data *data, char **env)
 	data->input = NULL;
 	data->list = NULL;
 	data->token = NULL;
-	data->pipe_num = 0;
+	data->process = 1;
 	// TODO: PATH's
 	// TODO: unset old PWD
 	// TODO: increment shlvl
@@ -57,12 +58,3 @@ int	main(int argc, char **argv, char **env)
 	}
 	return (0);
 }
-
-// !!! Check if env is copied. !!!
-// int i = 0;
-// while (data.env[i])
-// {
-// 	printf("env_list[i] is: %s\n", data.env[i]);
-// 	i++;
-// }
-		// !!! Check if env is copied. !!!

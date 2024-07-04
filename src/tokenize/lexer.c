@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   lexer.c                                            :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/06/14 18:42:29 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/06/28 12:23:18 by anonymous     ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   lexer.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: diwalaku <diwalaku@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/14 18:42:29 by diwalaku          #+#    #+#             */
+/*   Updated: 2024/07/04 17:18:24 by diwalaku         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@ int	lexer_and_parser(t_data *data)
 	if ((all_quotes_closed(data->input) == false))
 		return (1);
 	data->list = tokenize_input(data, data->input);
-	printf("Before expanding:\n");
-	print_linked_list(data->list);
+	// printf("Before expanding:\n");
+	// print_linked_list(data->list);
 	expand_input(data->list, data->env);
 	// printf("After expanding in lex + exp:\n");
 	// print_linked_list(data->list);
@@ -88,16 +88,6 @@ static bool	token_syntax_error(char *str, int *i)
 	return (false);
 }
 
-// static void	print_linked_list(t_node *head)
-// {
-// 	while (head != NULL)
-// 	{
-// 		printf("Node is: %s - type is: %s \n", head->str, type_to_string(head->type));
-// 		head = head->next;
-// 	}
-// 	printf("\n");
-// }
-
 // Tokenizes input into nodes.
 // currently iterates beyond the \0.
 // For |; Just pipes, right? Not |&?
@@ -125,8 +115,3 @@ t_node	*tokenize_input(t_data *data, char *str)
 	}
 	return (list);
 }
-
-// Check linked list:
-	// printf("\nprint list:\n");
-	// print_linked_list(list);
-	// printf("Num of pipes is: %zu\n", data->pipe_num);

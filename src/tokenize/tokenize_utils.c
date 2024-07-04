@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   tokenize_utils.c                                   :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/06/14 18:43:19 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/06/14 19:43:18 by diwalaku      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   tokenize_utils.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: diwalaku <diwalaku@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/04 15:38:34 by diwalaku          #+#    #+#             */
+/*   Updated: 2024/07/04 16:08:15 by diwalaku         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	add_one_token(char *str, int i, t_data *data, t_node **list)
 	if (str[i] == '|')
 	{
 		new->type = PIPE;
-		data->pipe_num += 1;
+		data->process += 1;
 	}
 	else if (str[i] == '<')
 		new->type = REDIR_IN;

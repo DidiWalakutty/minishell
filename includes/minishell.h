@@ -94,7 +94,7 @@ typedef struct s_data
 	t_node	*list;
 	t_command *commands;
 	t_token	*token;	// needed for expansion??
-	size_t	pipe_num;
+	size_t	process;
 }	t_data;
 
 // Functions //
@@ -134,7 +134,6 @@ void	replace_string(t_node *node, t_dollar *var);
 // Nodes
 t_node	*create_node(char *str);
 void	node_to_list(t_node **list, t_node *new);
-t_node	*attach_list_token(t_node **head, t_node *new_node);
 
 // Free and exit
 // exit_error(char *str); probably not needed
@@ -147,5 +146,6 @@ t_node	*attach_list_token(t_node **head, t_node *new_node);
 // For Testing
 const char	*type_to_string(t_token type);
 void		print_linked_list(t_node *head);
+void		print_env(char **env);
 
 #endif

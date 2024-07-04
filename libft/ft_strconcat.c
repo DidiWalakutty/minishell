@@ -1,40 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   ft_strconcat.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: diwalaku <diwalaku@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/04 15:37:19 by diwalaku          #+#    #+#             */
-/*   Updated: 2024/07/04 15:37:23 by diwalaku         ###   ########.fr       */
+/*   Created: 2024/07/04 18:57:19 by diwalaku          #+#    #+#             */
+/*   Updated: 2024/07/04 20:29:36 by diwalaku         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-// split on '=' and name + value?
-// Copies current env. Should eventually also update ShellLevel
-char	**copy_env(char **env)
+char	*ft_strconcat(char *s1, char *s2)
 {
-	char	**copy;
+	char	*new;
 	int		i;
+	int		j;
+	int		len_s1;
+	int		len_s2;
 
 	i = 0;
-	while (env[i])
-		i++;
-	copy = ft_calloc(sizeof(char *), i + 1);
-	if (!copy)
-		return (NULL);
-	i = 0;
-	while (env[i])
+	j = 0;
+	len_s1 = ft_strlen(s1);
+	len_s2 = ft_strlen(s2);
+	new = malloc(sizeof(char *) + (len_s1 + len_s2 + 1));
+	while (i < len_s1)
 	{
-		copy[i] = ft_strdup(env[i]);
-		if (copy[i] == NULL)
-		{
-			free_array(copy);
-			return (copy);
-		}
+		new[i] = s1[i];
 		i++;
 	}
-	return (copy);
+	while (j < len_s2)
+	{
+		new[i] = s2[j];
+		i++;
+		j++;
+	}
+	new[i] = '\0';
+	return (new);
 }
