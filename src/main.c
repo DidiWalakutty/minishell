@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/20 16:40:26 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/07/07 02:01:15 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/07/07 22:41:41 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,11 +56,11 @@ int	main(int argc, char *argv[], char *envp[])
 	args[0] = ft_strdup("echo");
 	args[1] = ft_strdup("hello");
 	args[2] = NULL;
-	args2[0] = ft_strdup("cat");
+	args2[0] = ft_strdup("ls");
 	args2[1] = NULL;
 	data = ft_calloc(1, sizeof(t_data));
 	data->pipe_num = 2;
-	data->cmd_process = init_cmd_node(data->cmd_process, args[0], args, envp, NULL, "|");
-	data->cmd_process = init_cmd_node(data->cmd_process, args2[0], args2, envp, "|", "bla.txt");
+	data->cmd_process = init_cmd_node(data->cmd_process, args[0], args, envp, NULL, "test");
+	data->cmd_process = init_cmd_node(data->cmd_process, args2[0], args2, envp, "|", "YOO");
 	return (make_processes(data));
 }

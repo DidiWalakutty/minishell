@@ -6,7 +6,7 @@ HEADERS	= -I includes -I $(LIBFT)/headers
 
 # Configuration
 CC		= 	cc
-CFLAGS	=	-Wall -Werror -Wextra -g
+CFLAGS	=	-g -Wall -Werror -Wextra
 # CFLAGS	+= -fsanitize=address -g
 RM 		= rm -rf
 

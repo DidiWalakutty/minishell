@@ -6,7 +6,7 @@
 /*   By: sreerink <sreerink@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2024/06/12 20:30:41 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/07/07 01:47:26 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/07/07 21:51:17 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,11 @@ void	child_process(t_cmd *cmd, int fd_in[], int fd_out[])
 		close(fd_in[0]);
 		file1 = open(cmd->redirect_in, O_RDONLY);
 		if (file1 == -1)
+		{
+			close(fd_out[0]);
+			close(fd_out[1]);
 			error_exit(cmd->redirect_in, EXIT_FAILURE);
+		}
 		if (dup2(file1, STDIN_FILENO) == -1)
 			error_exit("dup2", EXIT_FAILURE);
 		close(file1);
@@ -94,6 +98,22 @@ void	child_process(t_cmd *cmd, int fd_in[], int fd_out[])
 	execve(cmd->path, cmd->args, cmd->env);
 }
 
+void	close_unused_pipes(int pipefd[][2], size_t cur_pipe, size_t total_pipes)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < total_pipes)
+	{
+		if (i != cur_pipe && i != cur_pipe + 1)
+		{
+			close(pipefd[i][0]);
+			close(pipefd[i][1]);
+		}
+		i++;
+	}
+}
+
 int	make_processes(t_data *data)
 {
 	size_t	i;
@@ -118,7 +138,10 @@ int	make_processes(t_data *data)
 		if (temp->pid == -1)
 			error_exit("fork", EXIT_FAILURE);
 		else if (temp->pid == 0)
+		{
+			close_unused_pipes(pipefd, i, data->pipe_num + 1);
 			child_process(temp, pipefd[i], pipefd[i + 1]);
+		}
 		close(pipefd[i][0]);
 		close(pipefd[i][1]);
 		temp = temp->next;
