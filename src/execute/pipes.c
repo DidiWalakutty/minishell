@@ -6,36 +6,60 @@
 /*   By: sreerink <sreerink@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2024/06/12 20:30:41 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/07/03 22:46:23 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/07/07 01:47:26 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	error_exit(char	*msg, int status)
+char	*find_cmd_path(t_cmd *cmd)
 {
-	if (msg)
-		perror(msg);
-	exit(status);
+	size_t	i;
+	char	**path_arr;
+	char	*slash_cmd;
+	char	*path_temp;
+	int		access_check;
+
+	i = 0;
+	access_check = 1;
+	while (cmd->env[i] && strncmp(cmd->env[i], "PATH=", 5))
+		i++;
+	path_arr = ft_split(cmd->env[i] + 5, ':');
+	if (!path_arr)
+		error_exit("ft_split", EXIT_FAILURE);
+	slash_cmd = ft_strjoin("/", cmd->cmd);
+	if (!slash_cmd)
+		error_exit("ft_strjoin", EXIT_FAILURE);
+	i = 0;
+	while (access_check != 0 && path_arr[i])
+	{
+		path_temp = ft_strjoin(path_arr[i], slash_cmd);
+		access_check = access(path_temp, F_OK);
+		i++;
+	}
+	free(slash_cmd);
+	ft_free_array(path_arr);
+	return (path_temp);
 }
 
-void	child_process(t_cmd *cmd, int pipefd[])
+void	child_process(t_cmd *cmd, int fd_in[], int fd_out[])
 {
 	int	file1;
 	int	file2;
 
+	close(fd_in[1]);
 	if (!cmd->redirect_in)
-		close(pipefd[0]);
+		close(fd_in[0]);
 	// Following line needs to be replaced with a Libft function
 	else if (!strcmp(cmd->redirect_in, "|"))
 	{
-		if (dup2(pipefd[0], STDIN_FILENO) == -1)
+		if (dup2(fd_in[0], STDIN_FILENO) == -1)
 			error_exit("dup2", EXIT_FAILURE);
-		close(pipefd[0]);
+		close(fd_in[0]);
 	}
 	else
 	{
-		close(pipefd[0]);
+		close(fd_in[0]);
 		file1 = open(cmd->redirect_in, O_RDONLY);
 		if (file1 == -1)
 			error_exit(cmd->redirect_in, EXIT_FAILURE);
@@ -46,18 +70,19 @@ void	child_process(t_cmd *cmd, int pipefd[])
 	// Under following line is all redirecting output
 	// TO DO: separate redirect in/output into functions
 	// -----------------------------------------------------
+	close(fd_out[0]);
 	if (!cmd->redirect_out)
-		close(pipefd[1]);
+		close(fd_out[1]);
 	// Following line needs to be replaced with a Libft function
 	else if (!strcmp(cmd->redirect_out, "|"))
 	{
-		if (dup2(pipefd[1], STDOUT_FILENO) == -1)
+		if (dup2(fd_out[1], STDOUT_FILENO) == -1)
 			error_exit("dup2", EXIT_FAILURE);
-		close(pipefd[1]);
+		close(fd_out[1]);
 	}
 	else
 	{
-		close(pipefd[1]);
+		close(fd_out[1]);
 		file2 = open(cmd->redirect_out, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (file2 == -1)
 			error_exit(cmd->redirect_out, EXIT_FAILURE);
@@ -65,6 +90,7 @@ void	child_process(t_cmd *cmd, int pipefd[])
 			error_exit("dup2", EXIT_FAILURE);
 		close(file2);
 	}
+	cmd->path = find_cmd_path(cmd);
 	execve(cmd->path, cmd->args, cmd->env);
 }
 
@@ -74,12 +100,12 @@ int	make_processes(t_data *data)
 	t_cmd	*cmds;
 	t_cmd	*temp;
 	int		status;
-	int		pipefd[data->pipe_num][2];
+	int		pipefd[data->pipe_num + 1][2];
 
 	i = 0;
 	cmds = data->cmd_process;
 	temp = cmds;
-	while (i < data->pipe_num)
+	while (i < data->pipe_num + 1)
 	{
 		if (pipe(pipefd[i]) == -1)
 			error_exit("pipe", EXIT_FAILURE);
@@ -92,12 +118,14 @@ int	make_processes(t_data *data)
 		if (temp->pid == -1)
 			error_exit("fork", EXIT_FAILURE);
 		else if (temp->pid == 0)
-			child_process(temp, pipefd[i]);
+			child_process(temp, pipefd[i], pipefd[i + 1]);
 		close(pipefd[i][0]);
 		close(pipefd[i][1]);
 		temp = temp->next;
 		i++;
 	}
+	close(pipefd[i][0]);
+	close(pipefd[i][1]);
 	temp = cmds;
 	while (temp)
 	{

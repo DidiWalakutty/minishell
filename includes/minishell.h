@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/20 16:38:50 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/07/03 22:46:14 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/07/07 01:47:14 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,6 +126,7 @@ bool		error_msg(char *message, char c);
 const char 	*type_to_string(t_token type);
 
 // Executing
-int	make_processes(t_data *data);
+void	error_exit(char	*msg, int status);
+int		make_processes(t_data *data);
 
 #endif

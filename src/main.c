@@ -6,18 +6,20 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/20 16:40:26 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/07/03 22:54:54 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/07/07 02:01:15 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	error_exit(void)
+void	error_exit(char	*msg, int status)
 {
-	printf("Inside error_exit\n");
+	if (msg)
+		perror(msg);
+	exit(status);
 }
 
-t_cmd	*init_cmd_node(t_cmd *cmds, char *str, char **args, char **envp)
+t_cmd	*init_cmd_node(t_cmd *cmds, char *str, char **args, char **envp, char *in, char *out)
 {
 	t_cmd	*head;
 	t_cmd	*last;
@@ -29,9 +31,11 @@ t_cmd	*init_cmd_node(t_cmd *cmds, char *str, char **args, char **envp)
 		last = last->next;
 	new = ft_calloc(1, sizeof(t_cmd));
 	if (!new)
-		error_exit();
+		error_exit("ft_calloc", EXIT_FAILURE);
 	new->cmd = str;
 	new->args = args;
+	new->redirect_in = in;
+	new->redirect_out = out;
 	new->env = envp;
 	if (head == NULL)
 		return (new);
@@ -42,22 +46,21 @@ t_cmd	*init_cmd_node(t_cmd *cmds, char *str, char **args, char **envp)
 int	main(int argc, char *argv[], char *envp[])
 {
 	size_t	i;
-	char	*str[] = {"echo", "ls"};
-	char	***args;
+	char	**args = malloc(sizeof(char *) * 3);
+	char	**args2 = malloc(sizeof(char *) * 3);
 	t_data	*data;
 
 	i = 0;
 	argc = 0;
 	argv[0] = "Yo";
-	args[0][0] = "echo";
-	args[0][1] = "hello";
-	args[0][2] = "\0";
+	args[0] = ft_strdup("echo");
+	args[1] = ft_strdup("hello");
+	args[2] = NULL;
+	args2[0] = ft_strdup("cat");
+	args2[1] = NULL;
 	data = ft_calloc(1, sizeof(t_data));
-	data->pipe_num = 1;
-	while (i < data->pipe_num)
-	{
-		data->cmd_process = init_cmd_node(data->cmd_process, str[i], args[i], envp);
-		i++;
-	}
+	data->pipe_num = 2;
+	data->cmd_process = init_cmd_node(data->cmd_process, args[0], args, envp, NULL, "|");
+	data->cmd_process = init_cmd_node(data->cmd_process, args2[0], args2, envp, "|", "bla.txt");
 	return (make_processes(data));
 }
