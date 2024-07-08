@@ -1,1 +1,6 @@
+minishell
+obj
+*.obj
+libft/libft.a
 .vscode
+*.json
