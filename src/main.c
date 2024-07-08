@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/20 16:40:26 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/07/07 22:41:41 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/07/08 21:03:06 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,16 +51,19 @@ int	main(int argc, char *argv[], char *envp[])
 	t_data	*data;
 
 	i = 0;
-	argc = 0;
+/*	argc = 0;
 	argv[0] = "Yo";
-	args[0] = ft_strdup("echo");
-	args[1] = ft_strdup("hello");
+	args[0] = ft_strdup("cat");
+	args[1] = ft_strdup("Makefile");
 	args[2] = NULL;
-	args2[0] = ft_strdup("ls");
+	args2[0] = ft_strdup("cat");
 	args2[1] = NULL;
 	data = ft_calloc(1, sizeof(t_data));
 	data->pipe_num = 2;
-	data->cmd_process = init_cmd_node(data->cmd_process, args[0], args, envp, NULL, "test");
-	data->cmd_process = init_cmd_node(data->cmd_process, args2[0], args2, envp, "|", "YOO");
-	return (make_processes(data));
+	data->cmd_process = init_cmd_node(data->cmd_process, args[0], args, envp, NULL, "|");
+	data->cmd_process = init_cmd_node(data->cmd_process, args2[0], args2, envp, "|", NULL);
+	return (make_processes(data));*/
+	if (argc > 1)
+		echo_builtin(argv[1], true);
+	return (0);
 }

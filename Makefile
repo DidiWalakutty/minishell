@@ -6,7 +6,7 @@ HEADERS	= -I includes -I $(LIBFT)/headers
 
 # Configuration
 CC		= 	cc
-CFLAGS	=	-g -Wall -Werror -Wextra
+CFLAGS	=	-g
 # CFLAGS	+= -fsanitize=address -g
 RM 		= rm -rf
 
@@ -23,7 +23,8 @@ SRC =	./src/main.c \
 				./src/tokenize/quotes.c \
 				./src/tokenize/tokenize_utils.c \
 				./src/tokenize/tokenizer.c \
-				./src/execute/pipes.c
+				./src/execute/pipes.c \
+				./src/builtins/echo.c
 				# ./src/expanding/expander.c \
 				# ./src/expanding/expander_utils.c \
 				# ./src/expanding/expander_checks.c \
@@ -68,6 +69,9 @@ $(OBJDIR)/%.o: ./src/utils/%.c
 		@$(CC) $(CFLAGS) $(HEADERS) -c -o $@ $<
 
 $(OBJDIR)/%.o: ./src/execute/%.c
+		@$(CC) $(CFLAGS) $(HEADERS) -c -o $@ $<
+
+$(OBJDIR)/%.o: ./src/builtins/%.c
 		@$(CC) $(CFLAGS) $(HEADERS) -c -o $@ $<
 
 # Cleaning

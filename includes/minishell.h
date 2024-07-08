@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/20 16:38:50 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/07/07 01:47:14 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/07/08 20:58:50 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,5 +128,8 @@ const char 	*type_to_string(t_token type);
 // Executing
 void	error_exit(char	*msg, int status);
 int		make_processes(t_data *data);
+
+// Builtins
+void	echo_builtin(const char *str, bool newline);
 
 #endif
