@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/20 16:38:50 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/07/17 16:09:08 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/07/17 16:35:49 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <stdio.h>
 # include <unistd.h>
 # include <stdbool.h>
+# include <linux/limits.h>
 # include "../libft/libft.h"
 # include <readline/readline.h>
 # include <readline/history.h>
@@ -131,5 +132,6 @@ int		make_processes(t_data *data);
 // Builtins
 void	echo_builtin(const char *str, bool newline);
 void	cd_builtin(const char *dst_directory);
+void	pwd_builtin(void);
 
 #endif

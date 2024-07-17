@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/20 16:40:26 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/07/17 16:02:27 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/07/17 16:36:40 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,9 @@ int	main(int argc, char *argv[], char *envp[])
 	data->cmd_process = init_cmd_node(data->cmd_process, args2[0], args2, envp, "|", NULL);
 	return (make_processes(data));*/
 	if (argc > 1)
+	{
 		cd_builtin(argv[1]);
+		pwd_builtin();
+	}
 	return (0);
 }

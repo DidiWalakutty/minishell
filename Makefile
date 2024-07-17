@@ -25,7 +25,8 @@ SRC =	./src/main.c \
 				./src/tokenize/tokenizer.c \
 				./src/execute/pipes.c \
 				./src/builtins/echo.c \
-				./src/builtins/cd.c
+				./src/builtins/cd.c \
+				./src/builtins/pwd.c
 				# ./src/expanding/expander.c \
 				# ./src/expanding/expander_utils.c \
 				# ./src/expanding/expander_checks.c \
