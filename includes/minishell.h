@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/20 16:38:50 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/07/08 20:58:50 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/07/17 16:09:08 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,16 +120,16 @@ t_node	*create_node(char *str);
 void	node_to_list(t_node **list, t_node *new);
 
 // Free and exit
-// exit_error(char *str); probably not needed
 void		free_array(char **str);
 bool		error_msg(char *message, char c);
 const char 	*type_to_string(t_token type);
 
 // Executing
-void	error_exit(char	*msg, int status);
+void	error_exit(const char *msg, int status);
 int		make_processes(t_data *data);
 
 // Builtins
 void	echo_builtin(const char *str, bool newline);
+void	cd_builtin(const char *dst_directory);
 
 #endif

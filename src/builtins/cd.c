@@ -1,21 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                       ::::::::             */
-/*   echo.c                                            :+:    :+:             */
+/*   cd.c                                              :+:    :+:             */
 /*                                                    +:+                     */
 /*   By: sreerink <sreerink@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
-/*   Created: 2024/07/17 15:29:51 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/07/17 15:30:32 by sreerink      ########   odam.nl         */
+/*   Created: 2024/07/17 15:29:31 by sreerink      #+#    #+#                 */
+/*   Updated: 2024/07/17 16:04:35 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	echo_builtin(const char *str, bool newline)
+void	cd_builtin(const char *dst_directory)
 {
-	if (newline)
-		printf("%s\n", str);
-	else
-		printf("%s", str);
+	if (chdir(dst_directory) == -1)
+	{
+		write(STDERR_FILENO, "minishell: cd: ", 15);
+		error_exit(dst_directory, EXIT_FAILURE);
+	}
 }
