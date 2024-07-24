@@ -27,7 +27,7 @@ bool	is_dollar(t_node *node, bool is_expandable)
 	return (false);
 }
 
-static t_dollar	*init_dollar(int pos)
+static t_dollar	*init_dollar(int pos, t_node *node)
 {
 	t_dollar	*dollar;
 
@@ -35,22 +35,20 @@ static t_dollar	*init_dollar(int pos)
 	dollar->expanded = NULL;
 	dollar->env_name = NULL;
 	dollar->i = 0;
-	dollar->str_len = 0;
+	dollar->str_len = ft_strlen(node->str);
 	dollar->dollar_pos = pos;
 	dollar->start_env = 0;
 	dollar->end_var = 0;
 	dollar->env_length = 0;
 	dollar->brackets = false;
+	dollar->remainder = false;
 	return (dollar);
 }
 
-// start_env is $ +1, where EVN-name starts.
+// start_env is $ +1, where ENV-name starts.
 // end is where env_name ends.
 static void	expand_dollar(t_node *node, t_dollar *var, char **env)
 {
-	t_node	*expanded_part;
-
-	expanded_part = NULL;
 	var->start_env = var->dollar_pos + 1;
 	if (node->str[var->start_env] == '{')
 	{
@@ -70,8 +68,11 @@ static void	expand_dollar(t_node *node, t_dollar *var, char **env)
 		var->start_env--;
 		var->end_var++;
 	}
-	expanded_part = expand_node(node, var);
+	var->i = var->end_var;
+	expand_node(node, var);
 	// printf("exp part: %s\n", expanded_part->str);
+	// node_to_list(expanded_part);
+	// printf("Node after expanding is: %s\n", node->str);
 	// replace_string(node, var);
 	// Replace string is just to check if expanding worked. 
 	// We need expand_node to truly replace it. ^^
@@ -82,32 +83,54 @@ int	set_dollar(t_node *node, char **env, t_expand *info)
 {
 	t_dollar	*dol_var;
 
-	dol_var = init_dollar(info->i);
-	dol_var->str_len = ft_strlen(node->str);
+	//
+	//
+	// HERE!
+	// Won't continu when there's a remainder
+	// "Hi $USER hoi" will continuously loop and not pick up the "hoi".
+	// Is the problem in expand_input or set_dollar?
+	//
+	//
+	dol_var = init_dollar(info->i, node);
 	while (dol_var->i < dol_var->str_len)
 	{
+		printf("Loop iteration: dol_var->i = %d, char = %c, str_len = %d\n", dol_var->i, node->str[dol_var->i], dol_var->str_len);
 		if (node->str[dol_var->i] == '$' && !node->str[dol_var->i + 1])
 		{
 			free(dol_var);
 			return (0);
 		}
-		else if (node->str[dol_var->i] == '$' && (if_valid_char(node->str[dol_var->i + 1]) || \
+		if (node->str[dol_var->i] == '$' && (if_valid_char(node->str[dol_var->i + 1]) || \
 			node->str[dol_var->i + 1] == '{'))
 		{
 			dol_var->dollar_pos = dol_var->i;
 			expand_dollar(node, dol_var, env);
-			continue;
+			// dol_var->i = dol_var->end_var;
+			printf("i in set_dollar is: %i\n", dol_var->i);
+			if (dol_var->remainder == true)
+			{
+				info->to_next_node = false;
+				printf("Expansion found remainder, don't go to next node\n");
+			}
+			break ;
 		}
 		else
 		{
 			dol_var->i++;
-			// while (node->str[dol_var->i] && node->str[dol_var->i] != '$')
-			// {
-			// 	dol_var->i++;
-			// 	// printf("Else statement: char is: %c|\n", node->str[dol_var->i]);
-			// }
-			// printf("char end else-loop: %c|\n", node->str[dol_var->i]);
+			while (node->str[dol_var->i] && node->str[dol_var->i] != '$')
+			{
+				dol_var->i++;
+				printf("Else statement: char is: %c|\n", node->str[dol_var->i]);
+			}
 		}
 	}
+	if (ft_strlen(dol_var->expanded) == 0)
+	{
+		printf("strlen dol_var->expanded is 0\n");
+		free(dol_var);
+		return (0);
+	}
+	printf("Exiting set_dollar\n");
+	free(dol_var);
 	return (0);
 }

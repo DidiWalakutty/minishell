@@ -53,6 +53,7 @@ typedef struct s_expand
 	bool	expandable;
 	t_node	*head;
 	t_token	prev_type;
+	t_token	to_next_node;
 }	t_expand;
 
 typedef struct s_dollar
@@ -65,7 +66,8 @@ typedef struct s_dollar
 	int		start_env;			// Position after $ and/or ${
 	int		end_var;			// Position where env-name ends.
 	int		env_length;			// Length of found env.
-	bool	brackets;
+	bool	brackets;			// In case of ${}
+	bool	remainder;			// Check for if we need to re-read the node
 }	t_dollar;
 
 typedef struct s_command
@@ -129,7 +131,6 @@ int		if_valid_char(char c);
 bool	is_dollar(t_node *node, bool is_expandable);
 int		set_dollar(t_node *node, char **env, t_expand *info);
 t_node	*expand_node(t_node *node, t_dollar *var);
-void	replace_string(t_node *node, t_dollar *var);
 
 // Nodes
 t_node	*create_node(char *str);

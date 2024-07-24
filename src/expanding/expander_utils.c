@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   expander_utils.c                                   :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: diwalaku <diwalaku@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/04 15:35:01 by diwalaku          #+#    #+#             */
-/*   Updated: 2024/07/04 21:42:00 by diwalaku         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   expander_utils.c                                   :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/07/04 15:35:01 by diwalaku      #+#    #+#                 */
+/*   Updated: 2024/07/23 00:36:15 by anonymous     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,85 +21,40 @@
 // 	return (new);
 // }
 
-// Replaces the expansion-part in the node.
 t_node	*expand_node(t_node *node, t_dollar *var)
 {
 	t_node	*new;
-	t_node	*current;
 	char	*before;
-	char	*replace;
-	char	*remaining;
+	char	*remainder;
 	char	*joined;
-	// char	*joined2;
 
+	printf("in expanding node\n");
 	new = NULL;
-	current = NULL;
 	joined = NULL;
 	before = ft_substr(node->str, 0, var->dollar_pos);
-	replace = ft_substr(var->expanded, 0, var->env_length);
-	remaining = ft_substr(node->str, var->end_var, var->str_len);
+	remainder = ft_substr(node->str, var->end_var, var->str_len);
+	printf("Before: %s\n", before);
+	printf("Expand: %s\n", var->expanded);
+	printf("Remain: %s\n", remainder);
 	if (ft_strlen(before) > 0)
+		joined = ft_strdup(before);
+	if (ft_strlen(var->expanded) > 0)
+		joined = ft_strconcat(before, var->expanded);
+	if (ft_strlen(remainder) > 0)
 	{
-		node_to_list(&new, create_node(before));
-		current = new;
-		while (current->next != NULL)
-			current = current->next;
+		joined = ft_strconcat(joined, remainder);
+		var->remainder = true;
 	}
-	printf("current->str after before is: |%s|\n", current->str);
-	printf("new->str after before is: |%s|\n", new->str);
-	if (ft_strlen(replace) > 0)
-	{
-		if (current)
-		{
-			joined = ft_strconcat(current->str, replace);
-			free(current->str);
-			current->str = joined;
-		}
-		else
-		{
-			// node_to_list(&new, create_node(var->expanded));
-			joined = ft_strdup(replace);
-			current = create_node(joined);
-			node_to_list(&new, current);
-		}
-	}
-	printf("current->str after replace is: |%s|\n", current->str);
-	printf("new->str after replace is: |%s|\n", new->str);
-	// if (ft_strlen(remaining) > 0)
-	// {
-	// 	node_to_list(&new, create_node(remaining));
-	// 	current = new;
-	// 	while (current->next != NULL)
-	// 		current = current->next;
-	// }
-	// printf("after remain check: |%s|\n", new->str);
-	// free(before);
-	// free(replace);
-	// free(remaining);
+	free(node->str);
+	// new = create_node(joined);
+	// new->type = node->type;
+	node->str = joined;
+	// node_to_list(head, new);
+	// node_to_list(&new, create_node(joined));
+	free(before);
+	free(remainder);
 	return (new);
 }
-
-		// joined = attach_expand(before, var->expanded);
-		// printf("Joined is: %s\n", joined);
-		// node_to_list(&new, create_node(joined));
-		// // HERE: Doesn't update the node to joined!!!
-		// printf("After +expand is: %s\n", new->str);
-		// joined = ft_strconcat(current->str, var->expanded);
-		// free(current->str);
-		// current->str = joined;
-		// node_to_list(&new, create_node(joined));
-	// }
-	// if (ft_strlen(remaining) > 0)
-	// {
-	// 	joined2 = ft_strconcat(current->str, remaining);
-	// 	free(current->str);
-	// 	current->str = joined2;
-	// 	node_to_list(&new, create_node(joined2));
-	// }
-	// free(before);
-	// free(remaining);
-// 	return (new);
-// }
 
 // Compares each line of env with the given string, like
 // pwd, user etc.

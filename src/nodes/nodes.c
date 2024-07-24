@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   nodes.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: diwalaku <diwalaku@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/04 15:28:16 by diwalaku          #+#    #+#             */
-/*   Updated: 2024/07/04 17:17:55 by diwalaku         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   nodes.c                                            :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/07/04 15:28:16 by diwalaku      #+#    #+#                 */
+/*   Updated: 2024/07/23 00:29:43 by anonymous     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,16 +28,16 @@ t_node	*create_node(char *str)
 	return (new_node);
 }
 
-void	node_to_list(t_node **list, t_node *new)
+void	node_to_list(t_node **head, t_node *new)
 {
 	t_node	*current;
 
-	current = *list;
+	current = *head;
 	if (!new)
 		return ;
 	if (!current)
 	{
-		*list = new;
+		*head = new;
 		return ;
 	}
 	while (current->next != NULL)
