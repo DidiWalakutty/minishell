@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:42:29 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/07/24 19:13:46 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/07/25 12:37:34 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ int	lexer_and_parser(t_data *data)
 	printf("Before expanding:\n");
 	print_linked_list(data->list);
 	expand_input(data->list, data->env);
-	printf("Back in lexer and parser\n");
 	// printf("After expanding in lex + exp:\n");
 	// print_linked_list(data->list);
 	return (0);

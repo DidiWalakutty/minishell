@@ -6,13 +6,13 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/07/04 15:35:01 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/07/25 12:16:43 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/07/25 14:33:52 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_node	*expand_node(t_node *node, t_dollar *var)
+t_node	*expand_node(t_node *node, t_dollar *var, t_expand *info)
 {
 	t_node	*new;
 	char	*before;
@@ -21,7 +21,7 @@ t_node	*expand_node(t_node *node, t_dollar *var)
 
 	new = NULL;
 	joined = NULL;
-	before = ft_substr(node->str, 0, var->dollar_pos);
+	before = ft_substr(node->str, 0, var->i);
 	remainder = ft_substr(node->str, var->end_var, var->str_len);
 	if (ft_strlen(before) > 0)
 		joined = ft_strdup(before);
@@ -32,11 +32,11 @@ t_node	*expand_node(t_node *node, t_dollar *var)
 		joined = ft_strconcat(joined, remainder);
 		var->remainder = true;
 	}
-	free(node->str);
-	// new = create_node(joined);
-	// new->type = node->type;
-	node->str = joined;
-	// node_to_list(head, new);
+	// free(node->str);
+	new = create_node(joined);
+	new->type = node->type;
+	// node->str = joined;
+	node_to_list(&info->head, new);
 	// node_to_list(&new, create_node(joined));
 	// free(before);
 	// free(var->expanded);

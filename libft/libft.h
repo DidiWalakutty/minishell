@@ -40,6 +40,7 @@ int		ft_isalpha(int c);
 int		is_alph_or_num(char c);
 char	*ft_strconcat(char *s1, char *s2);
 char	*ft_itoa(int i);
+void	*ft_memcpy(void *dst, const void *src, size_t n);
 
 // printf
 int		ft_printf(const char *format, ...);

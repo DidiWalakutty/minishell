@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:36:22 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/07/25 12:29:56 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/07/25 15:15:47 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ t_expand	*init_info(t_node *list)
 	info->head = list;
 	info->char_pos = 0;
 	info->i = 0;
-	info->strlen = ft_strlen(list->str); // needed???
+	info->strlen = ft_strlen(list->str);
 	info->expandable = false;
 	info->prev_type = WORD;
 	info->to_next_node = true;
@@ -43,12 +43,11 @@ void	expand_input(t_node *node, char **env)
 	while (node)
 	{
 		info->to_next_node = true;
-		// printf("1. still in node: %s\n", node->str);
-		// check tilde ~
-		// printf("node in while loop is: %s\n", node->str);
 		expandable_type(info, node->type);
-		// if (is_double_dollar(node, info, info->expandable) == true)
-		// 	set_pid(node, info);
+		// check tilde ~
+		// check double_dollar/PID
+		if (is_double_dollar(node, info, info->expandable) == true)
+			set_pid(node, info);
 		if (is_dollar(node, info->expandable) == true)
 			set_dollar(node, env, info);
 		if (info->to_next_node == true)

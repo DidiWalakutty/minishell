@@ -61,10 +61,9 @@ typedef struct s_dollar
 {
 	char	*expanded;
 	char	*env_name;
-	int		i;
-	int		str_len;			// Length of full node->str
-	int		dollar_pos;			// Position where $ is.
-	int		start_env;			// Position after $ and/or ${
+	int		i;					// Position in string.
+	int		str_len;			// Length of full node->str.
+	int		start_env;			// Position after $ and/or ${.
 	int		end_var;			// Position where env-name ends.
 	int		env_length;			// Length of found env.
 	bool	brackets;			// In case of ${}
@@ -134,8 +133,8 @@ void	set_pid(t_node *node, t_expand *info);
 bool	is_dollar(t_node *node, bool is_expandable);
 int		find_dollar_position(char *str);
 int		set_dollar(t_node *node, char **env, t_expand *info);
-t_node	*expand_node(t_node *node, t_dollar *var);
-// t_node	*expand_node(t_node *node, t_dollar *var, t_expand *info);
+// t_node	*expand_node(t_node *node, t_dollar *var);
+t_node	*expand_node(t_node *node, t_dollar *var, t_expand *info);
 
 // Nodes
 t_node	*create_node(char *str);
