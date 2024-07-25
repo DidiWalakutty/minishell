@@ -70,6 +70,7 @@ static void	expand_dollar(t_node *node, t_dollar *var, char **env)
 	}
 	var->i = var->end_var;
 	expand_node(node, var);
+	// var->expanded = NULL;
 	// printf("exp part: %s\n", expanded_part->str);
 	// node_to_list(expanded_part);
 	// printf("Node after expanding is: %s\n", node->str);
@@ -83,14 +84,10 @@ int	set_dollar(t_node *node, char **env, t_expand *info)
 {
 	t_dollar	*dol_var;
 
-	//
-	//
 	// HERE!
 	// Won't continu when there's a remainder
 	// "Hi $USER hoi" will continuously loop and not pick up the "hoi".
 	// Is the problem in expand_input or set_dollar?
-	//
-	//
 	dol_var = init_dollar(info->i, node);
 	while (dol_var->i < dol_var->str_len)
 	{
@@ -106,12 +103,13 @@ int	set_dollar(t_node *node, char **env, t_expand *info)
 			dol_var->dollar_pos = dol_var->i;
 			expand_dollar(node, dol_var, env);
 			// dol_var->i = dol_var->end_var;
-			printf("i in set_dollar is: %i\n", dol_var->i);
+			// printf("i in set_dollar is: %i\n", dol_var->i);
 			if (dol_var->remainder == true)
 			{
 				info->to_next_node = false;
-				printf("Expansion found remainder, don't go to next node\n");
+				// printf("Expansion found remainder, don't go to next node\n");
 			}
+			printf("break\n");
 			break ;
 		}
 		else
@@ -131,6 +129,7 @@ int	set_dollar(t_node *node, char **env, t_expand *info)
 		return (0);
 	}
 	printf("Exiting set_dollar\n");
+	// free_dollarvar(dol_var);
 	free(dol_var);
 	return (0);
 }

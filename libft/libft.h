@@ -39,6 +39,7 @@ int		ft_isdigit(int c);
 int		ft_isalpha(int c);
 int		is_alph_or_num(char c);
 char	*ft_strconcat(char *s1, char *s2);
+char	*ft_itoa(int i);
 
 // printf
 int		ft_printf(const char *format, ...);

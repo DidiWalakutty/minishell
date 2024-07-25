@@ -6,20 +6,11 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/07/04 15:35:01 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/07/23 00:36:15 by anonymous     ########   odam.nl         */
+/*   Updated: 2024/07/25 12:16:43 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-// Or t_node *new???
-// static char	*attach_expand(char *before, char *replace)
-// {
-// 	char	*new;
-
-// 	new = ft_strconcat(before, replace);
-// 	return (new);
-// }
 
 t_node	*expand_node(t_node *node, t_dollar *var)
 {
@@ -28,14 +19,10 @@ t_node	*expand_node(t_node *node, t_dollar *var)
 	char	*remainder;
 	char	*joined;
 
-	printf("in expanding node\n");
 	new = NULL;
 	joined = NULL;
 	before = ft_substr(node->str, 0, var->dollar_pos);
 	remainder = ft_substr(node->str, var->end_var, var->str_len);
-	printf("Before: %s\n", before);
-	printf("Expand: %s\n", var->expanded);
-	printf("Remain: %s\n", remainder);
 	if (ft_strlen(before) > 0)
 		joined = ft_strdup(before);
 	if (ft_strlen(var->expanded) > 0)
@@ -51,8 +38,9 @@ t_node	*expand_node(t_node *node, t_dollar *var)
 	node->str = joined;
 	// node_to_list(head, new);
 	// node_to_list(&new, create_node(joined));
-	free(before);
-	free(remainder);
+	// free(before);
+	// free(var->expanded);
+	// free(remainder);
 	return (new);
 }
 

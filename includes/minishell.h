@@ -28,7 +28,6 @@
 typedef enum s_token		t_token;
 typedef struct s_expand		t_expand;
 typedef struct s_command	t_command;
-typedef struct s_list		t_list;
 typedef struct s_node		t_node;
 typedef struct s_data		t_data;
 
@@ -49,6 +48,8 @@ typedef enum s_token
 
 typedef struct s_expand
 {
+	int		char_pos;
+	int		strlen;
 	int		i;
 	bool	expandable;
 	t_node	*head;
@@ -95,7 +96,7 @@ typedef struct s_data
 	char	**env;
 	t_node	*list;
 	t_command *commands;
-	t_token	*token;	// needed for expansion??
+	// t_token	*token;	// needed in t_node??
 	size_t	process;
 }	t_data;
 
@@ -128,9 +129,13 @@ int		variable_len(char *str);
 // Utils - Expanding
 char	*copy_env_input(char **env, char *to_find);
 int		if_valid_char(char c);
+bool	is_double_dollar(t_node *node, t_expand *info, bool is_expandable);
+void	set_pid(t_node *node, t_expand *info);
 bool	is_dollar(t_node *node, bool is_expandable);
+int		find_dollar_position(char *str);
 int		set_dollar(t_node *node, char **env, t_expand *info);
 t_node	*expand_node(t_node *node, t_dollar *var);
+// t_node	*expand_node(t_node *node, t_dollar *var, t_expand *info);
 
 // Nodes
 t_node	*create_node(char *str);
@@ -140,6 +145,8 @@ void	node_to_list(t_node **list, t_node *new);
 // exit_error(char *str); probably not needed
 void	free_array(char **str);
 bool	error_msg(char *message, char c);
+void	free_all(t_data	*data);
+int		free_dollarvar(t_dollar *var);
 
 // List_utils
 t_node	*attach_list_token(t_node **head, t_node *new_node);

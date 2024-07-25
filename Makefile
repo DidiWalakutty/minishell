@@ -28,7 +28,7 @@ SRC =	./src/main.c \
 				./src/expanding/expander.c \
 				./src/expanding/expand_dollar.c \
 				./src/expanding/expander_utils.c \
-				# ./src/expanding/expand_double_dollar.c \
+				./src/expanding/expand_double_dollar.c \
 
 # Object files and directories
 # obj folder in src?: src/obj 

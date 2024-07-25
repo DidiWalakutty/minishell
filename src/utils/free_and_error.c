@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   free_and_error.c                                   :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: diwalaku <diwalaku@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/14 18:41:04 by diwalaku          #+#    #+#             */
-/*   Updated: 2024/07/04 15:41:27 by diwalaku         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   free_and_error.c                                   :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/06/14 18:41:04 by diwalaku      #+#    #+#                 */
+/*   Updated: 2024/07/24 19:25:42 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,24 @@ bool	error_msg(char *message, char c)
 {
 	ft_printf("%s `%c'\n", message, c);
 	return (true);
+}
+void	free_all(t_data	*data)
+{
+	free(data->input);
+	free(data->env);
+	free(data->list);
+	// free(data->process);
+	// free(&data);
+}
+
+int	free_dollarvar(t_dollar *var)
+{
+	if (var->env_name)
+		free(var->env_name);
+	if (var->expanded)
+		free(var->expanded);
+	free(var);
+	return (1);
 }
 
 void	free_array(char **str)
@@ -56,6 +74,8 @@ void	print_linked_list(t_node *head)
 	while (head != NULL)
 	{
 		printf("Node %i is: %s - type is: %s \n", i, head->str, type_to_string(head->type));
+		// if (i >= 2)
+		// 	printf("Previous node %i is: %s - type is: %s \n", i - 1, head->previous->str, type_to_string(head->previous->type));
 		head = head->next;
 		i++;
 	}
