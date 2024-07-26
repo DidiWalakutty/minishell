@@ -28,7 +28,7 @@ SRC =	./src/main.c \
 				./src/execute/pipes.c \
 				./src/builtins/echo.c \
 				./src/builtins/cd.c \
-				./src/builtins/pwd.c
+				./src/builtins/pwd.c \
 				./src/expanding/expander.c \
 				./src/expanding/expand_dollar.c \
 				./src/expanding/expander_utils.c \
@@ -61,25 +61,25 @@ $(OBJDIR)/%.o: ./src/%.c
 	@$(CC) $(CFLAGS) $(HEADERS) -c -o $@ $<
 
 $(OBJDIR)/%.o: ./src/environment/%.c
-		@$(CC) $(CFLAGS) $(HEADERS) -c -o $@ $<
+	@$(CC) $(CFLAGS) $(HEADERS) -c -o $@ $<
 
 $(OBJDIR)/%.o: ./src/nodes/%.c
-		@$(CC) $(CFLAGS) $(HEADERS) -c -o $@ $<
+	@$(CC) $(CFLAGS) $(HEADERS) -c -o $@ $<
 
 $(OBJDIR)/%.o: ./src/tokenize/%.c
-		@$(CC) $(CFLAGS) $(HEADERS) -c -o $@ $<
+	@$(CC) $(CFLAGS) $(HEADERS) -c -o $@ $<
 
 $(OBJDIR)/%.o: ./src/expanding/%.c
-		@$(CC) $(CFLAGS) $(HEADERS) -c -o $@ $<
+	@$(CC) $(CFLAGS) $(HEADERS) -c -o $@ $<
 
 $(OBJDIR)/%.o: ./src/utils/%.c
-		@$(CC) $(CFLAGS) $(HEADERS) -c -o $@ $<
+	@$(CC) $(CFLAGS) $(HEADERS) -c -o $@ $<
 
 $(OBJDIR)/%.o: ./src/execute/%.c
-		@$(CC) $(CFLAGS) $(HEADERS) -c -o $@ $<
+	@$(CC) $(CFLAGS) $(HEADERS) -c -o $@ $<
 
 $(OBJDIR)/%.o: ./src/builtins/%.c
-		@$(CC) $(CFLAGS) $(HEADERS) -c -o $@ $<
+	@$(CC) $(CFLAGS) $(HEADERS) -c -o $@ $<
 
 
 # Cleaning
