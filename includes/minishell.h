@@ -31,6 +31,7 @@
 typedef enum s_token		t_token;
 typedef struct s_list		t_list;
 typedef struct s_cmd		t_cmd;
+typedef struct s_expand		t_expand;
 typedef struct s_node		t_node;
 typedef struct s_data		t_data;
 
@@ -47,7 +48,31 @@ typedef enum s_token
 	DOUBLE_QUOTE,	// "  double qyote = expandable
 	SINGLE_QUOTE,	// ' single quote
 	DOLLAR,			// $ dollar = do it during expanding
-}  t_token;
+}	t_token;
+
+typedef struct s_expand
+{
+	int		char_pos;
+	int		strlen;
+	int		node_i;		// node iterator.
+	bool	expandable;
+	t_node	*head;
+	t_token	prev_type;
+	t_token	to_next_node;
+}	t_expand;
+
+typedef struct s_dollar
+{
+	char	*expanded;
+	char	*env_name;
+	int		i;					// Position in string.
+	int		str_len;			// Length of full node->str.
+	int		start_env;			// Position after $ and/or ${.
+	int		end_var;			// Position where env-name ends.
+	int		env_length;			// Length of found env.
+	bool	brackets;			// In case of ${}
+	bool	remainder;			// Check for if we need to re-read the node
+}	t_dollar;
 
 // word: 	a pointer to the string stored in a node
 // len: 	the content length
@@ -73,57 +98,74 @@ typedef struct s_node
 	t_node			*previous;
 	// state?
 	// set i?
-}  t_node;
+}	t_node;
 
 typedef struct s_data
 {
+	// int		i; add for iterating with data->i in tokenize_input?
 	char	*input;
 	char	**env;
 	t_node	*list;
 	t_token	*token;
 	t_cmd	*cmd_process;
+	// t_token	*token;	// needed in t_node??
 	size_t	process;
 }	t_data;
 
-
 // Functions //
-
 // Environment and paths;
 char	**copy_env(char **env);
 
 // Lexer
-int		lexer(t_data *data);
+int		lexer_and_parser(t_data *data);
 bool	all_quotes_closed(char *str);
 bool	skip_quotedstring(char *str, int *i);
 t_node	*tokenize_input(t_data *data, char *str);
 
-// Tokenize
-int	add_quote(char *str, int i, char c, t_node **list);
-int	add_redir(char *str, int i, char c, t_node **list);
-int	add_one_token(char *str, int i, char c, t_node **list);
-int	add_dollar(char *str, int i, t_node **list);
-int	add_space(char *str, int i, t_node **list);
+// Tokenize and Expanding
+int		add_quote(char *str, int i, char c, t_node **list);
+int		add_redir_or_pipe(char *str, int i, t_data *data, t_node **list);
+int		add_one_token(char *str, int i, t_data *data, t_node **list);
+int		add_dollar(char *str, int i, t_node **list);
+int		add_word(char *str, int i, t_node **list);
+void	expand_input(t_node *list, char **env);
+// t_node	*expander(t_node *list, char **env);
 
 // Utils
 bool	one_of_tokens(char c);
-void 	skip_to_token(char *str, int *i);
+void	skip_to_token(char *str, int *i);
 void	skip_whitespace(char *str, int *i);
 int		quote_length(char *str, char c);
-int		add_one_token(char *str, int i, char c, t_node **list);
 int		variable_len(char *str);
 
-// still needed?
-int		add_word(char *str, int i, t_node **list);
-int		add_tokens(char *str, int i, t_node **list);
+// Utils - Expanding
+char	*copy_env_input(char **env, char *to_find);
+int		if_valid_char(char c);
+bool	is_double_dollar(t_node *node, t_expand *info, bool is_expandable);
+void	set_pid(t_node *node, t_expand *info);
+bool	is_dollar(t_node *node, bool is_expandable);
+int		set_dollar(t_node *node, char **env, t_expand *info);
+// t_node	*expand_node(t_node *node, t_dollar *var);
+t_node	*expand_node(t_node *node, t_dollar *var, t_expand *info);
 
 // Nodes
 t_node	*create_node(char *str);
 void	node_to_list(t_node **list, t_node *new);
 
 // Free and exit
+
 void		free_array(char **str);
 bool		error_msg(char *message, char c);
-const char 	*type_to_string(t_token type);
+void	free_all(t_data	*data);
+int		free_dollarvar(t_dollar *var);
+
+// List_utils
+t_node	*attach_list_token(t_node **head, t_node *new_node);
+
+// For Testing
+const char	*type_to_string(t_token type);
+void		print_linked_list(t_node *head);
+void		print_env(char **env);
 
 // Executing
 void	error_exit(const char *msg, int status);

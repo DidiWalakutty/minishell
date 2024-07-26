@@ -12,6 +12,7 @@
 
 #include "../../includes/minishell.h"
 
+
 bool	is_dollar(t_node *node, bool is_expandable)
 {
 	char	*copy;
