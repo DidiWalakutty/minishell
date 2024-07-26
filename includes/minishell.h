@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/20 16:38:50 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/07/26 16:33:33 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/07/26 17:54:06 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,6 +166,9 @@ t_node	*attach_list_token(t_node **head, t_node *new_node);
 const char	*type_to_string(t_token type);
 void		print_linked_list(t_node *head);
 void		print_env(char **env);
+
+// Parsing
+t_cmd	*make_cmd_nodes(t_data *data);
 
 // Executing
 void	error_exit(const char *msg, int status);
