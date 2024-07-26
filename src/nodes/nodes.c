@@ -1,18 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   nodes.c                                            :+:    :+:            */
+/*   nodes.c                                           :+:    :+:             */
 /*                                                     +:+                    */
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2024/07/04 15:28:16 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/07/23 00:29:43 by anonymous     ########   odam.nl         */
+/*   Created: 2023/11/20 16:39:35 by diwalaku      #+#    #+#                 */
+/*   Updated: 2024/06/12 20:26:00 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-
-// t_node	*
+#include "../../includes/minishell.h"
 
 t_node	*create_node(char *str)
 {
@@ -28,16 +26,16 @@ t_node	*create_node(char *str)
 	return (new_node);
 }
 
-void	node_to_list(t_node **head, t_node *new)
+void	node_to_list(t_node **list, t_node *new)
 {
 	t_node	*current;
 
-	current = *head;
+	current = *list;
 	if (!new)
 		return ;
 	if (!current)
 	{
-		*head = new;
+		*list = new;
 		return ;
 	}
 	while (current->next != NULL)

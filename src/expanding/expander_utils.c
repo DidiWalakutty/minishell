@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   expander_utils.c                                   :+:    :+:            */
+/*   expander_utils.c                                  :+:    :+:             */
 /*                                                     +:+                    */
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/07/04 15:35:01 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/07/26 12:35:22 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/07/26 16:43:25 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../includes/minishell.h"
 
 t_node	*expand_node(t_node *node, t_dollar *dol, t_expand *info)
 {

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   minishell.h                                        :+:    :+:            */
+/*   minishell.h                                       :+:    :+:             */
 /*                                                     +:+                    */
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/20 16:38:50 by diwalaku      #+#    #+#                 */
-/*   Updated: 2023/12/05 20:27:40 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/07/26 16:33:33 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,12 @@
 # include <stdio.h>
 # include <unistd.h>
 # include <stdbool.h>
+# include <linux/limits.h>
 # include "../libft/libft.h"
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <fcntl.h>
+# include <sys/wait.h>
 
 // Defining ANSI colors
 //
@@ -26,8 +29,9 @@
 # define SHELL_NAME "Minishell$ " // which name, colors?
 
 typedef enum s_token		t_token;
+typedef struct s_list		t_list;
+typedef struct s_cmd		t_cmd;
 typedef struct s_expand		t_expand;
-typedef struct s_command	t_command;
 typedef struct s_node		t_node;
 typedef struct s_data		t_data;
 
@@ -70,14 +74,22 @@ typedef struct s_dollar
 	bool	remainder;			// Check for if we need to re-read the node
 }	t_dollar;
 
-typedef struct s_command
-{	
-
-}	t_command;
-
 // word: 	a pointer to the string stored in a node
 // len: 	the content length
 // type: 	the content token
+
+typedef struct s_cmd
+{
+	pid_t	pid;
+	char	*cmd;
+	char	*path;
+	char	**args;
+	char	*redirect_in;
+	char	*redirect_out;
+	char	**env;
+	t_cmd	*next;
+} t_cmd;
+
 typedef struct s_node
 {
 	char			*str;
@@ -94,7 +106,8 @@ typedef struct s_data
 	char	*input;
 	char	**env;
 	t_node	*list;
-	t_command *commands;
+	t_token	*token;
+	t_cmd	*cmd_process;
 	// t_token	*token;	// needed in t_node??
 	size_t	process;
 }	t_data;
@@ -140,9 +153,9 @@ t_node	*create_node(char *str);
 void	node_to_list(t_node **list, t_node *new);
 
 // Free and exit
-// exit_error(char *str); probably not needed
-void	free_array(char **str);
-bool	error_msg(char *message, char c);
+
+void		free_array(char **str);
+bool		error_msg(char *message, char c);
 void	free_all(t_data	*data);
 int		free_dollarvar(t_dollar *var);
 
@@ -153,5 +166,14 @@ t_node	*attach_list_token(t_node **head, t_node *new_node);
 const char	*type_to_string(t_token type);
 void		print_linked_list(t_node *head);
 void		print_env(char **env);
+
+// Executing
+void	error_exit(const char *msg, int status);
+int		make_processes(t_data *data);
+
+// Builtins
+void	echo_builtin(const char *str, bool newline);
+void	cd_builtin(const char *dst_directory);
+void	pwd_builtin(void);
 
 #endif

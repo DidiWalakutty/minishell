@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   tokenizer.c                                        :+:    :+:            */
+/*   tokenizer.c                                       :+:    :+:             */
 /*                                                     +:+                    */
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:43:34 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/07/04 15:17:45 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/07/26 16:40:11 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../includes/minishell.h"
 
 // Add 2 for the opening and closing quote, remove 2 for line
 //  (we don't want to include the quotes).

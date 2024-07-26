@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   expand_double_dollar.c                             :+:    :+:            */
+/*   expand_double_dollar.c                            :+:    :+:             */
 /*                                                     +:+                    */
 /*   By: diwalaku <diwalaku@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/07/04 15:27:10 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/07/04 15:27:10 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/07/26 16:43:25 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../includes/minishell.h"
 
 // bool	is_double_dollar(t_node *node, t_expand *info, bool is_expandable)
 // {
