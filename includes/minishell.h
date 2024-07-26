@@ -136,7 +136,7 @@ int		set_dollar(t_node *node, char **env, t_expand *info);
 t_node	*expand_node(t_node *node, t_dollar *var, t_expand *info);
 
 // Nodes
-t_node	*create_node(char *str);
+t_node	*create_node(char *str, t_token type);
 void	node_to_list(t_node **list, t_node *new);
 
 // Free and exit

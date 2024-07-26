@@ -72,6 +72,7 @@ static void	expand_dollar(t_node *node, t_dollar *dol, char **env, t_expand *inf
 		dol->end_var++;
 	}
 	replacement = expand_node(node, dol, info);
+	printf("replacement is: %s\n", replacement->str);
 	// dol->expanded = NULL;	reset for next check?
 }
 

@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:43:34 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/07/04 15:17:45 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/07/26 13:17:26 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	add_quote(char *str, int i, char c, t_node **list)
 	else
 		line = ft_substr(str, start, len - 2);
 	i = len + start + 1;
-	new = create_node(line);
+	new = create_node(line, EMPTY);
 	if (c == '\'')
 		new->type = SINGLE_QUOTE;
 	else
@@ -50,7 +50,7 @@ int	add_redir_or_pipe(char *str, int i, t_data *data, t_node **list)
 	if (str[i + 1] == str[i])
 	{
 		line = ft_substr(str, i, 2);
-		new = create_node(line);
+		new = create_node(line, EMPTY);
 		if (str[i] == '>')
 			new->type = APPEND;
 		else if (str[i] == '<')
@@ -69,8 +69,7 @@ int	add_pipe(char *str, int i, t_node **list)
 	t_node	*new;
 
 	line = ft_substr(str, i, 1);
-	new = create_node(line);
-	new->type = PIPE;
+	new = create_node(line, PIPE);
 	node_to_list(list, new);
 	i += 1;
 	return (i);
@@ -99,8 +98,7 @@ int	add_word(char *str, int i, t_node **list)
 		len++;
 	}
 	line = ft_substr(str, start, len - start);
-	new = create_node(line);
-	new->type = WORD;
+	new = create_node(line, WORD);
 	node_to_list(list, new);
 	i = len;
 	return (i);
