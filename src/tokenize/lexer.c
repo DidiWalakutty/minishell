@@ -5,24 +5,22 @@
 /*                                                     +:+                    */
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2023/11/20 16:39:51 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/06/12 20:26:00 by sreerink      ########   odam.nl         */
+/*   Created: 2024/06/14 18:42:29 by diwalaku      #+#    #+#                 */
+/*   Updated: 2024/07/26 16:40:11 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
+t_node		*tokenize_input(t_data *data, char *str);
 static bool	check_syntax_errors(char *str);
-t_node	*tokenize_input(t_data *data, char *str);
 static bool	token_syntax_error(char *str, int *i);
 
 // This function checks if there are any syntax errors in the given string
 // and if all quotes are closed.
 // We then tokenize the input.
-int	lexer(t_data *data)
+int	lexer_and_parser(t_data *data)
 {
-	t_node	*temp;
-
 	if (!data)
 		return (1);
 	if (check_syntax_errors(data->input) == true)
@@ -32,7 +30,8 @@ int	lexer(t_data *data)
 	}
 	if ((all_quotes_closed(data->input) == false))
 		return (1);
-	temp = tokenize_input(data, data->input);
+	data->list = tokenize_input(data, data->input);
+	// expand_input(data->list, data->env);
 	return (0);
 }
 
@@ -60,7 +59,7 @@ static bool	check_syntax_errors(char *str)
 	return (false);
 }
 
-// When |, it's next token can't be a | or \0.
+// Nothing behind | makes it a heredoc, TODO???
 // When < or >, it checks if +1 is the same.
 // Its next token can't be <, > or a |.
 static bool	token_syntax_error(char *str, int *i)
@@ -85,30 +84,18 @@ static bool	token_syntax_error(char *str, int *i)
 	return (false);
 }
 
-static void	print_linked_list(t_node *head)
-{
-    while (head != NULL)
-    {
-        printf("Node is: %s - type is: %s \n", head->str, type_to_string(head->type));
-        head = head->next;
-    }
-    printf("\n");
-}
-
 // Tokenizes input into nodes.
 // currently iterates beyond the \0.
 // For |; Just pipes, right? Not |&?
 t_node	*tokenize_input(t_data *data, char *str)
 {
-	t_node	*list;
 	int		i;
+	t_node	*list;
 
 	i = 0;
 	list = NULL;
 	if (!str)
 		return (create_node(NULL));
-	while (iswhitespace(str[i]))
-		i++;
 	while (str[i])
 	{
 		while (iswhitespace(str[i]))
@@ -117,17 +104,10 @@ t_node	*tokenize_input(t_data *data, char *str)
 			i = add_quote(str, i, '\'', &list);
 		else if (str[i] == '\"')
 			i = add_quote(str, i, '\"', &list);
-		else if (str[i] == '<' || str[i] == '>')
-			i = add_redir(str, i, str[i], &list);
-		else if (str[i] == '|')
-		{
-			i = add_one_token(str, i, str[i], &list);
-			data->pipe_num += 1;
-		}
+		else if (str[i] == '<' || str[i] == '>' || str[i] == '|')
+			i = add_redir_or_pipe(str, i, data, &list);
 		else
 			i = add_word(str, i, &list);
 	}
-	printf("\nprint list:\n");
-	print_linked_list(list);
 	return (list);
 }

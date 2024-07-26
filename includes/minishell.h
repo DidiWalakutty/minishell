@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/20 16:38:50 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/07/17 16:35:49 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/07/26 16:33:33 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ typedef struct s_data
 	t_node	*list;
 	t_token	*token;
 	t_cmd	*cmd_process;
-	size_t	pipe_num;
+	size_t	process;
 }	t_data;
 
 

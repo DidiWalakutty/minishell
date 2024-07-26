@@ -6,9 +6,11 @@ CC = cc
 L_OBJDIR = obj/
 SRCS = ft_bzero.c ft_calloc.c ft_isascii.c ft_split.c ft_strdup.c \
 		ft_strlen.c ft_substr.c iswhitespace.c ft_strchr.c ft_strtrim.c \
-		ft_strnstr.c ft_strjoin.c ft_strlcpy.c ft_strlcat.c ft_free_array.c \
+		ft_strnstr.c ft_strncmp.c ft_strlcat.c ft_strlcpy.c \
 		ft_printf.c print_char.c print_str.c print_nbr.c print_pointer.c \
 		print_uns_dec.c print_lowerhex.c print_upperhex.c \
+		is_alph_or_num.c ft_isalpha.c ft_isdigit.c ft_strjoin.c \
+		ft_strconcat.c ft_itoa.c ft_memcpy.c \
 
 OBJ = $(SRCS:%.c=$(L_OBJDIR)%.o)
 

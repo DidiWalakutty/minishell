@@ -6,7 +6,7 @@
 /*   By: sreerink <sreerink@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2024/07/25 19:51:53 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/07/25 19:52:33 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/07/26 16:40:44 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,7 @@ t_cmd	*make_cmd_nodes(t_data *data)
 	size_t	cmds_n;
 
 	cur_list = data->list;
-	cmds_n = data->pipe_num - 1;
+	cmds_n = data->process - 1;
 	head = ft_calloc(1, sizeof(t_cmd));
 	if (!head)
 		error_exit("ft_calloc", EXIT_FAILURE);

@@ -1,34 +1,108 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
+/*                                                        ::::::::            */
 /*   expander_utils.c                                  :+:    :+:             */
-/*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/16 18:25:21 by marvin            #+#    #+#             */
-/*   Updated: 2024/06/12 20:24:33 by sreerink      ########   odam.nl         */
+/*                                                     +:+                    */
+/*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/07/04 15:35:01 by diwalaku      #+#    #+#                 */
+/*   Updated: 2024/07/26 16:43:25 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void if_expandable(t_expander *var, t_token *type)
+t_node	*expand_node(t_node *node, t_dollar *dol, t_expand *info)
 {
-    if (type == SEPARATOR || type = PIPE || type = APPEND || \
-        type == REDIR_IN || type == REDIR_OUT)
-        var->if_expand = true;
-    else if (type == HERE_DOC)
-        var->if_expand = false;
+	t_node	*new;
+	char	*before;
+	char	*remainder;
+	char	*joined;
+
+	new = NULL;
+	joined = NULL;
+	before = ft_substr(node->str, 0, dol->i);
+	remainder = ft_substr(node->str, dol->end_var, dol->str_len);
+	if (ft_strlen(before) > 0)
+		joined = ft_strdup(before);
+	if (ft_strlen(dol->expanded) > 0)
+		joined = ft_strconcat(before, dol->expanded);
+	if (ft_strlen(remainder) > 0)
+	{
+		joined = ft_strconcat(joined, remainder);
+		dol->remainder = true;
+	}
+	free(node->str);
+	// new = create_node(joined);
+	// new->type = node->type;
+	node->str = joined;
+	printf("ignore: %i\n", info->char_pos);
+	// node_to_list(&info->head, new);
+	// node_to_list(&new, create_node(joined));
+	// free(before);
+	// free(dol->expanded);
+	// free(remainder);
+	return (new);
 }
 
-t_expander   *init_var(t_token **tokens)
-{
-    t_expander *var;
+// t_node	*expand_node(t_node *node, t_dollar *dol, t_expand *info)
+// {
+// 	t_node	*new;
+// 	char	*before;
+// 	char	*remainder;
+// 	char	*joined;
 
-    var = malloc(sizeof(t_data));
-    var->head = *tokens;
-    var->old_pos = 0;
-    var->i = 0;
-    var->if_expand = true;
-    var->move_pointer = true;
+// 	new = NULL;
+// 	joined = NULL;
+// 	before = ft_substr(node->str, 0, dol->start_env);
+// 	printf("before is: %s\n", before);
+// 	printf("expand is: %s\n", dol->expanded);
+// 	remainder = ft_substr(node->str, dol->end_var, dol->str_len);
+// 	printf("remainder: %s\n", remainder);
+// 	if (ft_strlen(before) > 0)
+// 		joined = ft_strdup(before);
+// 	if (ft_strlen(dol->expanded) > 0)
+// 		joined = ft_strconcat(before, dol->expanded);
+// 	if (ft_strlen(remainder) > 0)
+// 	{
+// 		joined = ft_strconcat(joined, remainder);
+// 		dol->remainder = true;
+// 	}
+// 	printf("joined is: %s\n", joined);
+// 	free(node->str);
+// 	// new = create_node(joined);
+// 	// new->type = node->type;
+// 	node->str = joined;
+// 	// node_to_list(head, new);
+// 	// free(node->str);
+// 	// node->str = joined;
+// 	// new = create_node(joined);
+// 	// new->type = node->type;
+// 	printf("ignore: %i\n", info->char_pos);
+// 	printf("new string is: %s\n", node->str);
+// 	// node_to_list(&info->head, new);
+// 	// node_to_list(&new, create_node(joined));
+// 	// free(before);
+// 	// free(dol->expanded);
+// 	// free(remainder);
+// 	return (new);
+// }
+
+// Compares each line of env with the given string, like
+// pwd, user etc.
+char	*copy_env_input(char **env, char *to_find)
+{
+	int	i;
+	int	find_len;
+
+	i = 0;
+	find_len = ft_strlen(to_find);
+	while (env[i])
+	{
+		if (env[i][find_len] == '=' && \
+			ft_strncmp(env[i], to_find, find_len) == 0)
+			return (env[i] + find_len + 1);
+		i++;
+	}
+	return (NULL);
 }

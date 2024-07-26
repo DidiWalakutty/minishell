@@ -6,7 +6,7 @@
 /*   By: sreerink <sreerink@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2024/06/12 20:30:41 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/07/23 19:38:04 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/07/26 16:44:39 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,12 +120,12 @@ int	make_processes(t_data *data)
 	t_cmd	*cmds;
 	t_cmd	*temp;
 	int		status;
-	int		pipefd[data->pipe_num + 1][2];
+	int		pipefd[data->process + 1][2];
 
 	i = 0;
 	cmds = data->cmd_process;
 	temp = cmds;
-	while (i < data->pipe_num + 1)
+	while (i < data->process + 1)
 	{
 		if (pipe(pipefd[i]) == -1)
 			error_exit("pipe", EXIT_FAILURE);
@@ -139,7 +139,7 @@ int	make_processes(t_data *data)
 			error_exit("fork", EXIT_FAILURE);
 		else if (temp->pid == 0)
 		{
-			close_unused_pipes(pipefd, i, data->pipe_num + 1);
+			close_unused_pipes(pipefd, i, data->process + 1);
 			child_process(temp, pipefd[i], pipefd[i + 1]);
 		}
 		close(pipefd[i][0]);

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   libft.h                                           :+:    :+:             */
+/*   libft.h                                            :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/12 18:27:25 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/07/07 01:33:33 by sreerink      ########   odam.nl         */
+/*   Updated: 2023/12/08 15:33:50 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,20 @@ char	*ft_strdup(const char *s1);
 char	*ft_strndup(const char *s1, int len);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 char	**ft_split(char const *str, char c);
-size_t	ft_strlcpy(char *dst, const char *src, size_t size);
-size_t	ft_strlcat(char *dst, const char *src, size_t size);
-char	*ft_strjoin(char const *s1, char const *s2);
-void	ft_free_array(char **array);
-bool	iswhitespace(char c);
 char	*ft_strchr(const char *s, int d);
 char	*ft_strtrim(char const *s1, char const *set);
 char	*ft_strnstr(const char *haystack, const char *needle, size_t len);
+int		ft_strncmp(const char *s1, const char *s2, size_t d);
+char	*ft_strjoin(char const *s1, char const *s2);
+size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize);
+size_t	ft_strlcat(char *dst, const char *src, size_t size);
+bool	iswhitespace(char c);
+int		ft_isdigit(int c);
+int		ft_isalpha(int c);
+int		is_alph_or_num(char c);
+char	*ft_strconcat(char *s1, char *s2);
+char	*ft_itoa(int i);
+void	*ft_memcpy(void *dst, const void *src, size_t n);
 
 // printf
 int		ft_printf(const char *format, ...);

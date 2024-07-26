@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
+/*                                                        :::      ::::::::   */
 /*   tokenize_utils.c                                  :+:    :+:             */
-/*                                                     +:+                    */
-/*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2023/11/20 16:40:07 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/06/12 20:26:00 by sreerink      ########   odam.nl         */
+/*                                                    +:+ +:+         +:+     */
+/*   By: diwalaku <diwalaku@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/04 15:38:34 by diwalaku          #+#    #+#             */
+/*   Updated: 2024/07/26 16:40:11 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,18 +35,21 @@ void	skip_whitespace(char *str, int *i)
 
 // Add one token to the list: either |, < or >.
 // Return i + 1, so we get the i immediately after the token.
-int	add_one_token(char *str, int i, char c, t_node **list)
+int	add_one_token(char *str, int i, t_data *data, t_node **list)
 {
 	t_node	*new;
 	char	*line;
 
 	line = ft_substr(str, i, 1);
 	new = create_node(line);
-	if (c == '|')
+	if (str[i] == '|')
+	{
 		new->type = PIPE;
-	else if (c == '<')
+		data->process += 1;
+	}
+	else if (str[i] == '<')
 		new->type = REDIR_IN;
-	else if (c == '>')
+	else if (str[i] == '>')
 		new->type = REDIR_OUT;
 	node_to_list(list, new);
 	return (i + 1);
