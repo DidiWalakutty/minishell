@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:40:07 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/07/26 17:51:02 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/07/26 19:03:26 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ int	main(int argc, char **argv, char **env)
 {
 	t_data	*data;
 	char	*input;
+	int		i;
+	t_cmd	*current;
 
 	(void)argc;
 	(void)argv;
@@ -67,10 +69,22 @@ int	main(int argc, char **argv, char **env)
 		if (input != NULL)
 			add_history(data->input);
 		// printf("In main before expanding:\n");
-		// print_linked_list(data->list);
 		lexer_and_parser(data);
-		// build commands: concatenate 
-		// executor();
+		// print_linked_list(data->list);
+		data->cmd_process = make_cmd_nodes(data);
+		current = data->cmd_process;
+		printf("After make_cmd_nodes():\n");
+		while (current)
+		{
+			i = 0;
+			while (current->args && current->args[i])
+			{
+				printf("%s\n", current->args[i]);
+				i++;
+			}
+			current = current->next;
+		}
+		//make_processes(data);
 		// free_all(data);
 	}
 	return (0);
