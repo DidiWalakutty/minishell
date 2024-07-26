@@ -6,7 +6,7 @@
 /*   By: sreerink <sreerink@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2024/06/12 20:30:41 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/07/26 16:44:39 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/07/26 17:52:31 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ char	*find_cmd_path(t_cmd *cmd)
 		i++;
 	}
 	free(slash_cmd);
-	ft_free_array(path_arr);
+	free_array(path_arr);
 	return (path_temp);
 }
 
