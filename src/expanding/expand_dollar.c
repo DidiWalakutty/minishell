@@ -46,34 +46,36 @@ static t_dollar	*init_dollar(t_node *node)
 
 // start_env is $ +1, where ENV-name starts.
 // end is where env_name ends.
-static void	expand_dollar(t_node *node, t_dollar *var, char **env, t_expand *info)
+static void	expand_dollar(t_node *node, t_dollar *dol, char **env, t_expand *info)
 {
-	var->start_env = var->i + 1;
-	if (node->str[var->start_env] == '{')
+	t_node	*replacement;
+
+	dol->start_env = dol->i + 1;
+	if (node->str[dol->start_env] == '{')
 	{
-		var->brackets = true;
-		var->start_env++;
+		dol->brackets = true;
+		dol->start_env++;
 	}
-	var->end_var = var->start_env;
-	while (node->str[var->end_var] && (is_alph_or_num(node->str[var->end_var]) \
-			|| node->str[var->end_var] == '_'))
-		var->end_var++;
-	var->env_name = ft_substr(node->str, var->start_env, \
-					var->end_var - var->start_env);
-	var->expanded = copy_env_input(env, var->env_name);
-	if (!var->expanded)
-		var->expanded = ft_strdup("");
-	var->env_length = ft_strlen(var->expanded);
-	if (var->brackets == true)
+	dol->end_var = dol->start_env;
+	while (node->str[dol->end_var] && (is_alph_or_num(node->str[dol->end_var]) \
+			|| node->str[dol->end_var] == '_'))
+		dol->end_var++;
+	dol->env_name = ft_substr(node->str, dol->start_env, \
+					dol->end_var - dol->start_env);
+	dol->expanded = copy_env_input(env, dol->env_name);
+	if (!dol->expanded)
+		dol->expanded = ft_strdup("");
+	dol->env_length = ft_strlen(dol->expanded);
+	if (dol->brackets == true)
 	{
-		var->start_env--;
-		var->end_var++;
+		dol->start_env--;
+		dol->end_var++;
 	}
-	var->i = var->end_var;
-	expand_node(node, var, info);
+	replacement = expand_node(node, dol, info);
+	// dol->expanded = NULL;	reset for next check?
 }
 
-// Check for $ as last char
+// Check for $ as last char?
 // Check for if strlen(dol_var->expanded) == 0? If so, free(dol_var) + ret 0;
 // This function expands a $-env for the whole D-Q node.
 int	set_dollar(t_node *node, char **env, t_expand *info)

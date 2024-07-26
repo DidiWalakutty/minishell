@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:36:22 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/07/25 15:15:47 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/07/26 12:18:23 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ t_expand	*init_info(t_node *list)
 
 	info = malloc(sizeof(t_expand));
 	info->head = list;
-	info->char_pos = 0;
-	info->i = 0;
+	info->char_pos = 0;	// Where needed char starts.
+	info->node_i = 0;		// Tracks current position in string and where to insert expansion
 	info->strlen = ft_strlen(list->str);
 	info->expandable = false;
 	info->prev_type = WORD;
@@ -46,12 +46,15 @@ void	expand_input(t_node *node, char **env)
 		expandable_type(info, node->type);
 		// check tilde ~
 		// check double_dollar/PID
-		if (is_double_dollar(node, info, info->expandable) == true)
-			set_pid(node, info);
+		// if (is_double_dollar(node, info, info->expandable) == true)
+		// 	set_pid(node, info);
 		if (is_dollar(node, info->expandable) == true)
 			set_dollar(node, env, info);
 		if (info->to_next_node == true)
+		{
 			node = node->next;
+			// info->node_i++;
+		}
 	}
 	node = info->head;
 	free(info);

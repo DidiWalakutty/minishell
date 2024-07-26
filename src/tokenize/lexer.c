@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:42:29 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/07/25 12:37:34 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/07/26 12:46:46 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,7 @@ int	lexer_and_parser(t_data *data)
 	if ((all_quotes_closed(data->input) == false))
 		return (1);
 	data->list = tokenize_input(data, data->input);
-	printf("Before expanding:\n");
-	print_linked_list(data->list);
-	expand_input(data->list, data->env);
-	// printf("After expanding in lex + exp:\n");
-	// print_linked_list(data->list);
+	// expand_input(data->list, data->env);
 	return (0);
 }
 

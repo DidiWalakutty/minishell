@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:40:07 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/07/24 19:14:22 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/07/26 12:46:36 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,9 +55,9 @@ int	main(int argc, char **argv, char **env)
 		data->input = input;
 		if (input != NULL)
 			add_history(data->input);
+		// printf("In main before expanding:\n");
+		// print_linked_list(data->list);
 		lexer_and_parser(data);
-		printf("In main after expanding:\n");
-		print_linked_list(data->list);
 		// build commands: concatenate 
 		// executor();
 		// free_all(data);

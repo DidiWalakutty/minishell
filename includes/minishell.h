@@ -50,7 +50,7 @@ typedef struct s_expand
 {
 	int		char_pos;
 	int		strlen;
-	int		i;
+	int		node_i;		// node iterator.
 	bool	expandable;
 	t_node	*head;
 	t_token	prev_type;
@@ -131,7 +131,6 @@ int		if_valid_char(char c);
 bool	is_double_dollar(t_node *node, t_expand *info, bool is_expandable);
 void	set_pid(t_node *node, t_expand *info);
 bool	is_dollar(t_node *node, bool is_expandable);
-int		find_dollar_position(char *str);
 int		set_dollar(t_node *node, char **env, t_expand *info);
 // t_node	*expand_node(t_node *node, t_dollar *var);
 t_node	*expand_node(t_node *node, t_dollar *var, t_expand *info);
