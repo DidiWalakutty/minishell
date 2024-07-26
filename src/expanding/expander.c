@@ -1,83 +1,61 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   expander.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/15 14:58:18 by marvin            #+#    #+#             */
-/*   Updated: 2023/12/15 14:58:18 by marvin           ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   expander.c                                         :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/06/14 18:36:22 by diwalaku      #+#    #+#                 */
+/*   Updated: 2024/07/26 12:18:23 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./minishell.h"
+#include "minishell.h"
 
-// Tilde ~ not mandatory
-void expander(t_token **tokens, t_env *env)
+t_expand	*init_info(t_node *list)
 {
-    t_expander  *var;
-    char    *type;
+	t_expand	*info;
 
-    var = init_var(tokens);
-    while (*tokens)
-    {
-        if_expandable(var, (*tokens)->type);
-        if (dollar_questionmark(tokens, var) == true)
-            handle_error(tokens, &(var->head), var, env);
-        // single dollar
-        // double dollar
-                
-    }
-    
+	info = malloc(sizeof(t_expand));
+	info->head = list;
+	info->char_pos = 0;	// Where needed char starts.
+	info->node_i = 0;		// Tracks current position in string and where to insert expansion
+	info->strlen = ft_strlen(list->str);
+	info->expandable = false;
+	info->prev_type = WORD;
+	info->to_next_node = true;
+	return (info);
 }
 
-int	is_error_code(t_token **tokens, bool if_expand)
+void	expandable_type(t_expand *info, t_token type)
 {
-	if (!if_expand)
-		return (1);
-	if (((*tokens)->type == WORD || (*tokens)->type == DOUBLE_QUOTE)
-		&& ft_strnstr((*tokens)->command, "$?", \
-		ft_strlen((*tokens)->command)))
-		return (0);
-	return (1);
+	if (type == HERE_DOC)
+		info->expandable = false;
+	else
+		info->expandable = true;
 }
 
-// Handle $ during expansion!
-//
-// // Should we handle $$ (is PID)
-// int	add_dollar(char *str, int i, t_token **list)
-// {
-// 	char	*line;
-// 	int		dollar_len;
-// 	t_token	*new;
-// 	if (str[i + 1] == '?')
-// 	{
-// 		line = ft_substr(str, i, 2);
-// 		new = create_node(line);
-// 		node_to_list(list, new);
-// 		i += 2;
-// 	}
-// 	else
-// 	{
-// 		dollar_len = 1; // variable_len(&str[i + 1]);
-// 		line = ft_substr(str, i, dollar_len);
-// 		new = create_node(line);
-// 		new->type = DOLLAR;
-// 		node_to_list(list, new);
-// 		i += dollar_len;
-// 	}
-// 	return (i);
-// }
-//
-//
-// syntax check: outfile zonder naam etc.
-// ><, of >>
-//
-// eerst herkennen
-//
-// erna: parsen
-// alle nodes pakken en stoppen in command frame
-// args, in- en outfile (redirections)
-// meerdere pipes is meerdere command frames
-//
-// voor of na syntax check, maar in elk geval voor het parsen checken op $
+void	expand_input(t_node *node, char **env)
+{
+	t_expand	*info;
+
+	info = init_info(node);
+	while (node)
+	{
+		info->to_next_node = true;
+		expandable_type(info, node->type);
+		// check tilde ~
+		// check double_dollar/PID
+		// if (is_double_dollar(node, info, info->expandable) == true)
+		// 	set_pid(node, info);
+		if (is_dollar(node, info->expandable) == true)
+			set_dollar(node, env, info);
+		if (info->to_next_node == true)
+		{
+			node = node->next;
+			// info->node_i++;
+		}
+	}
+	node = info->head;
+	free(info);
+}

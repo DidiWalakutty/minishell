@@ -5,12 +5,14 @@
 /*                                                     +:+                    */
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2023/11/20 16:39:35 by diwalaku      #+#    #+#                 */
-/*   Updated: 2023/11/28 15:38:19 by diwalaku      ########   odam.nl         */
+/*   Created: 2024/07/04 15:28:16 by diwalaku      #+#    #+#                 */
+/*   Updated: 2024/07/23 00:29:43 by anonymous     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+// t_node	*
 
 t_node	*create_node(char *str)
 {
@@ -26,16 +28,16 @@ t_node	*create_node(char *str)
 	return (new_node);
 }
 
-void	node_to_list(t_node **list, t_node *new)
+void	node_to_list(t_node **head, t_node *new)
 {
 	t_node	*current;
 
-	current = *list;
+	current = *head;
 	if (!new)
 		return ;
 	if (!current)
 	{
-		*list = new;
+		*head = new;
 		return ;
 	}
 	while (current->next != NULL)

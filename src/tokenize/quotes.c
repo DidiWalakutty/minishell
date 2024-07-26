@@ -5,8 +5,8 @@
 /*                                                     +:+                    */
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2023/11/20 16:40:02 by diwalaku      #+#    #+#                 */
-/*   Updated: 2023/12/05 16:02:28 by diwalaku      ########   odam.nl         */
+/*   Created: 2024/06/14 18:43:00 by diwalaku      #+#    #+#                 */
+/*   Updated: 2024/07/04 15:16:14 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,8 @@ static int	count_quotes(char *str, int i, int *quote_nb, char q)
 		}
 		i++;
 	}
-	return (i - 1);	// return the last index if closing quote isn't found.
+	// return the last index if closing quote isn't found.
+	return (i - 1);
 }
 
 // Checks if all quotes in the string are properly closed.
@@ -77,7 +78,8 @@ bool	all_quotes_closed(char *str)
 }
 
 // Checks if the quoted string is closed with the same quote.
-// CHECK: Return at end of function should return true (error is found), because if it doesn't 
+// CHECK: Return at end of function should return true (error is found),
+// because if it doesn't 
 // go into either return statements of the if-loops, it's still an error???
 bool	skip_quotedstring(char *str, int *i)
 {
