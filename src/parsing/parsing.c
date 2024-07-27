@@ -6,7 +6,7 @@
 /*   By: sreerink <sreerink@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2024/07/25 19:51:53 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/07/26 16:40:44 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/07/27 20:53:50 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,12 +101,12 @@ void	write_cmd_data(t_cmd **cmd, t_node **list)
 		error_exit("malloc", EXIT_FAILURE);
 	(*cmd)->args[args_len] = NULL;
 	write_cmd_words(cmd, list);
-	if ((list && (*list)->type == 3) || pipe_in)
+	if (pipe_in || (*list && (*list)->type == REDIR_IN))
 		write_redirect_in(cmd, list);
-	if (list && ((*list)->type == 2 || (*list)->type == 4 || (*list)->type == 6))
+	if (*list && ((*list)->type == PIPE || (*list)->type == REDIR_OUT || (*list)->type == APPEND))
 	{
 		write_redirect_out(cmd, list);
-		if ((*list)->type == 2)
+		if (*list && (*list)->type == PIPE)
 			return ;
 	}
 }
@@ -125,6 +125,7 @@ t_cmd	*make_cmd_nodes(t_data *data)
 	if (!head)
 		error_exit("ft_calloc", EXIT_FAILURE);
 	last = head;
+	last->env = data->env;
 	write_cmd_data(&head, &cur_list);
 	while (cmds_n)
 	{
@@ -133,7 +134,8 @@ t_cmd	*make_cmd_nodes(t_data *data)
 			error_exit("ft_calloc", EXIT_FAILURE);
 		last->next = new;
 		last = new;
-		write_cmd_words(&last, &cur_list);
+		last->env = data->env;
+		write_cmd_data(&last, &cur_list);
 		cmds_n--;
 	}
 	last->next = NULL;

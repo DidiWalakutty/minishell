@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:40:07 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/07/26 19:03:26 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/07/27 22:28:28 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,35 +56,19 @@ int	main(int argc, char **argv, char **env)
 
 	(void)argc;
 	(void)argv;
-	data = init_shell(env);
 	while (1)
 	{
-		data->input = NULL;
-		data->list = NULL;
-		data->process = 1;
+		data = init_shell(env);
 		input = readline(SHELL_NAME);
 		if (!input)
 			error_exit("readline", EXIT_FAILURE);
 		data->input = input;
 		if (input != NULL)
 			add_history(data->input);
-		// printf("In main before expanding:\n");
 		lexer_and_parser(data);
-		// print_linked_list(data->list);
+		// Following two lines will be execute() in the future
 		data->cmd_process = make_cmd_nodes(data);
-		current = data->cmd_process;
-		printf("After make_cmd_nodes():\n");
-		while (current)
-		{
-			i = 0;
-			while (current->args && current->args[i])
-			{
-				printf("%s\n", current->args[i]);
-				i++;
-			}
-			current = current->next;
-		}
-		//make_processes(data);
+		make_processes(data);
 		// free_all(data);
 	}
 	return (0);

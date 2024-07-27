@@ -6,7 +6,7 @@
 /*   By: sreerink <sreerink@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2024/06/12 20:30:41 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/07/26 17:52:31 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/07/27 21:49:40 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,9 @@ void	child_process(t_cmd *cmd, int fd_in[], int fd_out[])
 
 	close(fd_in[1]);
 	if (!cmd->redirect_in)
+	{
 		close(fd_in[0]);
+	}
 	// Following line needs to be replaced with a Libft function
 	else if (!strcmp(cmd->redirect_in, "|"))
 	{
