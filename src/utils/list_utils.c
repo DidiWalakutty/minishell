@@ -24,3 +24,38 @@ int	list_size(t_node *list)
 	}
 	return (i);
 }
+
+void	attach_new_node(t_node *head, t_node *og, int node_i, bool empty_node)
+{
+	t_node	*new;
+
+	if (node_i == 0)
+	{
+		new = head->next;
+		free(head->str);
+		free(head);
+		head = new;
+	}
+	else if (empty_node == true && node_i > 0)
+	{
+		new = head->next;
+		free(head->str);
+		free(head);
+		head = og;
+	}
+	else if (empty_node == false && node_i > 0)
+	{
+		free(head->str);
+		free(head);
+		head = og;
+	}
+}
+
+t_node	*last_node(t_node *head)
+{
+	if (head == NULL)
+		return (NULL);
+	while (head->next != NULL)
+		head = head->next;
+	return (head);
+}

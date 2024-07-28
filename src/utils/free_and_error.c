@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:41:04 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/07/24 19:25:42 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/07/28 19:26:10 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,14 @@ bool	error_msg(char *message, char c)
 	ft_printf("%s `%c'\n", message, c);
 	return (true);
 }
+
+// free(data->process); ??
+// free(&data); ??
 void	free_all(t_data	*data)
 {
 	free(data->input);
 	free(data->env);
 	free(data->list);
-	// free(data->process);
-	// free(&data);
 }
 
 int	free_dollarvar(t_dollar *var)

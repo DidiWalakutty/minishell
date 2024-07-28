@@ -55,6 +55,7 @@ typedef struct s_expand
 	t_node	*head;
 	t_token	prev_type;
 	t_token	to_next_node;
+	bool	empty_node;
 }	t_expand;
 
 typedef struct s_dollar
@@ -132,12 +133,13 @@ bool	is_double_dollar(t_node *node, t_expand *info, bool is_expandable);
 void	set_pid(t_node *node, t_expand *info);
 bool	is_dollar(t_node *node, bool is_expandable);
 int		set_dollar(t_node *node, char **env, t_expand *info);
-// t_node	*expand_node(t_node *node, t_dollar *var);
 t_node	*expand_node(t_node *node, t_dollar *var, t_expand *info);
 
 // Nodes
 t_node	*create_node(char *str, t_token type);
 void	node_to_list(t_node **list, t_node *new);
+void	replace_node(t_node *sub, t_node *head, int node_i, bool empty_node);
+void	attach_new_node(t_node *head, t_node *og, int node_i, bool empty_node);
 
 // Free and exit
 // exit_error(char *str); probably not needed
@@ -147,6 +149,7 @@ void	free_all(t_data	*data);
 int		free_dollarvar(t_dollar *var);
 
 // List_utils
+t_node	*last_node(t_node *list);
 t_node	*attach_list_token(t_node **head, t_node *new_node);
 
 // For Testing

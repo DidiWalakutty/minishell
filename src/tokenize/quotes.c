@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:43:00 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/07/04 15:16:14 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/07/28 19:25:07 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ static int	count_quotes(char *str, int i, int *quote_nb, char q)
 		}
 		i++;
 	}
-	// return the last index if closing quote isn't found.
 	return (i - 1);
 }
 
@@ -83,25 +82,15 @@ bool	all_quotes_closed(char *str)
 // go into either return statements of the if-loops, it's still an error???
 bool	skip_quotedstring(char *str, int *i)
 {
-	if (str[*i] == '\'')
+	char	quote_type;
+
+	quote_type = str[*i];
+	if (str[*i] == '\'' || str[*i] == '\"')
 	{
 		(*i)++;
-		while (str[*i] && str[*i] != '\'')
+		while (str[*i] && str[*i] != quote_type)
 			(*i)++;
-		if (str[*i] == '\'')
-		{
-			(*i)++;
-			return (false);
-		}
-		else
-			return (error_msg("syntax error: missing closing quote", str[*i]));
-	}
-	else if (str[*i] == '\"')
-	{
-		(*i)++;
-		while (str[*i] && str[*i] != '\"')
-			(*i)++;
-		if (str[*i] == '\"')
+		if (str[*i] == quote_type)
 		{
 			(*i)++;
 			return (false);

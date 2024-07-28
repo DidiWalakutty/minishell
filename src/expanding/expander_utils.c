@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/07/04 15:35:01 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/07/26 15:02:00 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/07/28 21:56:45 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,11 @@ static char	*check_joined(char *before, char *fill_in)
 }
 
 // 	free(dol->expanded); ???
+// Can't free(joined), because it's now owned by ceate_node;
+// It would deallocate the memory while the node still needs to use it.
+//
 // Expand nodes checks and concatenates before expansion, 
-// the expansion and the possible remainder, creates a node and adds it.
+// the expansion and the possible remainder, creates a node and adds it to the list.
 t_node	*expand_node(t_node *node, t_dollar *dol, t_expand *info)
 {
 	t_node	*new;
@@ -48,8 +51,8 @@ t_node	*expand_node(t_node *node, t_dollar *dol, t_expand *info)
 		dol->remainder = true;
 	}
 	new = create_node(joined, node->type);
+	// TODO: Here: isn't properly updated with next and previous.
 	node_to_list(&info->head, new);
-	free(joined);
 	free(before);
 	free(remainder);
 	return (new);
@@ -59,8 +62,9 @@ t_node	*expand_node(t_node *node, t_dollar *dol, t_expand *info)
 // pwd, user etc.
 char	*copy_env_input(char **env, char *to_find)
 {
-	int	i;
-	int	find_len;
+	int		i;
+	int		find_len;
+	char	*result;
 
 	i = 0;
 	find_len = ft_strlen(to_find);
@@ -68,7 +72,10 @@ char	*copy_env_input(char **env, char *to_find)
 	{
 		if (env[i][find_len] == '=' && \
 			ft_strncmp(env[i], to_find, find_len) == 0)
-			return (env[i] + find_len + 1);
+		{
+			result = ft_strdup(env[i] + find_len + 1);
+			return (result);
+		}
 		i++;
 	}
 	return (NULL);

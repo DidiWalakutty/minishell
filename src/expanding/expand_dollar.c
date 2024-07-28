@@ -46,6 +46,7 @@ static t_dollar	*init_dollar(t_node *node)
 
 // start_env is $ +1, where ENV-name starts.
 // end is where env_name ends.
+// Searches the env-name and its info.
 static void	expand_dollar(t_node *node, t_dollar *dol, char **env, t_expand *info)
 {
 	t_node	*replacement;
@@ -71,14 +72,28 @@ static void	expand_dollar(t_node *node, t_dollar *dol, char **env, t_expand *inf
 		dol->start_env--;
 		dol->end_var++;
 	}
+	// Ended here: it's not expanded properly
 	replacement = expand_node(node, dol, info);
-	printf("replacement is: %s\n", replacement->str);
+	replace_node(replacement, info->head, info->node_i, info->empty_node);
 	// dol->expanded = NULL;	reset for next check?
+}
+
+void	reset_var_info(t_node *node, t_node *head, t_expand *info)
+{
+	int	temp;
+
+	temp = 0;
+	node = head;
+	temp = info->node_i;
+	while (info->node_i--)
+		node = (node)->next;
+	info->node_i = temp;
 }
 
 // Check for $ as last char?
 // Check for if strlen(dol_var->expanded) == 0? If so, free(dol_var) + ret 0;
 // This function expands a $-env for the whole D-Q node.
+// first while loop: node->next && node->previous == NULL
 int	set_dollar(t_node *node, char **env, t_expand *info)
 {
 	t_dollar	*dol_var;
@@ -102,6 +117,8 @@ int	set_dollar(t_node *node, char **env, t_expand *info)
 				dol_var->i++;
 		}
 	}
+	if (dol_var->i >= dol_var->str_len)
+		reset_var_info(node, info->head, info);
 	free(dol_var);
 	return (0);
 }
