@@ -6,7 +6,7 @@
 /*   By: sreerink <sreerink@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2024/06/12 20:30:41 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/07/29 18:45:12 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/07/29 21:58:31 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ char	*find_cmd_path(t_cmd *cmd)
 
 	i = 0;
 	access_check = 1;
-	if (strncmp(cmd->cmd, "./", 2) == 0)
+	if (!strncmp(cmd->cmd, "./", 2) || !strncmp(cmd->cmd, "/", 1))
 		return (cmd->cmd);
 	while (cmd->env[i] && strncmp(cmd->env[i], "PATH=", 5))
 		i++;
@@ -42,7 +42,7 @@ char	*find_cmd_path(t_cmd *cmd)
 	if (access_check != 0)
 		error_exit(cmd->cmd, 127);
 	free(slash_cmd);
-	free_array(path_arr);
+	// free_array(path_arr);
 	return (path_temp);
 }
 
