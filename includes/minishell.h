@@ -59,6 +59,7 @@ typedef struct s_expand
 	t_node	*head;
 	t_token	prev_type;
 	t_token	to_next_node;
+	bool	empty_node;
 }	t_expand;
 
 typedef struct s_dollar
@@ -129,8 +130,6 @@ int		add_one_token(char *str, int i, t_data *data, t_node **list);
 int		add_dollar(char *str, int i, t_node **list);
 int		add_word(char *str, int i, t_node **list);
 void	expand_input(t_node *list, char **env);
-// t_node	*expander(t_node *list, char **env);
-
 // Utils
 bool	one_of_tokens(char c);
 void	skip_to_token(char *str, int *i);
@@ -141,25 +140,26 @@ int		variable_len(char *str);
 // Utils - Expanding
 char	*copy_env_input(char **env, char *to_find);
 int		if_valid_char(char c);
-bool	is_double_dollar(t_node *node, t_expand *info, bool is_expandable);
-void	set_pid(t_node *node, t_expand *info);
+bool	is_double_dollar(t_node *node, bool is_expandable);
+int		set_pid(t_node *node, t_expand *info);
 bool	is_dollar(t_node *node, bool is_expandable);
 int		set_dollar(t_node *node, char **env, t_expand *info);
-// t_node	*expand_node(t_node *node, t_dollar *var);
-t_node	*expand_node(t_node *node, t_dollar *var, t_expand *info);
+void	expand_node(t_node *node, t_dollar *var);
 
 // Nodes
-t_node	*create_node(char *str);
+t_node	*create_node(char *str, t_token type);
 void	node_to_list(t_node **list, t_node *new);
+void	attach_new_node(t_node *head, t_node *og, int node_i, bool empty_node);
 
 // Free and exit
-
-void		free_array(char **str);
-bool		error_msg(char *message, char c);
+// exit_error(char *str); probably not needed
+void	free_env_array(char **str);
+bool	error_msg(char *message, char c);
 void	free_all(t_data	*data);
 int		free_dollarvar(t_dollar *var);
 
 // List_utils
+t_node	*last_node(t_node *list);
 t_node	*attach_list_token(t_node **head, t_node *new_node);
 
 // For Testing

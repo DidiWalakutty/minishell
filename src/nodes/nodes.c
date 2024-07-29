@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   nodes.c                                           :+:    :+:             */
+/*   nodes.c                                            :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2023/11/20 16:39:35 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/06/12 20:26:00 by sreerink      ########   odam.nl         */
+/*   Created: 2024/07/04 15:28:16 by diwalaku      #+#    #+#                 */
+/*   Updated: 2024/07/29 18:58:55 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
-t_node	*create_node(char *str)
+t_node	*create_node(char *str, t_token type)
 {
 	t_node	*new_node;
 
@@ -20,27 +20,24 @@ t_node	*create_node(char *str)
 	if (!new_node)
 		return (NULL);
 	new_node->str = str;
-	new_node->type = EMPTY;
+	new_node->type = type;
 	new_node->next = NULL;
 	new_node->previous = NULL;
 	return (new_node);
 }
 
-void	node_to_list(t_node **list, t_node *new)
+// GOES WRONG HERE
+void	node_to_list(t_node **head, t_node *new)
 {
-	t_node	*current;
+	t_node	*current_node;
 
-	current = *list;
 	if (!new)
 		return ;
-	if (!current)
+	if (*head == NULL)
 	{
-		*list = new;
+		*head = new;
 		return ;
 	}
-	while (current->next != NULL)
-		current = current->next;
-	current->next = new;
-	new->previous = current;
-	new->next = NULL;
+	current_node = last_node(*head);
+	current_node->next = new;
 }

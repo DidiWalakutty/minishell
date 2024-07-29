@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   expander.c                                        :+:    :+:             */
+/*   expander.c                                         :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:36:22 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/07/26 16:43:25 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/07/29 19:23:33 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
 t_expand	*init_info(t_node *list)
 {
@@ -19,11 +19,12 @@ t_expand	*init_info(t_node *list)
 	info = malloc(sizeof(t_expand));
 	info->head = list;
 	info->char_pos = 0;	// Where needed char starts.
-	info->node_i = 0;		// Tracks current position in string and where to insert expansion
+	info->node_i = 0;		// Tracks node position and where to insert expansion
 	info->strlen = ft_strlen(list->str);
 	info->expandable = false;
 	info->prev_type = WORD;
 	info->to_next_node = true;
+	info->empty_node = false;
 	return (info);
 }
 
@@ -35,6 +36,7 @@ void	expandable_type(t_expand *info, t_token type)
 		info->expandable = true;
 }
 
+// Currently keeps seeing the expanded node as the next.
 void	expand_input(t_node *node, char **env)
 {
 	t_expand	*info;
@@ -46,14 +48,18 @@ void	expand_input(t_node *node, char **env)
 		expandable_type(info, node->type);
 		// check tilde ~
 		// check double_dollar/PID
-		// if (is_double_dollar(node, info, info->expandable) == true)
-		// 	set_pid(node, info);
+		// Check: "$$$$$$USER" should output 3x PID + USER in word
+		// Currently goes to set_dollar after finding first PID, sets
+		// $USER to diwalaku, and is now: "$$$diwalaku", but $diwalaku
+		// doesn't exist. Finds to other $$ and removes $diwalaku
+		if (is_double_dollar(node, info->expandable) == true)
+			set_pid(node, info);
 		if (is_dollar(node, info->expandable) == true)
 			set_dollar(node, env, info);
 		if (info->to_next_node == true)
 		{
 			node = node->next;
-			// info->node_i++;
+			info->node_i++;
 		}
 	}
 	node = info->head;

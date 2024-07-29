@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   tokenize_utils.c                                  :+:    :+:             */
-/*                                                    +:+ +:+         +:+     */
-/*   By: diwalaku <diwalaku@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/04 15:38:34 by diwalaku          #+#    #+#             */
-/*   Updated: 2024/07/26 16:40:11 by sreerink      ########   odam.nl         */
+/*                                                        ::::::::            */
+/*   tokenize_utils.c                                   :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/07/04 15:38:34 by diwalaku      #+#    #+#                 */
+/*   Updated: 2024/07/26 13:16:44 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
 bool	one_of_tokens(char c)
 {
@@ -41,7 +41,7 @@ int	add_one_token(char *str, int i, t_data *data, t_node **list)
 	char	*line;
 
 	line = ft_substr(str, i, 1);
-	new = create_node(line);
+	new = create_node(line, EMPTY);
 	if (str[i] == '|')
 	{
 		new->type = PIPE;
