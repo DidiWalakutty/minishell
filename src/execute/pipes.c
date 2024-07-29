@@ -6,7 +6,7 @@
 /*   By: sreerink <sreerink@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2024/06/12 20:30:41 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/07/27 21:49:40 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/07/29 21:58:31 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ char	*find_cmd_path(t_cmd *cmd)
 
 	i = 0;
 	access_check = 1;
+	if (!strncmp(cmd->cmd, "./", 2) || !strncmp(cmd->cmd, "/", 1))
+		return (cmd->cmd);
 	while (cmd->env[i] && strncmp(cmd->env[i], "PATH=", 5))
 		i++;
 	path_arr = ft_split(cmd->env[i] + 5, ':');
@@ -37,8 +39,10 @@ char	*find_cmd_path(t_cmd *cmd)
 		access_check = access(path_temp, F_OK);
 		i++;
 	}
+	if (access_check != 0)
+		error_exit(cmd->cmd, 127);
 	free(slash_cmd);
-	//free_array(path_arr);
+	// free_array(path_arr);
 	return (path_temp);
 }
 
@@ -98,6 +102,7 @@ void	child_process(t_cmd *cmd, int fd_in[], int fd_out[])
 	}
 	cmd->path = find_cmd_path(cmd);
 	execve(cmd->path, cmd->args, cmd->env);
+	error_exit(cmd->cmd, EXIT_FAILURE);
 }
 
 void	close_unused_pipes(int pipefd[][2], size_t cur_pipe, size_t total_pipes)

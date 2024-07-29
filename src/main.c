@@ -21,7 +21,12 @@
 
 void	error_exit(const char *msg, int status)
 {
-	if (msg)
+	if (status == 127)
+	{
+		write(STDERR_FILENO, msg, ft_strlen(msg));
+		write(STDERR_FILENO, ": command not found\n", 20);
+	}
+	else if (msg)
 		perror(msg);
 	exit(status);
 }
@@ -60,6 +65,8 @@ int	main(int argc, char **argv, char **env)
 		input = readline(SHELL_NAME);
 		if (!input)
 			error_exit("readline", EXIT_FAILURE);
+		if (!ft_strlen(input))
+			continue ;
 		data->input = input;
 		if (input != NULL)
 			add_history(data->input);
