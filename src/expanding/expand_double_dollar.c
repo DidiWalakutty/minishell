@@ -57,16 +57,12 @@ int	set_pid(t_node *node, t_expand *info)
 			dub_var->expanded = pid;
 			dub_var->end_var = dub_var->i + 2;
 			expand_node(node, dub_var);
-			if (dub_var->remainder == true)
-				info->to_next_node = false;
-			break ;
+			// dub_var->i++;
 		}
-		else
-		{
+		dub_var->i++;
+		while (node->str[dub_var->i] && node->str[dub_var->i] != '$')
 			dub_var->i++;
-			while (node->str[dub_var->i] && node->str[dub_var->i] != '$')
-				dub_var->i++;
-		}
+		dub_var->str_len = ft_strlen(node->str);
 	}
 	return (0);
 }
