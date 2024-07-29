@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   env.c                                             :+:    :+:             */
+/*   env.c                                              :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2023/11/20 16:39:23 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/07/15 14:33:05 by sreerink      ########   odam.nl         */
+/*   Created: 2024/07/04 15:37:19 by diwalaku      #+#    #+#                 */
+/*   Updated: 2024/07/29 18:21:13 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
 // split on '=' and name + value?
 // Copies current env. Should eventually also update ShellLevel
@@ -31,7 +31,7 @@ char	**copy_env(char **env)
 		copy[i] = ft_strdup(env[i]);
 		if (copy[i] == NULL)
 		{
-			free_array(copy);
+			free_env_array(copy);
 			return (copy);
 		}
 		i++;

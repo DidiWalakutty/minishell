@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   main.c                                            :+:    :+:             */
+/*   main.c                                             :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:40:07 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/07/27 22:28:28 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/07/29 21:35:06 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,14 +51,12 @@ int	main(int argc, char **argv, char **env)
 {
 	t_data	*data;
 	char	*input;
-	int		i;
-	t_cmd	*current;
 
 	(void)argc;
 	(void)argv;
+	data = init_shell(env);
 	while (1)
 	{
-		data = init_shell(env);
 		input = readline(SHELL_NAME);
 		if (!input)
 			error_exit("readline", EXIT_FAILURE);
@@ -69,7 +67,7 @@ int	main(int argc, char **argv, char **env)
 		// Following two lines will be execute() in the future
 		data->cmd_process = make_cmd_nodes(data);
 		make_processes(data);
-		// free_all(data);
+		free_all(data);
 	}
 	return (0);
 }
