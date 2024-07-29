@@ -38,7 +38,7 @@ char	*find_cmd_path(t_cmd *cmd)
 		i++;
 	}
 	free(slash_cmd);
-	free_array(path_arr);
+	//free_array(path_arr);
 	return (path_temp);
 }
 
