@@ -29,12 +29,13 @@ void	attach_new_node(t_node *head, t_node *og, int node_i, bool empty_node)
 {
 	t_node	*new;
 
+	new = ft_calloc(1, sizeof(t_node));
 	if (node_i == 0)
 	{
 		new = head->next;
 		free(head->str);
-		free(head);
 		head = new;
+		printf("Head: %s\n", head->str);
 	}
 	else if (empty_node == true && node_i > 0)
 	{

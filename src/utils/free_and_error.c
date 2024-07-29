@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:41:04 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/07/28 19:26:10 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/07/29 18:31:17 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,28 @@ bool	error_msg(char *message, char c)
 	return (true);
 }
 
+static void	free_list(t_node *list)
+{
+	t_node	*temp;
+
+	while (list)
+	{
+		temp = list;
+		list = list->next;
+		free(temp->str);
+		free(temp);
+	}
+}
+
 // free(data->process); ??
 // free(&data); ??
 void	free_all(t_data	*data)
 {
 	free(data->input);
-	free(data->env);
-	free(data->list);
+	free_list(data->list);
+	// free(data->list); // still necessary?
+	data->input = NULL;
+	data->list = NULL;
 }
 
 int	free_dollarvar(t_dollar *var)
@@ -37,7 +52,7 @@ int	free_dollarvar(t_dollar *var)
 	return (1);
 }
 
-void	free_array(char **str)
+void	free_env_array(char **str)
 {
 	int	i;
 

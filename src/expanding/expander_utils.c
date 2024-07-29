@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/07/04 15:35:01 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/07/28 21:56:45 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/07/29 18:33:13 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,14 +30,12 @@ static char	*check_joined(char *before, char *fill_in)
 //
 // Expand nodes checks and concatenates before expansion, 
 // the expansion and the possible remainder, creates a node and adds it to the list.
-t_node	*expand_node(t_node *node, t_dollar *dol, t_expand *info)
+void	expand_node(t_node *node, t_dollar *dol)
 {
-	t_node	*new;
 	char	*before;
 	char	*remainder;
 	char	*joined;
 
-	new = NULL;
 	joined = NULL;
 	before = ft_substr(node->str, 0, dol->i);
 	remainder = ft_substr(node->str, dol->end_var, dol->str_len);
@@ -50,12 +48,10 @@ t_node	*expand_node(t_node *node, t_dollar *dol, t_expand *info)
 		joined = check_joined(joined, remainder);
 		dol->remainder = true;
 	}
-	new = create_node(joined, node->type);
-	// TODO: Here: isn't properly updated with next and previous.
-	node_to_list(&info->head, new);
+	free(node->str);
+	node->str = joined;
 	free(before);
 	free(remainder);
-	return (new);
 }
 
 // Compares each line of env with the given string, like

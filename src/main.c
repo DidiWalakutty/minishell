@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:40:07 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/07/28 17:06:54 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/07/29 18:56:38 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 // Sets all variables to NULL.
 // Termcaps???
 // process al op 1 ivm child
-static t_data	*init_shell(char **env)
+static t_data	*init_shell(char **env_copy)
 {
 	t_data	*data;
 
@@ -27,7 +27,7 @@ static t_data	*init_shell(char **env)
 		return (NULL);
 	// if (!isatty(STDIN_FILENO))
 	// 	exit_program();
-	data->env = copy_env(env);
+	data->env = env_copy;
 	data->input = NULL;
 	data->list = NULL;
 	data->process = 1;
@@ -39,6 +39,7 @@ static t_data	*init_shell(char **env)
 	return (data);
 }
 
+// what to do with exit_code $? exit-status???
 int	main(int argc, char **argv, char **env)
 {
 	t_data	*data;
@@ -46,9 +47,9 @@ int	main(int argc, char **argv, char **env)
 
 	(void)argc;
 	(void)argv;
+	data = init_shell(env);
 	while (1)
 	{
-		data = init_shell(env);
 		input = readline(SHELL_NAME);
 		if (!input)
 			return (1);
@@ -60,7 +61,7 @@ int	main(int argc, char **argv, char **env)
 		print_linked_list(data->list);
 		// build commands: concatenate 
 		// executor();
-		// free_all(data);
+		free_all(data);
 	}
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:36:22 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/07/28 21:38:38 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/07/29 19:23:33 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,12 @@ void	expand_input(t_node *node, char **env)
 		expandable_type(info, node->type);
 		// check tilde ~
 		// check double_dollar/PID
-		// if (is_double_dollar(node, info, info->expandable) == true)
-		// 	set_pid(node, info);
+		// Check: "$$$$$$USER" should output 3x PID + USER in word
+		// Currently goes to set_dollar after finding first PID, sets
+		// $USER to diwalaku, and is now: "$$$diwalaku", but $diwalaku
+		// doesn't exist. Finds to other $$ and removes $diwalaku
+		if (is_double_dollar(node, info->expandable) == true)
+			set_pid(node, info);
 		if (is_dollar(node, info->expandable) == true)
 			set_dollar(node, env, info);
 		if (info->to_next_node == true)

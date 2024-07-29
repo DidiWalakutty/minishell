@@ -22,9 +22,7 @@ bool	is_dollar(t_node *node, bool is_expandable)
 	copy = ft_strchr(node->str, '$');
 	if (!copy)
 		return (false);
-	if (ft_strlen(copy) >= 1 && ((if_valid_char(copy[1])) || copy[1] == '{'))
-		return (true);
-	return (false);
+	return (true);
 }
 
 static t_dollar	*init_dollar(t_node *node)
@@ -47,9 +45,8 @@ static t_dollar	*init_dollar(t_node *node)
 // start_env is $ +1, where ENV-name starts.
 // end is where env_name ends.
 // Searches the env-name and its info.
-static void	expand_dollar(t_node *node, t_dollar *dol, char **env, t_expand *info)
+static void	expand_dollar(t_node *node, t_dollar *dol, char **env)
 {
-	t_node	*replacement;
 
 	dol->start_env = dol->i + 1;
 	if (node->str[dol->start_env] == '{')
@@ -72,9 +69,7 @@ static void	expand_dollar(t_node *node, t_dollar *dol, char **env, t_expand *inf
 		dol->start_env--;
 		dol->end_var++;
 	}
-	// Ended here: it's not expanded properly
-	replacement = expand_node(node, dol, info);
-	replace_node(replacement, info->head, info->node_i, info->empty_node);
+	expand_node(node, dol);
 	// dol->expanded = NULL;	reset for next check?
 }
 
@@ -105,10 +100,10 @@ int	set_dollar(t_node *node, char **env, t_expand *info)
 			(if_valid_char(node->str[dol_var->i + 1]) || \
 			node->str[dol_var->i + 1] == '{'))
 		{
-			expand_dollar(node, dol_var, env, info);
+			expand_dollar(node, dol_var, env);
 			if (dol_var->remainder == true)
 				info->to_next_node = false;
-			break ;
+			// break ;
 		}
 		else
 		{
