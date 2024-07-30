@@ -6,7 +6,7 @@
 /*   By: sreerink <sreerink@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2024/06/12 20:30:41 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/07/29 21:58:31 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/07/30 21:04:14 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,10 @@ void	child_process(t_cmd *cmd, int fd_in[], int fd_out[])
 	else
 	{
 		close(fd_out[1]);
-		file2 = open(cmd->redirect_out, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		if (cmd->append)
+			file2 = open(cmd->redirect_out, O_WRONLY | O_CREAT | O_APPEND, 0644);
+		else
+			file2 = open(cmd->redirect_out, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (file2 == -1)
 			error_exit(cmd->redirect_out, EXIT_FAILURE);
 		if (dup2(file2, STDOUT_FILENO) == -1)

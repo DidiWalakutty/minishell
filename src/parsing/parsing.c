@@ -6,7 +6,7 @@
 /*   By: sreerink <sreerink@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2024/07/25 19:51:53 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/07/27 20:53:50 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/07/30 20:57:07 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ void	write_redirect_out(t_cmd **cmd, t_node **list)
 	}
 	else if ((*list)->type == APPEND)
 	{
+		(*cmd)->append = true;
 		(*cmd)->redirect_out = ft_strdup((*list)->next->str);
 		if (!(*cmd)->redirect_out)
 			error_exit("ft_strdup", EXIT_FAILURE);

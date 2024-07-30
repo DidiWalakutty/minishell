@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/20 16:38:50 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/07/26 17:54:06 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/07/30 20:52:27 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,8 @@ typedef struct s_cmd
 	char	*redirect_in;
 	char	*redirect_out;
 	char	**env;
+	bool	append;
+	bool	builtin;
 	t_cmd	*next;
 } t_cmd;
 
