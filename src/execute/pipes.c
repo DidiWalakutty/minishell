@@ -6,11 +6,20 @@
 /*   By: sreerink <sreerink@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2024/06/12 20:30:41 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/07/30 21:04:14 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/07/31 19:04:04 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+int		errno_to_exit_status(int err)
+{
+	if (err == ENOENT)
+		return (127);
+	else if (err == EACCES)
+		return (126);
+	return (EXIT_FAILURE);
+}
 
 char	*find_cmd_path(t_cmd *cmd)
 {
@@ -105,7 +114,7 @@ void	child_process(t_cmd *cmd, int fd_in[], int fd_out[])
 	}
 	cmd->path = find_cmd_path(cmd);
 	execve(cmd->path, cmd->args, cmd->env);
-	error_exit(cmd->cmd, EXIT_FAILURE);
+	error_exit(cmd->cmd, errno_to_exit_status(errno));
 }
 
 void	close_unused_pipes(int pipefd[][2], size_t cur_pipe, size_t total_pipes)

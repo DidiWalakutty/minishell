@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/20 16:38:50 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/07/30 20:52:27 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/07/31 18:18:56 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <stdio.h>
 # include <unistd.h>
+# include <errno.h>
 # include <stdbool.h>
 # include <linux/limits.h>
 # include "../libft/libft.h"
@@ -113,6 +114,7 @@ typedef struct s_data
 	t_cmd	*cmd_process;
 	// t_token	*token;	// needed in t_node??
 	size_t	process;
+	int		exit_status;
 }	t_data;
 
 // Functions //
