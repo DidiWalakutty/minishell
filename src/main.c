@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   main.c                                             :+:    :+:            */
+/*   main.c                                            :+:    :+:             */
 /*                                                     +:+                    */
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:40:07 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/07/29 21:35:06 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/07/31 19:14:24 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ int	main(int argc, char **argv, char **env)
 		lexer_and_parser(data);
 		// Following two lines will be execute() in the future
 		data->cmd_process = make_cmd_nodes(data);
-		make_processes(data);
+		data->exit_status = make_processes(data);
 		free_all(data);
 	}
 	return (0);
