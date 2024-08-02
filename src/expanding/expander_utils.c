@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/07/04 15:35:01 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/07/29 18:33:13 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/08/02 22:44:16 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@ static char	*check_joined(char *before, char *fill_in)
 // It would deallocate the memory while the node still needs to use it.
 //
 // Expand nodes checks and concatenates before expansion, 
-// the expansion and the possible remainder, creates a node and adds it to the list.
+// the expansion and the possible remainder, 
+// creates a node and adds it to the list.
 void	expand_node(t_node *node, t_dollar *dol)
 {
 	char	*before;
