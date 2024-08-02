@@ -44,6 +44,7 @@ static t_data	*init_shell(char **env_copy)
 	data->input = NULL;
 	data->list = NULL;
 	data->process = 1;
+	data->exit_status = 0;
 	// data->token = NULL; Not needed?
 	// TODO: PATH's
 	// TODO: unset old PWD
