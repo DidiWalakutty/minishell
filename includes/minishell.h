@@ -71,11 +71,6 @@ typedef struct s_dollar
 	bool	remainder;			// Check for if we need to re-read the node
 }	t_dollar;
 
-typedef struct s_command
-{	
-
-}	t_command;
-
 // word: 	a pointer to the string stored in a node
 // len: 	the content length
 // type: 	the content token
@@ -95,7 +90,6 @@ typedef struct s_data
 	char	*input;
 	char	**env;
 	t_node	*list;
-	t_command *commands;
 	// t_token	*token;	// needed in t_node??
 	size_t	process;
 }	t_data;
