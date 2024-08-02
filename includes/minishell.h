@@ -110,11 +110,8 @@ typedef struct s_data
 	char	*input;
 	char	**env;
 	t_node	*list;
-<<<<<<< HEAD
-=======
 	t_token	*token;
 	t_cmd	*cmd_process;
->>>>>>> origin/main
 	// t_token	*token;	// needed in t_node??
 	size_t	process;
 	int		exit_status;
