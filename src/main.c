@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   main.c                                            :+:    :+:             */
+/*   main.c                                             :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:40:07 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/07/31 19:14:24 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/08/02 18:35:06 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ static t_data	*init_shell(char **env)
 	data->input = NULL;
 	data->list = NULL;
 	data->process = 1;
+	data->exit_status = 0;
 	// data->token = NULL; Not needed?
 	// TODO: PATH's
 	// TODO: unset old PWD
