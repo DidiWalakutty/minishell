@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:40:07 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/02 18:35:06 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/08/02 18:48:22 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	error_exit(const char *msg, int status)
 	exit(status);
 }
 
-static t_data	*init_shell(char **env)
+static t_data	*init_shell(char **env_copy)
 {
 	t_data	*data;
 
@@ -40,7 +40,7 @@ static t_data	*init_shell(char **env)
 		return (NULL);
 	// if (!isatty(STDIN_FILENO))
 	// 	exit_program();
-	data->env = copy_env(env);
+	data->env = env_copy;
 	data->input = NULL;
 	data->list = NULL;
 	data->process = 1;
@@ -53,6 +53,7 @@ static t_data	*init_shell(char **env)
 	return (data);
 }
 
+// what to do with exit_code $? exit-status???
 int	main(int argc, char **argv, char **env)
 {
 	t_data	*data;
