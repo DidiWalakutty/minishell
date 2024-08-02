@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:43:34 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/07/26 13:17:26 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/08/02 21:57:42 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,17 +17,23 @@
 // Returns i - 1, so the i in tokenize_input immediately follows
 // the closing quote's position that we return.
 // Should we consider "" as an empty string and add it to the node-list?
+//  free line?
 int	add_quote(char *str, int i, char c, t_node **list)
 {
 	t_node	*new;
 	int		start;
 	int		len;
 	char	*line;
+	bool	null;
 
+	null = false;
 	start = i + 1;
 	len = quote_length(&str[start], c) + 2;
 	if (len == 2)
-		return (len + start);
+	{
+		line = "\0";
+		null = true;
+	}
 	else
 		line = ft_substr(str, start, len - 2);
 	i = len + start + 1;
@@ -36,6 +42,7 @@ int	add_quote(char *str, int i, char c, t_node **list)
 		new->type = SINGLE_QUOTE;
 	else
 		new->type = DOUBLE_QUOTE;
+	new->null = null;
 	node_to_list(list, new);
 	return (i - 1);
 }

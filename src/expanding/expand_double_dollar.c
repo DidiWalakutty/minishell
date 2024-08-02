@@ -38,7 +38,6 @@ t_dollar	*init_double_dol(t_node *node)
 	double_dollar->end_var = 0;
 	double_dollar->str_len = ft_strlen(node->str);
 	double_dollar->i = 0;
-	double_dollar->remainder = false;
 	return (double_dollar);
 }
 
@@ -49,7 +48,6 @@ int	set_pid(t_node *node, t_expand *info)
 
 	pid = ft_itoa(getpid());
 	dub_var = init_double_dol(node);
-	info->to_next_node = true;
 	while (dub_var->i < dub_var->str_len)
 	{
 		if (node->str[dub_var->i] == '$' && node->str[dub_var->i + 1] == '$')
@@ -57,7 +55,6 @@ int	set_pid(t_node *node, t_expand *info)
 			dub_var->expanded = pid;
 			dub_var->end_var = dub_var->i + 2;
 			expand_node(node, dub_var);
-			// dub_var->i++;
 		}
 		dub_var->i++;
 		while (node->str[dub_var->i] && node->str[dub_var->i] != '$')

@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:42:29 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/02 18:35:03 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/08/02 22:27:32 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,8 @@ int	lexer_and_parser(t_data *data)
 	if ((all_quotes_closed(data->input) == false))
 		return (1);
 	data->list = tokenize_input(data, data->input);
-	expand_input(data->list, data->env);
+	expand_input(data, data->list, data->env);
+	print_linked_list(data->list);
 	return (0);
 }
 
@@ -99,7 +100,11 @@ t_node	*tokenize_input(t_data *data, char *str)
 	while (str[i])
 	{
 		while (iswhitespace(str[i]))
+		{
 			i++;
+			if (str[i] == '\0')
+				return (list);
+		}
 		if (str[i] == '\'')
 			i = add_quote(str, i, '\'', &list);
 		else if (str[i] == '\"')

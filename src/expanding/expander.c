@@ -6,21 +6,20 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:36:22 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/07/29 19:23:33 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/08/02 22:46:06 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+// info->node_i = 0; // Tracks node position and where to insert expansion
 t_expand	*init_info(t_node *list)
 {
 	t_expand	*info;
 
 	info = malloc(sizeof(t_expand));
 	info->head = list;
-	info->char_pos = 0;	// Where needed char starts.
-	info->node_i = 0;		// Tracks node position and where to insert expansion
-	info->strlen = ft_strlen(list->str);
+	info->char_pos = 0;
 	info->expandable = false;
 	info->prev_type = WORD;
 	info->to_next_node = true;
@@ -28,7 +27,7 @@ t_expand	*init_info(t_node *list)
 	return (info);
 }
 
-void	expandable_type(t_expand *info, t_token type)
+static void	expandable_type(t_expand *info, t_token type)
 {
 	if (type == HERE_DOC)
 		info->expandable = false;
@@ -37,7 +36,8 @@ void	expandable_type(t_expand *info, t_token type)
 }
 
 // Currently keeps seeing the expanded node as the next.
-void	expand_input(t_node *node, char **env)
+// if we use info->i: // info->node_i++; at to_next_node == true
+void	expand_input(t_data *data, t_node *node, char **env)
 {
 	t_expand	*info;
 
@@ -46,21 +46,17 @@ void	expand_input(t_node *node, char **env)
 	{
 		info->to_next_node = true;
 		expandable_type(info, node->type);
+		if (check_null(&node) == true)
+			continue ;
 		// check tilde ~
-		// check double_dollar/PID
-		// Check: "$$$$$$USER" should output 3x PID + USER in word
-		// Currently goes to set_dollar after finding first PID, sets
-		// $USER to diwalaku, and is now: "$$$diwalaku", but $diwalaku
-		// doesn't exist. Finds to other $$ and removes $diwalaku
+		if (is_exit_status(node, info->expandable) == true)
+			set_exit_status(data, node, info);
 		if (is_double_dollar(node, info->expandable) == true)
 			set_pid(node, info);
 		if (is_dollar(node, info->expandable) == true)
 			set_dollar(node, env, info);
 		if (info->to_next_node == true)
-		{
 			node = node->next;
-			info->node_i++;
-		}
 	}
 	node = info->head;
 	free(info);

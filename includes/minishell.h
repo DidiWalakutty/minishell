@@ -96,10 +96,11 @@ typedef struct s_cmd
 
 typedef struct s_node
 {
-	char			*str;
-	t_token			type;
-	t_node			*next;
-	t_node			*previous;
+	char	*str;
+	t_token	type;
+	t_node	*next;
+	t_node	*previous;
+	bool	null;	
 	// state?
 	// set i?
 }	t_node;
@@ -127,27 +128,33 @@ bool	all_quotes_closed(char *str);
 bool	skip_quotedstring(char *str, int *i);
 t_node	*tokenize_input(t_data *data, char *str);
 
-// Tokenize and Expanding
+// Tokenize
 int		add_quote(char *str, int i, char c, t_node **list);
 int		add_redir_or_pipe(char *str, int i, t_data *data, t_node **list);
 int		add_one_token(char *str, int i, t_data *data, t_node **list);
 int		add_dollar(char *str, int i, t_node **list);
 int		add_word(char *str, int i, t_node **list);
-void	expand_input(t_node *list, char **env);
-// Utils
+void	expand_input(t_data *data, t_node *node, char **env);
+
+// Utils - Tokenizer
 bool	one_of_tokens(char c);
 void	skip_to_token(char *str, int *i);
 void	skip_whitespace(char *str, int *i);
 int		quote_length(char *str, char c);
 int		variable_len(char *str);
 
-// Utils - Expanding
-char	*copy_env_input(char **env, char *to_find);
-int		if_valid_char(char c);
+// Expanding
+bool	check_null(t_node **node);
+bool	is_exit_status(t_node *node, bool expandable);
+int		set_exit_status(t_data *data, t_node *node, t_expand *info);
 bool	is_double_dollar(t_node *node, bool is_expandable);
 int		set_pid(t_node *node, t_expand *info);
 bool	is_dollar(t_node *node, bool is_expandable);
 int		set_dollar(t_node *node, char **env, t_expand *info);
+
+// Utils - Expanding
+char	*copy_env_input(char **env, char *to_find);
+int		if_valid_char(char c);
 void	expand_node(t_node *node, t_dollar *var);
 
 // Nodes

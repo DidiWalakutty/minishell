@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:41:04 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/02 18:45:28 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/08/02 22:41:39 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 bool	error_msg(char *message, char c)
 {
-	ft_printf("%s `%c'\n", message, c);
+	printf("%s `%c'\n", message, c);
 	return (true);
 }
 
@@ -26,6 +26,11 @@ static void	free_list(t_node *list)
 	{
 		temp = list;
 		list = list->next;
+		if (temp->null == true)
+		{
+			free(temp);
+			return ;
+		}
 		free(temp->str);
 		free(temp);
 	}
@@ -33,11 +38,11 @@ static void	free_list(t_node *list)
 
 // free(data->process); ??
 // free(&data); ??
+// free(data->list); // still necessary?
 void	free_all(t_data	*data)
 {
 	free(data->input);
 	free_list(data->list);
-	// free(data->list); // still necessary?
 	data->input = NULL;
 	data->list = NULL;
 }
