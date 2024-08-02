@@ -1,16 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   free_and_error.c                                   :+:    :+:            */
+/*   free_and_error.c                                  :+:    :+:             */
 /*                                                     +:+                    */
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:41:04 by diwalaku      #+#    #+#                 */
+<<<<<<< HEAD
 /*   Updated: 2024/07/29 18:31:17 by diwalaku      ########   odam.nl         */
+=======
+/*   Updated: 2024/07/31 17:16:20 by sreerink      ########   odam.nl         */
+>>>>>>> origin/main
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../includes/minishell.h"
 
 bool	error_msg(char *message, char c)
 {

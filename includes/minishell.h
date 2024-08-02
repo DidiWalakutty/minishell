@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   minishell.h                                        :+:    :+:            */
+/*   minishell.h                                       :+:    :+:             */
 /*                                                     +:+                    */
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/20 16:38:50 by diwalaku      #+#    #+#                 */
-/*   Updated: 2023/12/05 20:27:40 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/07/31 18:18:56 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,14 @@
 
 # include <stdio.h>
 # include <unistd.h>
+# include <errno.h>
 # include <stdbool.h>
+# include <linux/limits.h>
 # include "../libft/libft.h"
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <fcntl.h>
+# include <sys/wait.h>
 
 // Defining ANSI colors
 //
@@ -26,8 +30,9 @@
 # define SHELL_NAME "Minishell$ " // which name, colors?
 
 typedef enum s_token		t_token;
+typedef struct s_list		t_list;
+typedef struct s_cmd		t_cmd;
 typedef struct s_expand		t_expand;
-typedef struct s_command	t_command;
 typedef struct s_node		t_node;
 typedef struct s_data		t_data;
 
@@ -74,6 +79,21 @@ typedef struct s_dollar
 // word: 	a pointer to the string stored in a node
 // len: 	the content length
 // type: 	the content token
+
+typedef struct s_cmd
+{
+	pid_t	pid;
+	char	*cmd;
+	char	*path;
+	char	**args;
+	char	*redirect_in;
+	char	*redirect_out;
+	char	**env;
+	bool	append;
+	bool	builtin;
+	t_cmd	*next;
+} t_cmd;
+
 typedef struct s_node
 {
 	char			*str;
@@ -90,8 +110,14 @@ typedef struct s_data
 	char	*input;
 	char	**env;
 	t_node	*list;
+<<<<<<< HEAD
+=======
+	t_token	*token;
+	t_cmd	*cmd_process;
+>>>>>>> origin/main
 	// t_token	*token;	// needed in t_node??
 	size_t	process;
+	int		exit_status;
 }	t_data;
 
 // Functions //
@@ -147,5 +173,17 @@ t_node	*attach_list_token(t_node **head, t_node *new_node);
 const char	*type_to_string(t_token type);
 void		print_linked_list(t_node *head);
 void		print_env(char **env);
+
+// Parsing
+t_cmd	*make_cmd_nodes(t_data *data);
+
+// Executing
+void	error_exit(const char *msg, int status);
+int		make_processes(t_data *data);
+
+// Builtins
+void	echo_builtin(const char *str, bool newline);
+void	cd_builtin(const char *dst_directory);
+void	pwd_builtin(void);
 
 #endif

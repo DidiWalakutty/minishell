@@ -1,0 +1,7 @@
+minishell
+obj
+*.obj
+libft/libft.a
+notes.txt
+.vscode
+*.json
