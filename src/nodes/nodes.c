@@ -19,7 +19,10 @@ t_node	*create_node(char *str, t_token type)
 	new_node = malloc(sizeof(t_node));
 	if (!new_node)
 		return (NULL);
-	new_node->str = str;
+	if (str)
+		new_node->str = str;
+	else
+		new_node->str = ft_strdup("");
 	new_node->type = type;
 	new_node->next = NULL;
 	new_node->previous = NULL;

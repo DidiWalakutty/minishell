@@ -37,6 +37,8 @@ void	expand_node(t_node *node, t_dollar *dol)
 	char	*remainder;
 	char	*joined;
 
+	if (!node->str)
+		return ;
 	joined = NULL;
 	before = ft_substr(node->str, 0, dol->i);
 	remainder = ft_substr(node->str, dol->end_var, dol->str_len);
@@ -45,10 +47,9 @@ void	expand_node(t_node *node, t_dollar *dol)
 	if (dol->expanded && dol->expanded[0] != '\0')
 		joined = check_joined(joined, dol->expanded);
 	if (remainder && remainder[0] != '\0')
-	{
 		joined = check_joined(joined, remainder);
-		dol->remainder = true;
-	}
+	if (!joined)
+		joined = ft_strdup("");
 	free(node->str);
 	node->str = joined;
 	free(before);

@@ -22,8 +22,6 @@ t_expand	*init_info(t_node *list)
 	info->char_pos = 0;
 	info->expandable = false;
 	info->prev_type = WORD;
-	info->to_next_node = true;
-	info->empty_node = false;
 	return (info);
 }
 
@@ -44,19 +42,17 @@ void	expand_input(t_data *data, t_node *node, char **env)
 	info = init_info(node);
 	while (node)
 	{
-		info->to_next_node = true;
 		expandable_type(info, node->type);
 		if (check_null(&node) == true)
 			continue ;
 		// check tilde ~
+		if (is_dollar(node, info->expandable) == true)
+			set_dollar(node, env, info);
 		if (is_exit_status(node, info->expandable) == true)
 			set_exit_status(data, node, info);
 		if (is_double_dollar(node, info->expandable) == true)
 			set_pid(node, info);
-		if (is_dollar(node, info->expandable) == true)
-			set_dollar(node, env, info);
-		if (info->to_next_node == true)
-			node = node->next;
+		node = node->next;
 	}
 	node = info->head;
 	free(info);
