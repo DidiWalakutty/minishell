@@ -6,7 +6,7 @@
 /*   By: sreerink <sreerink@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2024/07/25 19:51:53 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/07/30 20:57:07 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/08/04 00:05:15 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,24 @@ size_t	count_args(t_node *list)
 	return (n);
 }
 
+void	check_cmd_builtin(t_cmd **cmd)
+{
+	if (!strncmp("cd", (*cmd)->cmd, 3))
+		(*cmd)->builtin = CD;
+	else if (!strncmp("export", (*cmd)->cmd, 7))
+		(*cmd)->builtin = EXPORT;
+	else if (!strncmp("unset", (*cmd)->cmd, 6))
+		(*cmd)->builtin = UNSET;
+	else if (!strncmp("exit", (*cmd)->cmd, 5))
+		(*cmd)->builtin = EXIT;
+	else if (!strncmp("echo", (*cmd)->cmd, 5))
+		(*cmd)->builtin = ECHO;
+	else if (!strncmp("pwd", (*cmd)->cmd, 4))
+		(*cmd)->builtin = PWD;
+	else if (!strncmp("env", (*cmd)->cmd, 4))
+		(*cmd)->builtin = ENV;
+}
+
 void	write_cmd_words(t_cmd **cmd, t_node **list)
 {
 	size_t	i;
@@ -33,6 +51,7 @@ void	write_cmd_words(t_cmd **cmd, t_node **list)
 	(*cmd)->cmd = ft_strdup((*list)->str);
 	if (!(*cmd)->cmd)
 		error_exit("ft_strdup", EXIT_FAILURE);
+	check_cmd_builtin(cmd);
 	while (*list && (*list)->type == WORD)
 	{
 		(*cmd)->args[i] = ft_strdup((*list)->str);
