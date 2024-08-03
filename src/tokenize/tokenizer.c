@@ -6,11 +6,50 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:43:34 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/02 21:57:42 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/08/03 22:13:49 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	quote_len(char *str, int i, char c)
+{
+	int	len;
+
+	i++;
+	len = 0;
+	while (str[i + len])
+	{
+		if (c == '\'' && str[i + len] == '\'')
+		{
+			while (str[i + len + 1] != ' ')
+			{
+				len++;
+				if (str[i + len] == '\'')
+					return (len);
+			}
+			return (len);
+		}
+		if (c == '\"' && str[i + len] == '\"')
+			return (len);
+		len++;
+	}
+	return (len);
+}
+
+int	quote_length(char *str, char c)
+{
+	int	i;
+
+	i = 0;
+	if (c == '\'' || c == '\"')
+	{
+		while (str[i] && str[i] != c)
+			i++;
+		return (i);
+	}
+	return (i);
+}
 
 // Add 2 for the opening and closing quote, remove 2 for line
 //  (we don't want to include the quotes).
@@ -23,12 +62,14 @@ int	add_quote(char *str, int i, char c, t_node **list)
 	t_node	*new;
 	int		start;
 	int		len;
+	// int		len2;
 	char	*line;
 	bool	null;
 
 	null = false;
 	start = i + 1;
-	len = quote_length(&str[start], c) + 2;
+	// len1 = quote_length(&str[start], c) + 2;
+	len = quote_len(str, i, c);
 	if (len == 2)
 	{
 		line = "\0";

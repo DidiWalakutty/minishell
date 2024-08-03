@@ -90,7 +90,7 @@ typedef struct s_cmd
 	bool	append;
 	bool	builtin;
 	t_cmd	*next;
-} t_cmd;
+}	t_cmd;
 
 typedef struct s_node
 {
@@ -111,9 +111,10 @@ typedef struct s_data
 	t_node	*list;
 	t_token	*token;
 	t_cmd	*cmd_process;
-	// t_token	*token;	// needed in t_node??
 	size_t	process;
 	int		exit_status;
+	char	*home;
+	int		SHLVL;
 }	t_data;
 
 // Functions //

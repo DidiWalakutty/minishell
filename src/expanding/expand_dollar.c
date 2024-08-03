@@ -76,17 +76,17 @@ static void	expand_dollar(t_node *node, t_dollar *dol, char **env)
 }
 
 // still needed?
-void	reset_var_info(t_node *node, t_node *head, t_expand *info)
-{
-	int	temp;
+// void	reset_var_info(t_node *node, t_node *head, t_expand *info)
+// {
+// 	int	temp;
 
-	temp = 0;
-	node = head;
-	temp = info->node_i;
-	while (info->node_i--)
-		node = (node)->next;
-	info->node_i = temp;
-}
+// 	temp = 0;
+// 	node = head;
+// 	temp = info->node_i;
+// 	while (info->node_i--)
+// 		node = (node)->next;
+// 	info->node_i = temp;
+// }
 
 // Check for $ as last char?
 // Check for if strlen(dol_var->expanded) == 0? If so, free(dol_var) + ret 0;

@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:40:07 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/02 19:31:01 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/08/03 20:54:38 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,8 @@ static t_data	*init_shell(char **env_copy)
 	data->list = NULL;
 	data->process = 1;
 	data->exit_status = 0;
-	// data->token = NULL; Not needed?
+	data->home = copy_env_input(env_copy, "HOME");
+	data->SHLVL = 1;
 	// TODO: PATH's
 	// TODO: unset old PWD
 	// TODO: increment shlvl
@@ -74,8 +75,8 @@ int	main(int argc, char **argv, char **env)
 			add_history(data->input);
 		lexer_and_parser(data);
 		// Following two lines will be execute() in the future
-		// data->cmd_process = make_cmd_nodes(data);
-		// data->exit_status = make_processes(data);
+		//  data->cmd_process = make_cmd_nodes(data);
+		//  data->exit_status = make_processes(data);
 		free_all(data);
 	}
 	return (0);

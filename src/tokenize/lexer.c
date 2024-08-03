@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:42:29 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/02 22:27:32 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/08/03 21:51:09 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,25 +39,31 @@ int	lexer_and_parser(t_data *data)
 // Checks the string for syntax errors.
 static bool	check_syntax_errors(char *str)
 {
-	int	i;
+	int		i;
+	bool	error_found;
 
 	i = 0;
-	skip_whitespace(str, &i);
+	error_found = false;
 	if (str[i] == '|')
 		return (error_msg("syntax error near unexpected token", str[i]));
 	while (str[i])
 	{
+		skip_whitespace(str, &i);
 		skip_to_token(str, &i);
 		if (str[i] == '\'' || str[i] == '\"')
-			skip_quotedstring(str, &i);
+		{
+			if (skip_quotedstring(str, &i) == true)
+				error_found = true;
+		}
 		else if (str[i])
 		{
 			if (token_syntax_error(str, &i) == true)
 				return (true);
 		}
-		i++;
+		if (str[i] != '\'' && str[i] != '\"')
+			i++;
 	}
-	return (false);
+	return (error_found);
 }
 
 // Nothing behind | makes it a heredoc, TODO???
