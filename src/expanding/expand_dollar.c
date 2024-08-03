@@ -54,9 +54,13 @@ static void	expand_dollar(t_node *node, t_dollar *dol, char **env)
 		dol->start_env++;
 	}
 	dol->end_var = dol->start_env;
-	while (node->str[dol->end_var] && (ft_isalpha(node->str[dol->end_var]) \
-			|| node->str[dol->end_var] == '_'))
+	while (node->str[dol->end_var] && (is_alph_or_num(node->str[dol->end_var]) \
+		|| node->str[dol->end_var] == '_'))
+	{
 		dol->end_var++;
+		if (node->str[dol->end_var] == '$')
+			break ;
+	}
 	dol->env_name = ft_substr(node->str, dol->start_env, \
 					dol->end_var - dol->start_env);
 	dol->expanded = copy_env_input(env, dol->env_name);
@@ -72,17 +76,17 @@ static void	expand_dollar(t_node *node, t_dollar *dol, char **env)
 }
 
 // still needed?
-// void	reset_var_info(t_node *node, t_node *head, t_expand *info)
-// {
-// 	int	temp;
+void	reset_var_info(t_node *node, t_node *head, t_expand *info)
+{
+	int	temp;
 
-// 	temp = 0;
-// 	node = head;
-// 	temp = info->node_i;
-// 	while (info->node_i--)
-// 		node = (node)->next;
-// 	info->node_i = temp;
-// }
+	temp = 0;
+	node = head;
+	temp = info->node_i;
+	while (info->node_i--)
+		node = (node)->next;
+	info->node_i = temp;
+}
 
 // Check for $ as last char?
 // Check for if strlen(dol_var->expanded) == 0? If so, free(dol_var) + ret 0;
@@ -104,18 +108,11 @@ int	set_dollar(t_node *node, char **env, t_expand *info)
 		if (node->str[dol_var->i] == '$' && \
 			(if_valid_char(node->str[dol_var->i + 1]) || \
 			node->str[dol_var->i + 1] == '{'))
-		{
 			expand_dollar(node, dol_var, env);
-			if (dol_var->remainder == true)
-				info->to_next_node = false;
-			break ;
-		}
-		else
-		{
+		dol_var->i++;
+		while (node->str[dol_var->i] && node->str[dol_var->i] != '$')
 			dol_var->i++;
-			while (node->str[dol_var->i] && node->str[dol_var->i] != '$')
-				dol_var->i++;
-		}
+		dol_var->str_len = ft_strlen(node->str);
 	}
 	free(dol_var);
 	return (0);

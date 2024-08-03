@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/07/04 15:35:01 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/02 22:44:16 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/08/03 18:22:20 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ void	expand_node(t_node *node, t_dollar *dol)
 	char	*remainder;
 	char	*joined;
 
+	if (!node->str)
+		return ;
 	joined = NULL;
 	before = ft_substr(node->str, 0, dol->i);
 	remainder = ft_substr(node->str, dol->end_var, dol->str_len);
@@ -45,10 +47,9 @@ void	expand_node(t_node *node, t_dollar *dol)
 	if (dol->expanded && dol->expanded[0] != '\0')
 		joined = check_joined(joined, dol->expanded);
 	if (remainder && remainder[0] != '\0')
-	{
 		joined = check_joined(joined, remainder);
-		dol->remainder = true;
-	}
+	if (!joined)
+		joined = ft_strdup("");
 	free(node->str);
 	node->str = joined;
 	free(before);

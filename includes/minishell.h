@@ -59,8 +59,6 @@ typedef struct s_expand
 	bool	expandable;
 	t_node	*head;
 	t_token	prev_type;
-	t_token	to_next_node;
-	bool	empty_node;
 }	t_expand;
 
 typedef struct s_dollar
