@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/20 16:38:50 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/07/31 18:18:56 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/08/03 23:56:21 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,20 +76,31 @@ typedef struct s_dollar
 // word: 	a pointer to the string stored in a node
 // len: 	the content length
 // type: 	the content token
+typedef enum s_builtin
+{
+	NO_BUILTIN,
+	CD,
+	EXPORT,
+	UNSET,
+	EXIT,
+	ECHO,
+	PWD,
+	ENV,
+} t_builtin;
 
 typedef struct s_cmd
 {
 	pid_t	pid;
-	char	*cmd;
-	char	*path;
-	char	**args;
-	char	*redirect_in;
-	char	*redirect_out;
-	char	**env;
-	bool	append;
-	bool	builtin;
-	t_cmd	*next;
-}	t_cmd;
+	char		*cmd;
+	char		*path;
+	char		**args;
+	char		*redirect_in;
+	char		*redirect_out;
+	char		**env;
+	bool		append;
+	t_builtin	builtin;
+	t_cmd		*next;
+} t_cmd;
 
 typedef struct s_node
 {
