@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:42:29 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/03 21:51:09 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/08/04 20:44:32 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ static bool	token_syntax_error(char *str, int *i);
 // This function checks if there are any syntax errors in the given string
 // and if all quotes are closed.
 // We then tokenize the input.
+// rename  to parser and  expansion?
 int	lexer_and_parser(t_data *data)
 {
 	if (!data)
@@ -91,9 +92,28 @@ static bool	token_syntax_error(char *str, int *i)
 	return (false);
 }
 
+static int	add_space(char *str, int i, t_node **list)
+{
+	t_node	*new;
+	char	*line;
+
+	line = ft_strdup(" ");
+	new = create_node(line, SEPARATOR);
+	node_to_list(list, new);
+	while (iswhitespace(str[i]))
+		i++;
+	return (i);
+}
+
 // Tokenizes input into nodes.
 // currently iterates beyond the \0.
 // For |; Just pipes, right? Not |&?
+// while (iswhitespace(str[i]))
+// {
+// 	i++;
+// 	if (str[i] == '\0')
+// 		return (list);
+// }
 t_node	*tokenize_input(t_data *data, char *str)
 {
 	int		i;
@@ -105,16 +125,12 @@ t_node	*tokenize_input(t_data *data, char *str)
 		return (create_node(NULL, EMPTY));
 	while (str[i])
 	{
-		while (iswhitespace(str[i]))
-		{
-			i++;
-			if (str[i] == '\0')
-				return (list);
-		}
 		if (str[i] == '\'')
 			i = add_quote(str, i, '\'', &list);
 		else if (str[i] == '\"')
 			i = add_quote(str, i, '\"', &list);
+		else if (iswhitespace(str[i]))
+			i = add_space(str, i, &list);
 		else if (str[i] == '<' || str[i] == '>' || str[i] == '|')
 			i = add_redir_or_pipe(str, i, data, &list);
 		else

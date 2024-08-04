@@ -6,36 +6,11 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:43:34 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/03 22:13:49 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/08/04 20:54:09 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	quote_len(char *str, int i, char c)
-{
-	int	len;
-
-	i++;
-	len = 0;
-	while (str[i + len])
-	{
-		if (c == '\'' && str[i + len] == '\'')
-		{
-			while (str[i + len + 1] != ' ')
-			{
-				len++;
-				if (str[i + len] == '\'')
-					return (len);
-			}
-			return (len);
-		}
-		if (c == '\"' && str[i + len] == '\"')
-			return (len);
-		len++;
-	}
-	return (len);
-}
 
 int	quote_length(char *str, char c)
 {
@@ -62,14 +37,12 @@ int	add_quote(char *str, int i, char c, t_node **list)
 	t_node	*new;
 	int		start;
 	int		len;
-	// int		len2;
 	char	*line;
 	bool	null;
 
 	null = false;
 	start = i + 1;
-	// len1 = quote_length(&str[start], c) + 2;
-	len = quote_len(str, i, c);
+	len = quote_length(&str[start], c) + 2;
 	if (len == 2)
 	{
 		line = "\0";
@@ -77,7 +50,7 @@ int	add_quote(char *str, int i, char c, t_node **list)
 	}
 	else
 		line = ft_substr(str, start, len - 2);
-	i = len + start + 1;
+	i = len + start;
 	new = create_node(line, EMPTY);
 	if (c == '\'')
 		new->type = SINGLE_QUOTE;

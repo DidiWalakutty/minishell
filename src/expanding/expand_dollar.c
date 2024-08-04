@@ -36,9 +36,7 @@ static t_dollar	*init_dollar(t_node *node)
 	dollar->i = 0;
 	dollar->start_env = 0;
 	dollar->end_var = 0;
-	dollar->env_length = 0;
 	dollar->brackets = false;
-	dollar->remainder = false;
 	return (dollar);
 }
 
@@ -66,7 +64,6 @@ static void	expand_dollar(t_node *node, t_dollar *dol, char **env)
 	dol->expanded = copy_env_input(env, dol->env_name);
 	if (!dol->expanded)
 		dol->expanded = ft_strdup("");
-	dol->env_length = ft_strlen(dol->expanded);
 	if (dol->brackets == true)
 	{
 		dol->start_env--;
@@ -75,29 +72,7 @@ static void	expand_dollar(t_node *node, t_dollar *dol, char **env)
 	expand_node(node, dol);
 }
 
-// still needed?
-// void	reset_var_info(t_node *node, t_node *head, t_expand *info)
-// {
-// 	int	temp;
-
-// 	temp = 0;
-// 	node = head;
-// 	temp = info->node_i;
-// 	while (info->node_i--)
-// 		node = (node)->next;
-// 	info->node_i = temp;
-// }
-
-// Check for $ as last char?
-// Check for if strlen(dol_var->expanded) == 0? If so, free(dol_var) + ret 0;
 // This function expands a $-env for the whole D-Q node.
-// first while loop: node->next && node->previous == NULL
-//  following for under while_loop, needed???
-// if (dol_var->i >= dol_var->str_len)
-// {
-// 	printf("in reset_var_info!!!\n");
-// 	reset_var_info(node, info->head, info);
-// }
 int	set_dollar(t_node *node, char **env, t_expand *info)
 {
 	t_dollar	*dol_var;

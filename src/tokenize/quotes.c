@@ -6,12 +6,11 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:43:00 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/03 21:25:49 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/08/04 20:44:54 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
 
 // Only checks for the closing given quote.
 // If it encounters the non-given quote, it'll iterate over it, since

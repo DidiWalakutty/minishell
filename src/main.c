@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:40:07 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/03 20:54:38 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/08/04 16:55:41 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static t_data	*init_shell(char **env_copy)
 	data->process = 1;
 	data->exit_status = 0;
 	data->home = copy_env_input(env_copy, "HOME");
-	data->SHLVL = 1;
+	data->shlvl = 1;
 	// TODO: PATH's
 	// TODO: unset old PWD
 	// TODO: increment shlvl
