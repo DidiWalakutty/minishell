@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   lexer.c                                            :+:    :+:            */
+/*   lexer.c                                           :+:    :+:             */
 /*                                                     +:+                    */
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:42:29 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/02 22:27:32 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/08/04 18:27:34 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	lexer_and_parser(t_data *data)
 		return (1);
 	data->list = tokenize_input(data, data->input);
 	expand_input(data, data->list, data->env);
-	print_linked_list(data->list);
+//	print_linked_list(data->list);
 	return (0);
 }
 

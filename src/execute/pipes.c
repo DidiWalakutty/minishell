@@ -6,7 +6,7 @@
 /*   By: sreerink <sreerink@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2024/06/12 20:30:41 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/08/04 00:09:53 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/08/04 18:29:12 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,8 @@ void	child_process(t_cmd *cmd, int fd_in[], int fd_out[])
 			error_exit("dup2", EXIT_FAILURE);
 		close(file2);
 	}
+	if (cmd->builtin)
+		execute_builtin(cmd);
 	cmd->path = find_cmd_path(cmd);
 	execve(cmd->path, cmd->args, cmd->env);
 	error_exit(cmd->cmd, errno_to_exit_status(errno));

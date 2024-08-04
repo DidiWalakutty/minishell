@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/20 16:38:50 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/03 23:56:21 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/08/04 18:50:14 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -195,8 +195,8 @@ void	error_exit(const char *msg, int status);
 int		make_processes(t_data *data);
 
 // Builtins
-void	echo_builtin(const char *str, bool newline);
-void	cd_builtin(const char *dst_directory);
+void	execute_builtin(t_cmd *cmd);
+void	echo_builtin(t_cmd *cmd);
 void	pwd_builtin(void);
 
 #endif
