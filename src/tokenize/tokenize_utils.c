@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/07/04 15:38:34 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/07/26 13:16:44 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/08/04 20:53:47 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,20 +53,4 @@ int	add_one_token(char *str, int i, t_data *data, t_node **list)
 		new->type = REDIR_OUT;
 	node_to_list(list, new);
 	return (i + 1);
-}
-
-int	variable_len(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == '$' || iswhitespace(str[i]) || \
-			str[i] == '\'' || str[i] == '\"' || \
-			str[i] == '<' || str[i] == '>' || str[i] == '|')
-			break ;
-		i++;
-	}
-	return (i);
 }

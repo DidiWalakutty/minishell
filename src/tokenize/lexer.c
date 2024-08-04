@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:42:29 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/02 22:27:32 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/08/04 20:44:32 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ static bool	token_syntax_error(char *str, int *i);
 // This function checks if there are any syntax errors in the given string
 // and if all quotes are closed.
 // We then tokenize the input.
+// rename  to parser and  expansion?
 int	lexer_and_parser(t_data *data)
 {
 	if (!data)
@@ -39,25 +40,31 @@ int	lexer_and_parser(t_data *data)
 // Checks the string for syntax errors.
 static bool	check_syntax_errors(char *str)
 {
-	int	i;
+	int		i;
+	bool	error_found;
 
 	i = 0;
-	skip_whitespace(str, &i);
+	error_found = false;
 	if (str[i] == '|')
 		return (error_msg("syntax error near unexpected token", str[i]));
 	while (str[i])
 	{
+		skip_whitespace(str, &i);
 		skip_to_token(str, &i);
 		if (str[i] == '\'' || str[i] == '\"')
-			skip_quotedstring(str, &i);
+		{
+			if (skip_quotedstring(str, &i) == true)
+				error_found = true;
+		}
 		else if (str[i])
 		{
 			if (token_syntax_error(str, &i) == true)
 				return (true);
 		}
-		i++;
+		if (str[i] != '\'' && str[i] != '\"')
+			i++;
 	}
-	return (false);
+	return (error_found);
 }
 
 // Nothing behind | makes it a heredoc, TODO???
@@ -85,9 +92,28 @@ static bool	token_syntax_error(char *str, int *i)
 	return (false);
 }
 
+static int	add_space(char *str, int i, t_node **list)
+{
+	t_node	*new;
+	char	*line;
+
+	line = ft_strdup(" ");
+	new = create_node(line, SEPARATOR);
+	node_to_list(list, new);
+	while (iswhitespace(str[i]))
+		i++;
+	return (i);
+}
+
 // Tokenizes input into nodes.
 // currently iterates beyond the \0.
 // For |; Just pipes, right? Not |&?
+// while (iswhitespace(str[i]))
+// {
+// 	i++;
+// 	if (str[i] == '\0')
+// 		return (list);
+// }
 t_node	*tokenize_input(t_data *data, char *str)
 {
 	int		i;
@@ -99,16 +125,12 @@ t_node	*tokenize_input(t_data *data, char *str)
 		return (create_node(NULL, EMPTY));
 	while (str[i])
 	{
-		while (iswhitespace(str[i]))
-		{
-			i++;
-			if (str[i] == '\0')
-				return (list);
-		}
 		if (str[i] == '\'')
 			i = add_quote(str, i, '\'', &list);
 		else if (str[i] == '\"')
 			i = add_quote(str, i, '\"', &list);
+		else if (iswhitespace(str[i]))
+			i = add_space(str, i, &list);
 		else if (str[i] == '<' || str[i] == '>' || str[i] == '|')
 			i = add_redir_or_pipe(str, i, data, &list);
 		else

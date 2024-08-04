@@ -6,27 +6,11 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:43:00 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/07/28 19:25:07 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/08/04 20:44:54 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-// checks for the length of the add_quote node,
-// searches for the closing quote.
-int	quote_length(char *str, char c)
-{
-	int	i;
-
-	i = 0;
-	if (c == '\'' || c == '\"')
-	{
-		while (str[i] && str[i] != c)
-			i++;
-		return (i);
-	}
-	return (i);
-}
 
 // Only checks for the closing given quote.
 // If it encounters the non-given quote, it'll iterate over it, since
@@ -70,33 +54,26 @@ bool	all_quotes_closed(char *str)
 	}
 	if (single_q % 2 != 0 || double_q % 2 != 0)
 	{
-		ft_printf("Unclosed quotes detected\n");
+		printf("Unclosed quotes detected\n");
 		return (false);
 	}
 	return (true);
 }
 
-// Checks if the quoted string is closed with the same quote.
-// CHECK: Return at end of function should return true (error is found),
-// because if it doesn't 
-// go into either return statements of the if-loops, it's still an error???
 bool	skip_quotedstring(char *str, int *i)
 {
 	char	quote_type;
 
 	quote_type = str[*i];
-	if (str[*i] == '\'' || str[*i] == '\"')
+	(*i)++;
+	while (str[*i])
 	{
-		(*i)++;
-		while (str[*i] && str[*i] != quote_type)
-			(*i)++;
 		if (str[*i] == quote_type)
 		{
 			(*i)++;
 			return (false);
 		}
-		else
-			return (error_msg("syntax error: missing closing quote", str[*i]));
+		(*i)++;
 	}
-	return (true);
+	return (error_msg("syntax error: missing closing quote", quote_type));
 }
