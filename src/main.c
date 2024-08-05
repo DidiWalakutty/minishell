@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:40:07 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/04 16:55:41 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/08/05 19:01:04 by anonymous     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ int	main(int argc, char **argv, char **env)
 		data->input = input;
 		if (input != NULL)
 			add_history(data->input);
-		lexer_and_parser(data);
+		tokenizer_and_parser(data);
 		// Following two lines will be execute() in the future
 		//  data->cmd_process = make_cmd_nodes(data);
 		//  data->exit_status = make_processes(data);

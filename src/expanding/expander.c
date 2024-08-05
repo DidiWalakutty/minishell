@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:36:22 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/04 20:41:57 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/08/05 20:17:03 by anonymous     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,8 @@ void	expand_input(t_data *data, t_node *node, char **env)
 	}
 	if (quote_type_present(info->head) == true)
 		concatenate_quotes(info->head);
+	if (spaces_present(info->head) == true)
+		remove_spaces(info->head);
 	node = info->head;
 	free(info);
 }

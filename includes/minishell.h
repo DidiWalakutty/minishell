@@ -132,7 +132,7 @@ typedef struct s_data
 char	**copy_env(char **env);
 
 // Lexer
-int		lexer_and_parser(t_data *data);
+int		tokenizer_and_parser(t_data *data);
 bool	all_quotes_closed(char *str);
 bool	skip_quotedstring(char *str, int *i);
 t_node	*tokenize_input(t_data *data, char *str);
@@ -166,6 +166,10 @@ int		concatenate_quotes(t_node *node);
 char	*copy_env_input(char **env, char *to_find);
 int		if_valid_char(char c);
 void	expand_node(t_node *node, t_dollar *var);
+bool	quote_type_present(t_node *node);
+int		concatenate_quotes(t_node *list);
+bool	space_present(t_node *node);
+int		remove_spaces(t_node *list);
 
 // Nodes
 t_node	*create_node(char *str, t_token type);
