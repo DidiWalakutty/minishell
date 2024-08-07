@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/08/04 18:09:07 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/04 20:36:47 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/08/05 20:43:04 by anonymous     ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,39 @@ int	concatenate_quotes(t_node *list)
 			}
 		}
 		node = node->next;
+	}
+	return (0);
+}
+
+bool	space_present(t_node *node)
+{
+	while (node)
+	{
+		if (node->type == SEPARATOR)
+			return (true);
+		node = node->next;
+	}
+	return (false);
+}
+
+// Need to test at Codam. Does free remove the complete node
+// or use special free function?
+int	remove_spaces(t_node *list)
+{
+	t_node	*current;
+	t_node	*delete_node;
+
+	current = list;
+	while (current)
+	{
+		if (current->type == SEPARATOR)
+		{
+			delete_node = current;
+			current = current->next;
+			free(delete_node);
+		}
+		else
+			current = current->next;
 	}
 	return (0);
 }

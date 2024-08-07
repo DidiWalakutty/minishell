@@ -6,7 +6,11 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:42:29 by diwalaku      #+#    #+#                 */
+<<<<<<< HEAD
 /*   Updated: 2024/08/04 21:24:50 by diwalaku      ########   odam.nl         */
+=======
+/*   Updated: 2024/08/05 19:01:21 by anonymous     ########   odam.nl         */
+>>>>>>> 161283e136d334a3945c0105ec2bc2f64dac28c6
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +24,7 @@ static bool	token_syntax_error(char *str, int *i);
 // and if all quotes are closed.
 // We then tokenize the input.
 // rename  to parser and  expansion?
-int	lexer_and_parser(t_data *data)
+int	tokenizer_and_parser(t_data *data)
 {
 	if (!data)
 		return (1);
