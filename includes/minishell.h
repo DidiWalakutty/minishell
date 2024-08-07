@@ -40,7 +40,8 @@ typedef struct s_data		t_data;
 typedef enum s_token
 {
 	EMPTY,
-	WORD,
+	SEPARATOR,		// spaces, ' ' used for parsing only.
+	WORD,			// Word
 	PIPE,			// |  pipe
 	REDIR_IN,		// <  in
 	REDIR_OUT,		// >  out
@@ -69,9 +70,7 @@ typedef struct s_dollar
 	int		str_len;			// Length of full node->str.
 	int		start_env;			// Position after $ and/or ${.
 	int		end_var;			// Position where env-name ends.
-	int		env_length;			// Length of found env.
 	bool	brackets;			// In case of ${}
-	bool	remainder;			// Check for if we need to re-read the node
 }	t_dollar;
 
 // word: 	a pointer to the string stored in a node
@@ -122,9 +121,10 @@ typedef struct s_data
 	t_node	*list;
 	t_token	*token;
 	t_cmd	*cmd_process;
-	// t_token	*token;	// needed in t_node??
 	size_t	process;
 	int		exit_status;
+	char	*home;
+	int		shlvl;
 }	t_data;
 
 // Functions //
@@ -150,7 +150,6 @@ bool	one_of_tokens(char c);
 void	skip_to_token(char *str, int *i);
 void	skip_whitespace(char *str, int *i);
 int		quote_length(char *str, char c);
-int		variable_len(char *str);
 
 // Expanding
 bool	check_null(t_node **node);
@@ -160,6 +159,8 @@ bool	is_double_dollar(t_node *node, bool is_expandable);
 int		set_pid(t_node *node, t_expand *info);
 bool	is_dollar(t_node *node, bool is_expandable);
 int		set_dollar(t_node *node, char **env, t_expand *info);
+bool	quote_type_present(t_node *node);
+int		concatenate_quotes(t_node *node);
 
 // Utils - Expanding
 char	*copy_env_input(char **env, char *to_find);
@@ -169,23 +170,20 @@ void	expand_node(t_node *node, t_dollar *var);
 // Nodes
 t_node	*create_node(char *str, t_token type);
 void	node_to_list(t_node **list, t_node *new);
-void	attach_new_node(t_node *head, t_node *og, int node_i, bool empty_node);
 
 // Free and exit
 // exit_error(char *str); probably not needed
 void	free_env_array(char **str);
 bool	error_msg(char *message, char c);
 void	free_all(t_data	*data);
-int		free_dollarvar(t_dollar *var);
 
 // List_utils
 t_node	*last_node(t_node *list);
-t_node	*attach_list_token(t_node **head, t_node *new_node);
 
 // For Testing
 const char	*type_to_string(t_token type);
-void		print_linked_list(t_node *head);
-void		print_env(char **env);
+void	print_linked_list(t_node *head);
+void	print_env(char **env);
 
 // Parsing
 t_cmd	*make_cmd_nodes(t_data *data);

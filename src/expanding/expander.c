@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:36:22 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/02 22:46:06 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/08/04 20:41:57 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,10 @@ static void	expandable_type(t_expand *info, t_token type)
 		info->expandable = true;
 }
 
-// Currently keeps seeing the expanded node as the next.
-// if we use info->i: // info->node_i++; at to_next_node == true
+// This function searches the whole node and replaces
+// where necessary.
+// if (check_tilde(node) == true)
+// 	set_tilde(node, env, info);
 void	expand_input(t_data *data, t_node *node, char **env)
 {
 	t_expand	*info;
@@ -45,7 +47,6 @@ void	expand_input(t_data *data, t_node *node, char **env)
 		expandable_type(info, node->type);
 		if (check_null(&node) == true)
 			continue ;
-		// check tilde ~
 		if (is_dollar(node, info->expandable) == true)
 			set_dollar(node, env, info);
 		if (is_exit_status(node, info->expandable) == true)
@@ -54,6 +55,8 @@ void	expand_input(t_data *data, t_node *node, char **env)
 			set_pid(node, info);
 		node = node->next;
 	}
+	if (quote_type_present(info->head) == true)
+		concatenate_quotes(info->head);
 	node = info->head;
 	free(info);
 }

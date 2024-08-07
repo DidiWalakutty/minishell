@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:41:04 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/07 16:35:46 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/08/07 21:54:28 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,8 @@ static void	free_list(t_node *list)
 			free(temp);
 			return ;
 		}
-		free(temp->str);
+		if (temp->str)
+			free(temp->str);
 		free(temp);
 	}
 }
@@ -46,16 +47,6 @@ void	free_all(t_data	*data)
 	data->process = 1;
 	data->input = NULL;
 	data->list = NULL;
-}
-
-int	free_dollarvar(t_dollar *var)
-{
-	if (var->env_name)
-		free(var->env_name);
-	if (var->expanded)
-		free(var->expanded);
-	free(var);
-	return (1);
 }
 
 void	free_env_array(char **str)
@@ -77,6 +68,7 @@ const char	*type_to_string(t_token type)
 	switch(type)
 	{
 		case EMPTY: return "EMPTY";
+		case SEPARATOR: return "SPACE";
 		case WORD: return "WORD";
 		case PIPE: return "PIPE";
 		case REDIR_IN: return "REDIR_IN";
@@ -96,8 +88,6 @@ void	print_linked_list(t_node *head)
 	while (head != NULL)
 	{
 		printf("Node %i is: %s - type is: %s \n", i, head->str, type_to_string(head->type));
-		// if (i >= 2)
-		// 	printf("Previous node %i is: %s - type is: %s \n", i - 1, head->previous->str, type_to_string(head->previous->type));
 		head = head->next;
 		i++;
 	}

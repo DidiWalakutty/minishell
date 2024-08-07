@@ -6,11 +6,25 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:43:34 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/02 21:57:42 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/08/04 20:54:09 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	quote_length(char *str, char c)
+{
+	int	i;
+
+	i = 0;
+	if (c == '\'' || c == '\"')
+	{
+		while (str[i] && str[i] != c)
+			i++;
+		return (i);
+	}
+	return (i);
+}
 
 // Add 2 for the opening and closing quote, remove 2 for line
 //  (we don't want to include the quotes).
@@ -36,7 +50,7 @@ int	add_quote(char *str, int i, char c, t_node **list)
 	}
 	else
 		line = ft_substr(str, start, len - 2);
-	i = len + start + 1;
+	i = len + start;
 	new = create_node(line, EMPTY);
 	if (c == '\'')
 		new->type = SINGLE_QUOTE;
