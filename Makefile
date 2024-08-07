@@ -28,6 +28,7 @@ SRC =	./src/main.c \
 				./src/execute/pipes.c \
 				./src/parsing/parsing.c \
 				./src/builtins/builtins.c \
+				./src/builtins/cd.c \
 				./src/builtins/echo.c \
 				./src/builtins/pwd.c \
 				./src/expanding/expander.c \

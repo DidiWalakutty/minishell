@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   free_and_error.c                                   :+:    :+:            */
+/*   free_and_error.c                                  :+:    :+:             */
 /*                                                     +:+                    */
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:41:04 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/02 22:41:39 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/08/07 16:35:46 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ void	free_all(t_data	*data)
 {
 	free(data->input);
 	free_list(data->list);
+	data->process = 1;
 	data->input = NULL;
 	data->list = NULL;
 }

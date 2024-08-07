@@ -6,7 +6,7 @@
 /*   By: sreerink <sreerink@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2024/06/12 20:30:41 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/08/04 18:29:12 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/08/07 20:47:34 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,9 @@ char	*find_cmd_path(t_cmd *cmd)
 	return (path_temp);
 }
 
-void	child_process(t_cmd *cmd, int fd_in[], int fd_out[])
+void	redirect_input(t_cmd *cmd, int fd_in[], int fd_out[])
 {
-	int	file1;
-	int	file2;
+	int file;
 
 	close(fd_in[1]);
 	if (!cmd->redirect_in)
@@ -75,20 +74,23 @@ void	child_process(t_cmd *cmd, int fd_in[], int fd_out[])
 	else
 	{
 		close(fd_in[0]);
-		file1 = open(cmd->redirect_in, O_RDONLY);
-		if (file1 == -1)
+		file = open(cmd->redirect_in, O_RDONLY);
+		if (file == -1)
 		{
 			close(fd_out[0]);
 			close(fd_out[1]);
 			error_exit(cmd->redirect_in, EXIT_FAILURE);
 		}
-		if (dup2(file1, STDIN_FILENO) == -1)
+		if (dup2(file, STDIN_FILENO) == -1)
 			error_exit("dup2", EXIT_FAILURE);
-		close(file1);
+		close(file);
 	}
-	// Under following line is all redirecting output
-	// TO DO: separate redirect in/output into functions
-	// -----------------------------------------------------
+}
+
+void	redirect_output(t_cmd *cmd, int fd_in[], int fd_out[])
+{
+	int	file;
+
 	close(fd_out[0]);
 	if (!cmd->redirect_out)
 		close(fd_out[1]);
@@ -103,17 +105,23 @@ void	child_process(t_cmd *cmd, int fd_in[], int fd_out[])
 	{
 		close(fd_out[1]);
 		if (cmd->append)
-			file2 = open(cmd->redirect_out, O_WRONLY | O_CREAT | O_APPEND, 0644);
+			file = open(cmd->redirect_out, O_WRONLY | O_CREAT | O_APPEND, 0644);
 		else
-			file2 = open(cmd->redirect_out, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		if (file2 == -1)
+			file = open(cmd->redirect_out, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		if (file == -1)
 			error_exit(cmd->redirect_out, EXIT_FAILURE);
-		if (dup2(file2, STDOUT_FILENO) == -1)
+		if (dup2(file, STDOUT_FILENO) == -1)
 			error_exit("dup2", EXIT_FAILURE);
-		close(file2);
+		close(file);
 	}
+}
+
+void	child_process(t_cmd *cmd, int fd_in[], int fd_out[])
+{
+	redirect_input(cmd, fd_in, fd_out);
+	redirect_output(cmd, fd_in, fd_out);
 	if (cmd->builtin)
-		execute_builtin(cmd);
+		error_exit(NULL, execute_builtin(cmd));
 	cmd->path = find_cmd_path(cmd);
 	execve(cmd->path, cmd->args, cmd->env);
 	error_exit(cmd->cmd, errno_to_exit_status(errno));

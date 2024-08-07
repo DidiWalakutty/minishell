@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/20 16:38:50 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/04 18:50:14 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/08/07 16:52:31 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,11 +192,13 @@ t_cmd	*make_cmd_nodes(t_data *data);
 
 // Executing
 void	error_exit(const char *msg, int status);
+int		parent_process_return(const char *msg, int status);
 int		make_processes(t_data *data);
 
 // Builtins
-void	execute_builtin(t_cmd *cmd);
-void	echo_builtin(t_cmd *cmd);
-void	pwd_builtin(void);
+int		execute_builtin(t_cmd *cmd);
+int		cd_builtin(t_cmd *cmd);
+int		echo_builtin(t_cmd *cmd);
+int		pwd_builtin(void);
 
 #endif
