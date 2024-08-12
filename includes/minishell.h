@@ -57,6 +57,7 @@ typedef struct s_expand
 	int		char_pos;
 	int		strlen;
 	int		node_i;		// node iterator.
+	int		heredoc_pos;
 	bool	expandable;
 	t_node	*head;
 	t_token	prev_type;

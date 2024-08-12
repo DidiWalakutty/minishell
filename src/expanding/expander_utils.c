@@ -6,11 +6,32 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/07/04 15:35:01 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/02 22:44:16 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/08/12 21:53:56 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+bool	is_heredoc(t_node *node)
+{
+	int	i;
+
+	i = 0;
+	if (node->type != HERE_DOC)
+		return (false);
+	while (node->str[i])
+	{
+		if (node->str[i] == '<' && node->str[i + 1] == '<')
+			return (true);
+		i++;
+	}
+	return (false);
+}
+
+void	skip_first_arg(t_node *node, t_expand *info)
+{
+
+}
 
 static char	*check_joined(char *before, char *fill_in)
 {
