@@ -6,11 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:40:07 by diwalaku      #+#    #+#                 */
-<<<<<<< HEAD
-/*   Updated: 2024/08/04 21:24:58 by diwalaku      ########   odam.nl         */
-=======
-/*   Updated: 2024/08/05 19:01:04 by anonymous     ########   odam.nl         */
->>>>>>> 161283e136d334a3945c0105ec2bc2f64dac28c6
+/*   Updated: 2024/08/12 18:35:05 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,8 +75,8 @@ int	main(int argc, char **argv, char **env)
 			add_history(data->input);
 		tokenizer_and_parser(data);
 		// Following two lines will be execute() in the future
-		 data->cmd_process = make_cmd_nodes(data);
-		 data->exit_status = make_processes(data);
+		//  data->commands = make_cmd_nodes(data);
+		//  data->exit_status = make_processes(data);
 		free_all(data);
 	}
 	return (0);

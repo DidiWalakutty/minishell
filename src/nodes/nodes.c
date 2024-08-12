@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/07/04 15:28:16 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/02 21:10:42 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/08/07 14:09:24 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ t_node	*create_node(char *str, t_token type)
 	return (new_node);
 }
 
-// GOES WRONG HERE
 void	node_to_list(t_node **head, t_node *new)
 {
 	t_node	*current_node;

@@ -6,11 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:42:29 by diwalaku      #+#    #+#                 */
-<<<<<<< HEAD
-/*   Updated: 2024/08/04 21:24:50 by diwalaku      ########   odam.nl         */
-=======
-/*   Updated: 2024/08/05 19:01:21 by anonymous     ########   odam.nl         */
->>>>>>> 161283e136d334a3945c0105ec2bc2f64dac28c6
+/*   Updated: 2024/08/12 20:47:01 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +16,8 @@ t_node		*tokenize_input(t_data *data, char *str);
 static bool	check_syntax_errors(char *str);
 static bool	token_syntax_error(char *str, int *i);
 
-// This function checks if there are any syntax errors in the given string
-// and if all quotes are closed.
-// We then tokenize the input.
-// rename  to parser and  expansion?
+// Check for syntax errors, tokenizes, expands
+// and builds commands.
 int	tokenizer_and_parser(t_data *data)
 {
 	if (!data)
@@ -38,6 +32,7 @@ int	tokenizer_and_parser(t_data *data)
 	data->list = tokenize_input(data, data->input);
 	expand_input(data, data->list, data->env);
 	print_linked_list(data->list);
+	// data->commands = build_commands(data->list, data);
 	return (0);
 }
 
@@ -112,12 +107,6 @@ static int	add_space(char *str, int i, t_node **list)
 // Tokenizes input into nodes.
 // currently iterates beyond the \0.
 // For |; Just pipes, right? Not |&?
-// while (iswhitespace(str[i]))
-// {
-// 	i++;
-// 	if (str[i] == '\0')
-// 		return (list);
-// }
 t_node	*tokenize_input(t_data *data, char *str)
 {
 	int		i;

@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:36:22 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/05 20:17:03 by anonymous     ########   odam.nl         */
+/*   Updated: 2024/08/07 15:32:16 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,5 +60,6 @@ void	expand_input(t_data *data, t_node *node, char **env)
 	if (spaces_present(info->head) == true)
 		remove_spaces(info->head);
 	node = info->head;
+	// free_list(info->head);
 	free(info);
 }

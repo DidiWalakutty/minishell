@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/08/04 18:09:07 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/05 20:43:04 by anonymous     ########   odam.nl         */
+/*   Updated: 2024/08/12 17:36:14 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int	concatenate_quotes(t_node *list)
 	return (0);
 }
 
-bool	space_present(t_node *node)
+bool	spaces_present(t_node *node)
 {
 	while (node)
 	{
@@ -77,24 +77,46 @@ bool	space_present(t_node *node)
 	return (false);
 }
 
+static int	count_nodes(t_node *nodes)
+{
+	int	i;
+
+	i = 0;
+	while (nodes)
+	{
+		nodes = nodes->next;
+		i++;
+	}
+	return (i);
+}
+
 // Need to test at Codam. Does free remove the complete node
 // or use special free function?
 int	remove_spaces(t_node *list)
 {
-	t_node	*current;
-	t_node	*delete_node;
+	t_node	*head;
+	t_node	*to_delete;
+	t_node	*before;
 
-	current = list;
-	while (current)
+	head = list;
+	before = list;
+	while (before->type == SEPARATOR)
 	{
-		if (current->type == SEPARATOR)
+		to_delete = before;
+		before = to_delete->next;
+		head = before;
+		free_node(to_delete);
+	}
+	while (before && before->next)
+	{
+		if (before->next->type == SEPARATOR)
 		{
-			delete_node = current;
-			current = current->next;
-			free(delete_node);
+			to_delete = before->next;
+			before->next = to_delete->next;
+			free_node(to_delete);
 		}
 		else
-			current = current->next;
+			before = before->next;
 	}
 	return (0);
 }

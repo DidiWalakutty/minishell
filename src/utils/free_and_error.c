@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:41:04 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/04 20:54:56 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/08/12 17:35:35 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ void	free_all(t_data	*data)
 {
 	free(data->input);
 	free_list(data->list);
+	data->process = 1;
 	data->input = NULL;
 	data->list = NULL;
 }
@@ -59,6 +60,15 @@ void	free_env_array(char **str)
 		i++;
 	}
 	free(str);
+}
+
+void	free_node(t_node *node)
+{
+	if (node)
+	{
+		free(node->str);
+		free(node);
+	}
 }
 
 // to printf check type

@@ -109,8 +109,6 @@ typedef struct s_node
 	t_node	*next;
 	t_node	*previous;
 	bool	null;	
-	// state?
-	// set i?
 }	t_node;
 
 typedef struct s_data
@@ -120,7 +118,7 @@ typedef struct s_data
 	char	**env;
 	t_node	*list;
 	t_token	*token;
-	t_cmd	*cmd_process;
+	t_cmd	*commands;
 	size_t	process;
 	int		exit_status;
 	char	*home;
@@ -168,18 +166,22 @@ int		if_valid_char(char c);
 void	expand_node(t_node *node, t_dollar *var);
 bool	quote_type_present(t_node *node);
 int		concatenate_quotes(t_node *list);
-bool	space_present(t_node *node);
+bool	spaces_present(t_node *node);
 int		remove_spaces(t_node *list);
 
 // Nodes
 t_node	*create_node(char *str, t_token type);
 void	node_to_list(t_node **list, t_node *new);
 
+// Commands (Didi's part)
+t_cmd	*build_commands(t_node *nodes, t_data *data);
+
 // Free and exit
 // exit_error(char *str); probably not needed
 void	free_env_array(char **str);
 bool	error_msg(char *message, char c);
 void	free_all(t_data	*data);
+void	free_node(t_node *node);
 
 // List_utils
 t_node	*last_node(t_node *list);
