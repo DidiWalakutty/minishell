@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:36:22 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/12 22:00:04 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/08/12 22:02:36 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ void	expand_input(t_data *data, t_node *node, char **env)
 		expandable_type(info, node->type);
 		if (check_null(&node) == true)
 			continue ;
-		if (is_heredoc(node) == true)
-			skip_argument
+		// if (is_heredoc(node) == true)
+		// 	skip_argument
 		if (is_dollar(node, info->expandable) == true)
 			set_dollar(node, env, info);
 		if (is_exit_status(node, info->expandable) == true)
