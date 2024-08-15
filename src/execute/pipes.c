@@ -6,7 +6,7 @@
 /*   By: sreerink <sreerink@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2024/06/12 20:30:41 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/08/07 20:47:34 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/08/09 21:16:43 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,15 +55,25 @@ char	*find_cmd_path(t_cmd *cmd)
 	return (path_temp);
 }
 
+bool	redirect_fd(int fd, int fd_dst)
+{
+	if (dup2(fd, fd_dst) == -1)
+	{
+		close(fd);
+		perror("dup2");
+		return (false);
+	}
+	close(fd);
+	return (true);
+}
+
 void	redirect_input(t_cmd *cmd, int fd_in[], int fd_out[])
 {
 	int file;
 
 	close(fd_in[1]);
 	if (!cmd->redirect_in)
-	{
 		close(fd_in[0]);
-	}
 	// Following line needs to be replaced with a Libft function
 	else if (!strcmp(cmd->redirect_in, "|"))
 	{
@@ -143,6 +153,95 @@ void	close_unused_pipes(int pipefd[][2], size_t cur_pipe, size_t total_pipes)
 	}
 }
 
+int	redirect_input_parent(t_cmd *cmd)
+{
+	int file;
+
+	if (!cmd->redirect_in)
+		return (EXIT_SUCCESS);
+	else
+	{
+		file = open(cmd->redirect_in, O_RDONLY);
+		if (file == -1)
+		{
+			perror(cmd->redirect_in);
+			return (EXIT_FAILURE);
+		}
+		if (!redirect_fd(file, STDIN_FILENO))
+			return (EXIT_FAILURE);
+	}
+	return (EXIT_SUCCESS);
+}
+
+int	redirect_output_parent(t_cmd *cmd)
+{
+	int	file;
+
+	if (!cmd->redirect_out)
+		return (EXIT_SUCCESS);
+	else
+	{
+		if (cmd->append)
+			file = open(cmd->redirect_out, O_WRONLY | O_CREAT | O_APPEND, 0644);
+		else
+			file = open(cmd->redirect_out, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		if (file == -1)
+		{
+			perror(cmd->redirect_out);
+			return (EXIT_FAILURE);
+		}
+		if (!redirect_fd(file, STDOUT_FILENO))
+			return (EXIT_FAILURE);
+	}
+	return (EXIT_SUCCESS);
+}
+
+int	builtin_in_parent(t_cmd *cmd)
+{
+	int	stdin_fd;
+	int	stdout_fd;
+	int	exit_status;
+
+	printf("Inside builtin_in_parent()\n");
+	stdin_fd = dup(STDIN_FILENO);
+	if (stdin_fd == -1)
+	{
+		perror("dup");
+		return (EXIT_FAILURE);
+	}
+	stdout_fd = dup(STDOUT_FILENO);
+	if (stdout_fd == -1)
+	{
+		perror("dup");
+		close(stdin_fd);
+		return (EXIT_FAILURE);
+	}
+	if (redirect_input_parent(cmd) == 1)
+	{
+		close(stdin_fd);
+		close(stdout_fd);
+		return (EXIT_FAILURE);
+	}
+	if (redirect_output_parent(cmd) == 1)
+	{
+
+		close(stdin_fd);
+		close(stdout_fd);
+		return (EXIT_FAILURE);
+	}
+	exit_status = execute_builtin(cmd);
+	if (cmd->redirect_in && !redirect_fd(stdin_fd, STDIN_FILENO))
+	{
+		close(stdout_fd);
+		error_exit(NULL, EXIT_FAILURE);
+	}
+	if (cmd->redirect_out && !redirect_fd(stdout_fd, STDOUT_FILENO))
+		error_exit(NULL, EXIT_FAILURE);
+	close(stdin_fd);
+	close(stdout_fd);
+	return (exit_status);
+}
+
 int	make_processes(t_data *data)
 {
 	size_t	i;
@@ -154,6 +253,8 @@ int	make_processes(t_data *data)
 	i = 0;
 	cmds = data->cmd_process;
 	temp = cmds;
+	if (temp->builtin && data->process == 1)
+		return (builtin_in_parent(temp));
 	while (i < data->process + 1)
 	{
 		if (pipe(pipefd[i]) == -1)
