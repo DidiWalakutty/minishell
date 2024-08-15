@@ -108,7 +108,6 @@ typedef struct s_node
 	char	*str;
 	t_token	type;
 	t_node	*next;
-	t_node	*previous;
 	bool	null;	
 }	t_node;
 
