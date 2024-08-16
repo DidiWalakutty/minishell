@@ -6,7 +6,7 @@
 /*   By: sreerink <sreerink@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2024/08/04 22:34:30 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/08/07 21:38:04 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/08/17 00:18:39 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,13 @@ static char	*check_cd_args(t_cmd *cmd)
 int	cd_builtin(t_cmd *cmd)
 {
 	char	*path;
+	char	old_pwd[PATH_MAX + 1];
 
+	if (!getcwd(old_pwd, PATH_MAX + 1))
+	{
+		perror("minishell: cd_builtin: pwd");
+		return (EXIT_FAILURE);
+	}
 	path = check_cd_args(cmd);
 	if (!path)
 		return (EXIT_FAILURE);
@@ -40,6 +46,7 @@ int	cd_builtin(t_cmd *cmd)
 			free(path);
 		return (EXIT_FAILURE);
 	}
+	replace_env_var(old_pwd, "OLDPWD=", cmd->env);
 	if (path != cmd->args[1])
 		free(path);
 	return (EXIT_SUCCESS);

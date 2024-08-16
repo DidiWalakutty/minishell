@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/20 16:38:50 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/07 16:52:31 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/08/17 00:14:58 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,6 +130,7 @@ typedef struct s_data
 // Functions //
 // Environment and paths;
 char	**copy_env(char **env);
+bool	replace_env_var(char *new_value, char *var_dst, char **env);
 
 // Lexer
 int		lexer_and_parser(t_data *data);
