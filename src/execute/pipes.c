@@ -6,7 +6,7 @@
 /*   By: sreerink <sreerink@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2024/06/12 20:30:41 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/08/09 21:16:43 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/08/16 22:06:56 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,9 +77,8 @@ void	redirect_input(t_cmd *cmd, int fd_in[], int fd_out[])
 	// Following line needs to be replaced with a Libft function
 	else if (!strcmp(cmd->redirect_in, "|"))
 	{
-		if (dup2(fd_in[0], STDIN_FILENO) == -1)
-			error_exit("dup2", EXIT_FAILURE);
-		close(fd_in[0]);
+		if (!redirect_fd(fd_in[0], STDIN_FILENO))
+			error_exit(NULL, EXIT_FAILURE);
 	}
 	else
 	{
@@ -91,13 +90,12 @@ void	redirect_input(t_cmd *cmd, int fd_in[], int fd_out[])
 			close(fd_out[1]);
 			error_exit(cmd->redirect_in, EXIT_FAILURE);
 		}
-		if (dup2(file, STDIN_FILENO) == -1)
-			error_exit("dup2", EXIT_FAILURE);
-		close(file);
+		if (!redirect_fd(file, STDIN_FILENO))
+			error_exit(NULL, EXIT_FAILURE);
 	}
 }
 
-void	redirect_output(t_cmd *cmd, int fd_in[], int fd_out[])
+void	redirect_output(t_cmd *cmd, int fd_out[])
 {
 	int	file;
 
@@ -107,9 +105,8 @@ void	redirect_output(t_cmd *cmd, int fd_in[], int fd_out[])
 	// Following line needs to be replaced with a Libft function
 	else if (!strcmp(cmd->redirect_out, "|"))
 	{
-		if (dup2(fd_out[1], STDOUT_FILENO) == -1)
-			error_exit("dup2", EXIT_FAILURE);
-		close(fd_out[1]);
+		if (!redirect_fd(fd_out[1], STDOUT_FILENO))
+			error_exit(NULL, EXIT_FAILURE);
 	}
 	else
 	{
@@ -120,16 +117,15 @@ void	redirect_output(t_cmd *cmd, int fd_in[], int fd_out[])
 			file = open(cmd->redirect_out, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (file == -1)
 			error_exit(cmd->redirect_out, EXIT_FAILURE);
-		if (dup2(file, STDOUT_FILENO) == -1)
-			error_exit("dup2", EXIT_FAILURE);
-		close(file);
+		if (!redirect_fd(file, STDOUT_FILENO))
+			error_exit(NULL, EXIT_FAILURE);
 	}
 }
 
 void	child_process(t_cmd *cmd, int fd_in[], int fd_out[])
 {
 	redirect_input(cmd, fd_in, fd_out);
-	redirect_output(cmd, fd_in, fd_out);
+	redirect_output(cmd, fd_out);
 	if (cmd->builtin)
 		error_exit(NULL, execute_builtin(cmd));
 	cmd->path = find_cmd_path(cmd);
