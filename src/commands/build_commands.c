@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/08/12 17:57:27 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/16 20:10:21 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/08/16 20:38:34 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static bool	correct_pipe_syntax(t_node *nodes, bool *pipe_error, t_data *data)
 		{
 			if (*pipe_error)
 			{
-				error_exit("Incorrect pipes\n", STDERR_FILENO);
+				// error_exit("Incorrect pipes\n", STDERR_FILENO);
 				data->exit_status = 2;
 				return (1);
 			}

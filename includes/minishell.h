@@ -118,7 +118,7 @@ typedef struct s_data
 	char	**env;
 	t_node	*list;
 	t_token	*token;
-	t_cmd	*commands;
+	t_cmd	*cmd_process;
 	size_t	process;
 	int		exit_status;
 	char	*home;

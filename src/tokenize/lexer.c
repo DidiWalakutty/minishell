@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:42:29 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/16 19:55:36 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/08/16 20:32:24 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,12 @@ int	tokenizer_and_parser(t_data *data)
 		return (1);
 	if (check_syntax_errors(data->input) == true)
 		return (1);
-	// if ((all_quotes_closed(data->input) == false))
-	// 	return (1);
+	if ((all_quotes_closed(data->input) == false))
+		return (1);
 	data->list = tokenize_input(data, data->input);
 	expand_input(data, data->list, data->env);
 	print_linked_list(data->list);
-	data->commands = build_commands(data->list, data);
+	data->cmd_process = build_commands(data->list, data);
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:40:07 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/16 20:19:18 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/08/16 20:34:01 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static t_data	*init_shell(char **env_copy)
 	// TODO: PATH's
 	// TODO: unset old PWD
 	// TODO: increment shlvl
-	// signals
+	// Signals
 	return (data);
 }
 
@@ -75,8 +75,8 @@ int	main(int argc, char **argv, char **env)
 			add_history(data->input);
 		tokenizer_and_parser(data);
 		// Following two lines will be execute() in the future
-		 data->commands = make_cmd_nodes(data);
-		 data->exit_status = make_processes(data);
+		//  data->cmd_process = make_cmd_nodes(data);
+		//  data->exit_status = make_processes(data);
 		free_all(data);
 	}
 	return (0);
