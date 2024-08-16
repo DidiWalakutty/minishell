@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/08/04 18:09:07 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/12 17:36:14 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/08/16 18:16:45 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,8 +90,6 @@ static int	count_nodes(t_node *nodes)
 	return (i);
 }
 
-// Need to test at Codam. Does free remove the complete node
-// or use special free function?
 int	remove_spaces(t_node *list)
 {
 	t_node	*head;

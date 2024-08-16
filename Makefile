@@ -36,6 +36,7 @@ SRC =	./src/main.c \
 				./src/expanding/expand_double_dollar.c \
 				./src/expanding/expand_exit_and_empty.c \
 				./src/expanding/quote_concatenation.c \
+				./src/commands/build_commands.c \
 
 # Object files and directories
 # obj folder in src?: src/obj 
@@ -73,6 +74,9 @@ $(OBJDIR)/%.o: ./src/tokenize/%.c
 	@$(CC) $(CFLAGS) $(HEADERS) -c -o $@ $<
 
 $(OBJDIR)/%.o: ./src/expanding/%.c
+	@$(CC) $(CFLAGS) $(HEADERS) -c -o $@ $<
+
+$(OBJDIR)/%.o: ./src/commands/%.c
 	@$(CC) $(CFLAGS) $(HEADERS) -c -o $@ $<
 
 $(OBJDIR)/%.o: ./src/utils/%.c

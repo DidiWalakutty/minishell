@@ -148,6 +148,7 @@ bool	one_of_tokens(char c);
 void	skip_to_token(char *str, int *i);
 void	skip_whitespace(char *str, int *i);
 int		quote_length(char *str, char c);
+bool	check_start_pipes(char *str, int *i);
 
 // Expanding
 bool	check_null(t_node **node);
@@ -179,7 +180,7 @@ t_cmd	*build_commands(t_node *nodes, t_data *data);
 // Free and exit
 // exit_error(char *str); probably not needed
 void	free_env_array(char **str);
-bool	error_msg(char *message, char c);
+bool	error_msg(char *message, char c, char c2);
 void	free_all(t_data	*data);
 void	free_node(t_node *node);
 

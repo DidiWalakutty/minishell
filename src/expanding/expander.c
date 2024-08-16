@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:36:22 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/12 22:02:36 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/08/16 17:28:51 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,10 @@ void	expand_input(t_data *data, t_node *node, char **env)
 	}
 	if (quote_type_present(info->head) == true)
 		concatenate_quotes(info->head);
-	if (spaces_present(info->head) == true)
-		remove_spaces(info->head);
+	// Remove spaces perhaps just needed when building commands.
+	// Also check if it's just one or more spaces.
+	// if (spaces_present(info->head) == true)
+	// 	remove_spaces(info->head);
 	node = info->head;
-	// free_list(info->head);
 	free(info);
 }

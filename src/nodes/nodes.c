@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/07/04 15:28:16 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/07 14:09:24 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/08/16 16:52:38 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ t_node	*create_node(char *str, t_token type)
 		new_node->str = ft_strdup("");
 	new_node->type = type;
 	new_node->next = NULL;
-	new_node->previous = NULL;
 	new_node->null = false;
 	return (new_node);
 }

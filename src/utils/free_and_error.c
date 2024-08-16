@@ -6,15 +6,18 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:41:04 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/12 17:35:35 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/08/16 19:38:00 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-bool	error_msg(char *message, char c)
+bool	error_msg(char *message, char c, char c2)
 {
-	printf("%s `%c'\n", message, c);
+	if (c2 != '\0')
+		printf("%s `%c%c'\n", message, c, c2);
+	else
+		printf("%s `%c'\n", message, c);
 	return (true);
 }
 

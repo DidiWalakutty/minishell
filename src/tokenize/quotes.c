@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:43:00 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/04 20:44:54 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/08/16 19:38:51 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,5 +75,5 @@ bool	skip_quotedstring(char *str, int *i)
 		}
 		(*i)++;
 	}
-	return (error_msg("syntax error: missing closing quote", quote_type));
+	return (error_msg("syntax error: missing closing quote", quote_type, '\0'));
 }

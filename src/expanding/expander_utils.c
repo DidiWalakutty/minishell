@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/07/04 15:35:01 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/12 21:53:56 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/08/16 19:49:48 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,6 @@ bool	is_heredoc(t_node *node)
 		i++;
 	}
 	return (false);
-}
-
-void	skip_first_arg(t_node *node, t_expand *info)
-{
-
 }
 
 static char	*check_joined(char *before, char *fill_in)

@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:42:29 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/15 17:42:53 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/08/16 19:55:36 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,9 @@ int	tokenizer_and_parser(t_data *data)
 	if (!data)
 		return (1);
 	if (check_syntax_errors(data->input) == true)
-	{
-		free(data->input);
 		return (1);
-	}
-	if ((all_quotes_closed(data->input) == false))
-		return (1);
+	// if ((all_quotes_closed(data->input) == false))
+	// 	return (1);
 	data->list = tokenize_input(data, data->input);
 	expand_input(data, data->list, data->env);
 	print_linked_list(data->list);
@@ -45,7 +42,7 @@ static bool	check_syntax_errors(char *str)
 	i = 0;
 	error_found = false;
 	if (str[i] == '|')
-		return (error_msg("syntax error near unexpected token", str[i]));
+		return (check_start_pipes(str, &i));
 	while (str[i])
 	{
 		skip_whitespace(str, &i);
@@ -76,7 +73,8 @@ static bool	token_syntax_error(char *str, int *i)
 		(*i)++;
 		skip_whitespace(str, i);
 		if (str[*i] == '|' || str[*i] == '\0')
-			return (error_msg("syntax error near unexpected token", str[*i]));
+			return (error_msg("syntax error near unexpected token", \
+					str[*i], '\0'));
 	}
 	if (str[*i] == '<' || str[*i] == '>')
 	{
@@ -86,7 +84,8 @@ static bool	token_syntax_error(char *str, int *i)
 		skip_whitespace(str, i);
 		if (str[*i] == '<' || str[*i] == '>' || \
 			str[*i] == '|' || str[*i] == '\0')
-			return (error_msg("syntax error near unexpected token", str[*i]));
+			return (error_msg("syntax error near unexpected token", \
+					str[*i], '\0'));
 	}
 	return (false);
 }

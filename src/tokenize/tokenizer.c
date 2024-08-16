@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:43:34 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/12 18:41:52 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/08/16 19:22:00 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ int	add_redir_or_pipe(char *str, int i, t_data *data, t_node **list)
 	t_node	*new;
 	char	*line;
 
-	if (str[i + 1] == str[i])
+	if (str[i + 1] == str[i] && (str[i] == '<' || str[i] == '>'))
 	{
 		line = ft_substr(str, i, 2);
 		new = create_node(line, EMPTY);
