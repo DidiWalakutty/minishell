@@ -6,7 +6,7 @@
 /*   By: sreerink <sreerink@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2024/06/12 20:30:41 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/08/16 22:06:56 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/08/17 01:01:23 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,7 +198,6 @@ int	builtin_in_parent(t_cmd *cmd)
 	int	stdout_fd;
 	int	exit_status;
 
-	printf("Inside builtin_in_parent()\n");
 	stdin_fd = dup(STDIN_FILENO);
 	if (stdin_fd == -1)
 	{
