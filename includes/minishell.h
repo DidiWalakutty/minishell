@@ -89,19 +89,42 @@ typedef enum s_builtin
 	ENV,
 } t_builtin;
 
+// typedef struct s_cmd
+// {
+// 	pid_t	pid;
+// 	char		*cmd;
+// 	char		*path;
+// 	char		**args;
+// 	char		*redirect_in;
+// 	char		*redirect_out;
+// 	char		**env;
+// 	bool		append;
+// 	t_builtin	builtin;
+// 	t_cmd		*next;
+// } t_cmd;
+
+// orig saves the og file descriptors before any/
+// redirections occur during I/O (input/output) operations.
+
+typedef struct s_redir_info
+{
+	t_token		type;
+}	t_redir_info;
+
+typedef struct s_redir
+{
+	int				stdin_orig;
+	int				stdout_orig;
+	t_redir_info	*list;
+}	t_redir;
+
 typedef struct s_cmd
 {
-	pid_t	pid;
-	char		*cmd;
-	char		*path;
-	char		**args;
-	char		*redirect_in;
-	char		*redirect_out;
-	char		**env;
-	bool		append;
-	t_builtin	builtin;
-	t_cmd		*next;
-} t_cmd;
+	char	*command;
+	char	**args;
+	t_redir	*redirections;
+	t_cmd	*next;
+}	t_cmd;
 
 typedef struct s_node
 {
@@ -113,7 +136,6 @@ typedef struct s_node
 
 typedef struct s_data
 {
-	// int		i; add for iterating with data->i in tokenize_input?
 	char	*input;
 	char	**env;
 	t_node	*list;
