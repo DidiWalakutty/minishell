@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:36:22 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/16 17:28:51 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/08/21 13:19:12 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,18 +26,13 @@ t_expand	*init_info(t_node *list)
 	return (info);
 }
 
-static void	expandable_type(t_expand *info, t_token type)
-{
-	if (type == HERE_DOC)
-		info->expandable = false;
-	else
-		info->expandable = true;
-}
-
 // This function searches the whole node and replaces
 // where necessary.
-// if (check_tilde(node) == true)
-// 	set_tilde(node, env, info);
+// check for heredoc?
+	// Remove spaces perhaps just needed when building commands.
+	// Also check if it's just one or more spaces.
+	// if (spaces_present(info->head) == true)
+	// 	remove_spaces(info->head);
 void	expand_input(t_data *data, t_node *node, char **env)
 {
 	t_expand	*info;
@@ -45,25 +40,18 @@ void	expand_input(t_data *data, t_node *node, char **env)
 	info = init_info(node);
 	while (node)
 	{
-		expandable_type(info, node->type);
 		if (check_null(&node) == true)
 			continue ;
-		// if (is_heredoc(node) == true)
-		// 	skip_argument
-		if (is_dollar(node, info->expandable) == true)
+		if (is_dollar(node) == true)
 			set_dollar(node, env, info);
-		if (is_exit_status(node, info->expandable) == true)
+		if (is_exit_status(node) == true)
 			set_exit_status(data, node, info);
-		if (is_double_dollar(node, info->expandable) == true)
+		if (is_double_dollar(node) == true)
 			set_pid(node, info);
 		node = node->next;
 	}
 	if (quote_type_present(info->head) == true)
 		concatenate_quotes(info->head);
-	// Remove spaces perhaps just needed when building commands.
-	// Also check if it's just one or more spaces.
-	// if (spaces_present(info->head) == true)
-	// 	remove_spaces(info->head);
 	node = info->head;
 	free(info);
 }

@@ -12,12 +12,11 @@
 
 #include "minishell.h"
 
-bool	is_dollar(t_node *node, bool is_expandable)
+bool	is_dollar(t_node *node)
 {
 	char	*copy;
 
-	if (is_expandable == false || (node->type != WORD && \
-		node->type != DOUBLE_QUOTE))
+	if (node->type != WORD && node->type != DOUBLE_QUOTE)
 		return (false);
 	copy = ft_strchr(node->str, '$');
 	if (!copy)

@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:41:04 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/16 19:38:00 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/08/21 15:35:34 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,12 @@
 
 bool	error_msg(char *message, char c, char c2)
 {
-	if (c2 != '\0')
-		printf("%s `%c%c'\n", message, c, c2);
-	else
+	if (!c && !c2)
+		printf("%s %c%c\n", message, c, c2);
+	else if (!c2)
 		printf("%s `%c'\n", message, c);
+	else
+		printf("%s `%c%c'\n", message, c, c2);
 	return (true);
 }
 

@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/08/02 19:46:22 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/02 22:40:23 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/08/21 13:18:06 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,12 @@ bool	check_null(t_node **node)
 	return (false);
 }
 
-bool	is_exit_status(t_node *node, bool expandable)
+bool	is_exit_status(t_node *node)
 {
 	int	i;
 
 	i = 0;
-	if (expandable == false || (node->type != WORD && \
-		node->type != DOUBLE_QUOTE))
+	if (node->type != WORD && node->type != DOUBLE_QUOTE)
 		return (false);
 	while (node->str[i])
 	{

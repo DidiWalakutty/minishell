@@ -33,6 +33,7 @@ typedef enum s_token		t_token;
 typedef struct s_list		t_list;
 typedef struct s_cmd		t_cmd;
 typedef struct s_expand		t_expand;
+typedef struct s_redir_var	t_redir_var;
 typedef struct s_node		t_node;
 typedef struct s_data		t_data;
 
@@ -87,7 +88,7 @@ typedef enum s_builtin
 	ECHO,
 	PWD,
 	ENV,
-} t_builtin;
+}	t_builtin;
 
 // typedef struct s_cmd
 // {
@@ -103,26 +104,17 @@ typedef enum s_builtin
 // 	t_cmd		*next;
 // } t_cmd;
 
-// orig saves the og file descriptors before any/
-// redirections occur during I/O (input/output) operations.
 
-typedef struct s_redir_info
-{
-	t_token		type;
-}	t_redir_info;
-
-typedef struct s_redir
-{
-	int				stdin_orig;
-	int				stdout_orig;
-	t_redir_info	*list;
-}	t_redir;
 
 typedef struct s_cmd
 {
 	char	*command;
 	char	**args;
-	t_redir	*redirections;
+	// char	*delimiter; // Needed here?
+	char *infile;
+	// char **infile en **outfile als we alles willen handelen.
+	char *outfile;
+	char *heredoc_delim;
 	t_cmd	*next;
 }	t_cmd;
 
@@ -170,15 +162,15 @@ bool	one_of_tokens(char c);
 void	skip_to_token(char *str, int *i);
 void	skip_whitespace(char *str, int *i);
 int		quote_length(char *str, char c);
-bool	check_start_pipes(char *str, int *i);
+bool	check_start(char *str, int *i);
 
 // Expanding
 bool	check_null(t_node **node);
-bool	is_exit_status(t_node *node, bool expandable);
+bool	is_exit_status(t_node *node);
 int		set_exit_status(t_data *data, t_node *node, t_expand *info);
-bool	is_double_dollar(t_node *node, bool is_expandable);
+bool	is_double_dollar(t_node *node);
 int		set_pid(t_node *node, t_expand *info);
-bool	is_dollar(t_node *node, bool is_expandable);
+bool	is_dollar(t_node *node);
 int		set_dollar(t_node *node, char **env, t_expand *info);
 bool	quote_type_present(t_node *node);
 int		concatenate_quotes(t_node *node);
@@ -196,8 +188,12 @@ int		remove_spaces(t_node *list);
 t_node	*create_node(char *str, t_token type);
 void	node_to_list(t_node **list, t_node *new);
 
-// Commands (Didi's part)
+// Commands (Didi's Part)
 t_cmd	*build_commands(t_node *nodes, t_data *data);
+
+// Commands - Utils (Didi's Part)
+bool	a_redirection(t_node *node);
+int		not_just_spaces(t_node *nodes);
 
 // Free and exit
 // exit_error(char *str); probably not needed

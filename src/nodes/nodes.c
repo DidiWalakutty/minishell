@@ -6,11 +6,20 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/07/04 15:28:16 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/16 16:52:38 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/08/21 13:13:54 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+t_node	*last_node(t_node *head)
+{
+	if (head == NULL)
+		return (NULL);
+	while (head->next != NULL)
+		head = head->next;
+	return (head);
+}
 
 t_node	*create_node(char *str, t_token type)
 {

@@ -19,13 +19,11 @@ SRC =	./src/main.c \
 				./src/environment/env.c \
 				./src/nodes/nodes.c \
 				./src/utils/free_and_error.c\
-				./src/utils/list_utils.c \
 				./src/utils/utils.c \
 				./src/tokenize/lexer.c \
 				./src/tokenize/quotes.c \
 				./src/tokenize/tokenize_utils.c \
 				./src/tokenize/tokenizer.c \
-				./src/execute/pipes.c \
 				./src/parsing/parsing.c \
 				./src/builtins/echo.c \
 				./src/builtins/cd.c \
@@ -37,6 +35,7 @@ SRC =	./src/main.c \
 				./src/expanding/expand_exit_and_empty.c \
 				./src/expanding/quote_concatenation.c \
 				./src/commands/build_commands.c \
+				./src/commands/build_utils.c
 
 # Object files and directories
 # obj folder in src?: src/obj 

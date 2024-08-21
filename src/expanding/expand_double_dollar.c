@@ -12,13 +12,12 @@
 
 #include "minishell.h"
 
-bool	is_double_dollar(t_node *node, bool is_expandable)
+bool	is_double_dollar(t_node *node)
 {
 	int	i;
 
 	i = 0;
-	if (is_expandable == false || (node->type != WORD && \
-		node->type != DOUBLE_QUOTE))
+	if (node->type != WORD && node->type != DOUBLE_QUOTE)
 		return (false);
 	while (node->str[i])
 	{

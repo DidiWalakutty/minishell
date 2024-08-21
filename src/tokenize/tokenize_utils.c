@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/07/04 15:38:34 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/16 19:47:36 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/08/21 15:40:15 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,12 +55,30 @@ int	add_one_token(char *str, int i, t_data *data, t_node **list)
 	return (i + 1);
 }
 
-bool	check_start_pipes(char *str, int *i)
+bool	check_start(char *str, int *i)
 {
-	if (str[*i + 1] == '|')
-		return (error_msg("syntax error near unexpected token", \
-				str[*i], str[*i + 1]));
+	if (str[*i] == '|')
+	{
+		if (str[*i + 1] == '|')
+			return (error_msg("syntax error near unexpected token", \
+					str[*i], str[*i + 1]));
+		else
+			return (error_msg("syntax error near unexpected token", \
+					str[*i], '\0'));
+	}
 	else
-		return (error_msg("syntax error near unexpected token", \
-				str[*i], '\0'));
+	{
+		if (str[*i + 1] == str[*i])
+		{
+			if (str[*i] == '\0')
+			{
+				printf("syntax error near ");
+				return (error_msg("unexpected token `newline'", '\0', '\0'));
+			}
+		}
+		else
+			return (error_msg("syntax error near unexpected token `newline'", \
+					'\0', '\0'));
+	}
+	return (true);
 }
