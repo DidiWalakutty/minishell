@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:41:04 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/21 15:35:34 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/08/22 21:51:32 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@ bool	error_msg(char *message, char c, char c2)
 	return (true);
 }
 
-static void	free_list(t_node *list)
+static void	free_list(t_token *list)
 {
-	t_node	*temp;
+	t_token	*temp;
 
 	while (list)
 	{
@@ -54,20 +54,23 @@ void	free_all(t_data	*data)
 	data->list = NULL;
 }
 
-void	free_env_array(char **str)
+void	free_array(char **str)
 {
 	int	i;
 
 	i = 0;
-	while (str[i])
+	if (str)
 	{
-		free(str[i]);
-		i++;
+		while (str[i])
+		{
+			free(str[i]);
+			i++;
+		}
+		free(str);
 	}
-	free(str);
 }
 
-void	free_node(t_node *node)
+void	free_node(t_token *node)
 {
 	if (node)
 	{
@@ -77,7 +80,7 @@ void	free_node(t_node *node)
 }
 
 // to printf check type
-const char	*type_to_string(t_token type)
+const char	*type_to_string(t_type type)
 {
 	switch(type)
 	{
@@ -96,7 +99,7 @@ const char	*type_to_string(t_token type)
 	}
 }
 
-void	print_linked_list(t_node *head)
+void	print_linked_list(t_token *head)
 {
 	int i = 1;
 	while (head != NULL)

@@ -6,13 +6,13 @@
 /*   By: diwalaku <diwalaku@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/08/04 18:09:07 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/16 18:16:45 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/08/22 18:36:35 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-bool	quote_type_present(t_node *node)
+bool	quote_type_present(t_token *node)
 {
 	int	i;
 	int	quote_num;
@@ -37,10 +37,10 @@ bool	quote_type_present(t_node *node)
 
 // This function makes sure that things like 4 seperate nodes: 'e'c"h"'o'
 // become one node.
-int	concatenate_quotes(t_node *list)
+int	concatenate_quotes(t_token *list)
 {
-	t_node	*node;
-	t_node	*next_node;
+	t_token	*node;
+	t_token	*next_token;
 	char	*joined;
 
 	node = list;
@@ -52,13 +52,13 @@ int	concatenate_quotes(t_node *list)
 			while (node->next && (node->next->type == SINGLE_QUOTE || \
 				node->next->type == DOUBLE_QUOTE || node->next->type == WORD))
 			{
-				next_node = node->next;
-				joined = ft_strconcat(node->str, next_node->str);
+				next_token = node->next;
+				joined = ft_strconcat(node->str, next_token->str);
 				free(node->str);
 				node->str = joined;
-				node->next = next_node->next;
-				free(next_node->str);
-				free(next_node);
+				node->next = next_token->next;
+				free(next_token->str);
+				free(next_token);
 			}
 		}
 		node = node->next;
@@ -66,7 +66,7 @@ int	concatenate_quotes(t_node *list)
 	return (0);
 }
 
-bool	spaces_present(t_node *node)
+bool	spaces_present(t_token *node)
 {
 	while (node)
 	{
@@ -77,7 +77,7 @@ bool	spaces_present(t_node *node)
 	return (false);
 }
 
-static int	count_nodes(t_node *nodes)
+static int	count_tokens(t_token *nodes)
 {
 	int	i;
 
@@ -90,11 +90,11 @@ static int	count_nodes(t_node *nodes)
 	return (i);
 }
 
-int	remove_spaces(t_node *list)
+int	remove_spaces(t_token *list)
 {
-	t_node	*head;
-	t_node	*to_delete;
-	t_node	*before;
+	t_token	*head;
+	t_token	*to_delete;
+	t_token	*before;
 
 	head = list;
 	before = list;

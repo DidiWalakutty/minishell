@@ -6,13 +6,13 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:42:29 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/21 15:17:03 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/08/22 18:39:57 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_node		*tokenize_input(t_data *data, char *str);
+t_token		*tokenize_input(t_data *data, char *str);
 static bool	check_syntax_errors(char *str);
 static bool	token_syntax_error(char *str, int *i);
 
@@ -29,7 +29,7 @@ int	tokenizer_and_parser(t_data *data)
 	data->list = tokenize_input(data, data->input);
 	expand_input(data, data->list, data->env);
 	print_linked_list(data->list);
-	// data->cmd_process = build_commands(data->list, data);
+	data->cmd_process = build_commands(data->list, data);
 	return (0);
 }
 
@@ -90,9 +90,9 @@ static bool	token_syntax_error(char *str, int *i)
 	return (false);
 }
 
-static int	add_space(char *str, int i, t_node **list)
+static int	add_space(char *str, int i, t_token **list)
 {
-	t_node	*new;
+	t_token	*new;
 	char	*line;
 
 	line = ft_strdup(" ");
@@ -105,11 +105,10 @@ static int	add_space(char *str, int i, t_node **list)
 
 // Tokenizes input into nodes.
 // currently iterates beyond the \0.
-// For |; Just pipes, right? Not |&?
-t_node	*tokenize_input(t_data *data, char *str)
+t_token	*tokenize_input(t_data *data, char *str)
 {
 	int		i;
-	t_node	*list;
+	t_token	*list;
 
 	i = 0;
 	list = NULL;

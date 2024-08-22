@@ -6,13 +6,13 @@
 /*   By: diwalaku <diwalaku@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/08/02 19:46:22 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/21 13:18:06 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/08/22 18:36:35 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-bool	check_null(t_node **node)
+bool	check_null(t_token **node)
 {
 	if (*node && ((*node)->null == true))
 	{
@@ -22,7 +22,7 @@ bool	check_null(t_node **node)
 	return (false);
 }
 
-bool	is_exit_status(t_node *node)
+bool	is_exit_status(t_token *node)
 {
 	int	i;
 
@@ -38,7 +38,7 @@ bool	is_exit_status(t_node *node)
 	return (false);
 }
 
-t_dollar	*init_exit_variables(t_node *node)
+t_dollar	*init_exit_variables(t_token *node)
 {
 	t_dollar	*exit_var;
 
@@ -50,7 +50,7 @@ t_dollar	*init_exit_variables(t_node *node)
 	return (exit_var);
 }
 
-int	set_exit_status(t_data *data, t_node *node, t_expand *info)
+int	set_exit_status(t_data *data, t_token *node, t_expand *info)
 {
 	t_dollar	*exit_var;
 	char		*exit_status;

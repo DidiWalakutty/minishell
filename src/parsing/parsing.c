@@ -12,7 +12,7 @@
 
 // #include "../../includes/minishell.h"
 
-// size_t	count_args(t_node *list)
+// size_t	count_args(t_token *list)
 // {
 // 	size_t	n;
 
@@ -43,7 +43,7 @@
 // 		(*cmd)->builtin = ENV;
 // }
 
-// void	write_cmd_words(t_cmd **cmd, t_node **list)
+// void	write_cmd_words(t_cmd **cmd, t_token **list)
 // {
 // 	size_t	i;
 
@@ -62,7 +62,7 @@
 // 	}
 // }
 
-// void	write_redirect_in(t_cmd **cmd, t_node **list)
+// void	write_redirect_in(t_cmd **cmd, t_token **list)
 // {
 // 	if (*list && (*list)->type == REDIR_IN)
 // 	{
@@ -79,7 +79,7 @@
 // 	}
 // }
 
-// void	write_redirect_out(t_cmd **cmd, t_node **list)
+// void	write_redirect_out(t_cmd **cmd, t_token **list)
 // {
 // 	if ((*list)->type == REDIR_OUT)
 // 	{
@@ -104,7 +104,7 @@
 // 	*list = (*list)->next->next;
 // }
 
-// void	write_cmd_data(t_cmd **cmd, t_node **list)
+// void	write_cmd_data(t_cmd **cmd, t_token **list)
 // {
 // 	size_t	args_len;
 // 	bool	pipe_in;
@@ -136,7 +136,7 @@
 // 	t_cmd	*head;
 // 	t_cmd	*new;
 // 	t_cmd	*last;
-// 	t_node	*cur_list;
+// 	t_token	*cur_list;
 // 	size_t	cmds_n;
 
 // 	cur_list = data->list;

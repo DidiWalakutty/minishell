@@ -6,14 +6,14 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:36:22 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/21 13:19:12 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/08/22 20:48:48 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 // info->node_i = 0; // Tracks node position and where to insert expansion
-t_expand	*init_info(t_node *list)
+t_expand	*init_info(t_token *list)
 {
 	t_expand	*info;
 
@@ -31,9 +31,7 @@ t_expand	*init_info(t_node *list)
 // check for heredoc?
 	// Remove spaces perhaps just needed when building commands.
 	// Also check if it's just one or more spaces.
-	// if (spaces_present(info->head) == true)
-	// 	remove_spaces(info->head);
-void	expand_input(t_data *data, t_node *node, char **env)
+void	expand_input(t_data *data, t_token *node, char **env)
 {
 	t_expand	*info;
 

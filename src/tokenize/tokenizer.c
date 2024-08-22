@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:43:34 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/16 19:22:00 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/08/22 18:36:35 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,9 @@ int	quote_length(char *str, char c)
 // the closing quote's position that we return.
 // Should we consider "" as an empty string and add it to the node-list?
 //  free line?
-int	add_quote(char *str, int i, char c, t_node **list)
+int	add_quote(char *str, int i, char c, t_token **list)
 {
-	t_node	*new;
+	t_token	*new;
 	int		start;
 	int		len;
 	char	*line;
@@ -63,9 +63,9 @@ int	add_quote(char *str, int i, char c, t_node **list)
 
 // We add a token, either >> or <<.
 // It the i + 1 isn't equal, it adds one token.
-int	add_redir_or_pipe(char *str, int i, t_data *data, t_node **list)
+int	add_redir_or_pipe(char *str, int i, t_data *data, t_token **list)
 {
-	t_node	*new;
+	t_token	*new;
 	char	*line;
 
 	if (str[i + 1] == str[i] && (str[i] == '<' || str[i] == '>'))
@@ -84,10 +84,10 @@ int	add_redir_or_pipe(char *str, int i, t_data *data, t_node **list)
 	return (i);
 }
 
-int	add_pipe(char *str, int i, t_node **list)
+int	add_pipe(char *str, int i, t_token **list)
 {
 	char	*line;
-	t_node	*new;
+	t_token	*new;
 
 	line = ft_substr(str, i, 1);
 	new = create_node(line, PIPE);
@@ -98,9 +98,9 @@ int	add_pipe(char *str, int i, t_node **list)
 
 // !in_quote toggles the value of the current in_quote 
 // flag during the while-loop.
-int	add_word(char *str, int i, t_node **list)
+int	add_word(char *str, int i, t_token **list)
 {
-	t_node	*new;
+	t_token	*new;
 	char	*line;
 	int		start;
 	int		len;

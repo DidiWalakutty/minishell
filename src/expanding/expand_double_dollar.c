@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-bool	is_double_dollar(t_node *node)
+bool	is_double_dollar(t_token *node)
 {
 	int	i;
 
@@ -28,7 +28,7 @@ bool	is_double_dollar(t_node *node)
 	return (false);
 }
 
-t_dollar	*init_double_dol(t_node *node)
+t_dollar	*init_double_dol(t_token *node)
 {
 	t_dollar	*double_dollar;
 
@@ -40,7 +40,7 @@ t_dollar	*init_double_dol(t_node *node)
 	return (double_dollar);
 }
 
-int	set_pid(t_node *node, t_expand *info)
+int	set_pid(t_token *node, t_expand *info)
 {
 	t_dollar	*dub_var;
 	char		*pid;

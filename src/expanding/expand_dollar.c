@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-bool	is_dollar(t_node *node)
+bool	is_dollar(t_token *node)
 {
 	char	*copy;
 
@@ -24,7 +24,7 @@ bool	is_dollar(t_node *node)
 	return (true);
 }
 
-static t_dollar	*init_dollar(t_node *node)
+static t_dollar	*init_dollar(t_token *node)
 {
 	t_dollar	*dollar;
 
@@ -42,7 +42,7 @@ static t_dollar	*init_dollar(t_node *node)
 // start_env is $ +1, where ENV-name starts.
 // end is where env_name ends.
 // Searches the env-name and its info.
-static void	expand_dollar(t_node *node, t_dollar *dol, char **env)
+static void	expand_dollar(t_token *node, t_dollar *dol, char **env)
 {
 	dol->start_env = dol->i + 1;
 	if (node->str[dol->start_env] == '{')
@@ -72,7 +72,7 @@ static void	expand_dollar(t_node *node, t_dollar *dol, char **env)
 }
 
 // This function expands a $-env for the whole D-Q node.
-int	set_dollar(t_node *node, char **env, t_expand *info)
+int	set_dollar(t_token *node, char **env, t_expand *info)
 {
 	t_dollar	*dol_var;
 

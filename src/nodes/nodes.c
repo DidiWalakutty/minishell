@@ -6,13 +6,13 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/07/04 15:28:16 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/21 13:13:54 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/08/22 18:36:35 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_node	*last_node(t_node *head)
+t_token	*last_token(t_token *head)
 {
 	if (head == NULL)
 		return (NULL);
@@ -21,11 +21,11 @@ t_node	*last_node(t_node *head)
 	return (head);
 }
 
-t_node	*create_node(char *str, t_token type)
+t_token	*create_node(char *str, t_type type)
 {
-	t_node	*new_node;
+	t_token	*new_node;
 
-	new_node = malloc(sizeof(t_node));
+	new_node = malloc(sizeof(t_token));
 	if (!new_node)
 		return (NULL);
 	if (str)
@@ -38,9 +38,9 @@ t_node	*create_node(char *str, t_token type)
 	return (new_node);
 }
 
-void	node_to_list(t_node **head, t_node *new)
+void	node_to_list(t_token **head, t_token *new)
 {
-	t_node	*current_node;
+	t_token	*current_token;
 
 	if (!new)
 		return ;
@@ -49,6 +49,6 @@ void	node_to_list(t_node **head, t_node *new)
 		*head = new;
 		return ;
 	}
-	current_node = last_node(*head);
-	current_node->next = new;
+	current_token = last_token(*head);
+	current_token->next = new;
 }
