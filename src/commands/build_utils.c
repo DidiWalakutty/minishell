@@ -6,19 +6,11 @@
 /*   By: diwalaku <diwalaku@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/08/22 18:14:21 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/22 19:19:28 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/08/23 13:12:47 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-bool	a_redirection(t_token *node)
-{
-	if (node->type == REDIR_IN || node->type == REDIR_OUT || \
-		node->type == APPEND || node->type == HERE_DOC)
-		return (true);
-	return (false);
-}
 
 // Checks for space-input only and
 // pipe_usage.
@@ -42,4 +34,53 @@ int	not_just_spaces(t_token *nodes)
 		return (0);
 	remove_spaces(copy);
 	return (1);
+}
+
+static void	add_to_array(char **new_array, char **arguments, char *str)
+{
+	int	i;
+
+	i = 0;
+	if (arguments)
+	{
+		while (arguments[i])
+		{
+			new_array[i] = ft_strdup(arguments[i]);
+			if (!new_array[i])
+				free_array(new_array);
+			i++;
+		}
+	}
+	if (str)
+	{
+		new_array[i] = ft_strdup(str);
+		if (!new_array[i])
+			free_array(new_array);
+		i++;
+	}
+	new_array[i] = NULL;
+}
+
+char	**add_to_double_array(char **arguments, char *str)
+{
+	int		size;
+	char	**new_array;
+
+	size = 0;
+	if (!str && !arguments)
+		return (NULL);
+	if (!str)
+		return (arguments);
+	if (arguments)
+	{
+		while (arguments[size])
+			size++;
+	}
+	new_array = malloc(sizeof(char *) * (size + 2));
+	if (!new_array)
+		return (NULL);
+	add_to_array(new_array, arguments, str);
+	if (arguments)
+		free_array(arguments);
+	return (new_array);
 }

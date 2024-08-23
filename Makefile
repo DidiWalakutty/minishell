@@ -35,7 +35,9 @@ SRC =	./src/main.c \
 				./src/expanding/expand_exit_and_empty.c \
 				./src/expanding/quote_concatenation.c \
 				./src/commands/build_commands.c \
-				./src/commands/build_utils.c
+				./src/commands/build_redirections.c \
+				./src/commands/build_utils.c \
+				./src/commands/build_inits.c
 
 # Object files and directories
 # obj folder in src?: src/obj 

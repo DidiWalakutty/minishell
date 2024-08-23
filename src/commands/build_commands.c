@@ -6,115 +6,55 @@
 /*   By: diwalaku <diwalaku@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/08/22 18:14:06 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/22 22:40:23 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/08/23 18:03:57 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// int	handle_redirect(t_token *token, t_cmd *command, t_data *data)
-// {
-// 	t_type	type;
-
-// 	type = token->type;
-// 	token = token->next;
-// 	if (token->type == SEPARATOR)
-// 		token = token->next;
-// 	if (type == REDIR_OUT || type == APPEND)
-// 		command->outfile = token->str;
-// 	else
-// 		command->infile = token->str;
-// }
-
-static void	add_to_array(char **new_array, char **arguments, char *str)
+void	set_command(t_token **token, t_cmd **commands, t_cmd_v **var)
 {
-	int	i;
-
-	i = 0;
-	while (arguments[i])
+	// if token
+	if ((*var)->command == NULL)
 	{
-		new_array[i] = ft_strdup(arguments[i]);
-		if (!new_array[i])
-			free_array(new_array);
-		i++;
-	}
-	
-}
-
-char	**add_to_double_array(char **arguments, char *str)
-{
-	int		i;
-	char	**new_array;
-
-	i = 0;
-	if (!str && !arguments)
-		return (NULL);
-	if (!str)
-		return (arguments);
-	while (arguments[i])
-		i++;
-	if (str)
-		new_array = malloc(sizeof(char *) * (i + 2));
-	else
-		new_array = malloc(sizeof(char *) * (i + 1));
-	if (!new_array)
-		return (NULL);
-	add_to_array(new_array, arguments, str);
-	return (new_array);
-}
-
-void	set_command(t_token *token, t_cmd *commands, t_cmd_var *var)
-{
-	if (var->command == NULL)
-	{
-		if (token->type == WORD || token->type == SINGLE_QUOTE || \
-			token->type == DOUBLE_QUOTE)
-			var->command = token->str;
-	}
-	else
-	{
-		if (token->type == PIPE)
+		if ((*token)->type == WORD || (*token)->type == SINGLE_QUOTE || \
+			(*token)->type == DOUBLE_QUOTE)
 		{
-			// push it to command;
+			(*var)->command = (*token)->str;
+			(*var)->arguments = add_to_double_array((*var)->arguments, (*token)->str);	
+		}
+	}
+	else
+	{
+		if ((*token)->type == PIPE)
+		{
+
 			printf("Pipe found\n");
 		}
 		else
 		{
-			var->arguments = add_to_double_array(var->arguments, token->str);
+			(*var)->arguments = add_to_double_array((*var)->arguments, (*token)->str);
 		}
 	}
+	// if !token->next, push the command.
 }		
-
-// if (a_redirection(tokens->type) == true)
-		// {
-		// 	if (handle_redirect(&tokens, &commands, data) == 1)
-		// 		printf("check for failure and free");
-		// }
-
-t_cmd_var	*init_tracker(void)
-{
-	t_cmd_var	*tracker;
-
-	tracker = malloc(sizeof(t_cmd_var));
-	tracker->command = NULL;
-	tracker->arguments = NULL;
-	return (tracker);
-}
 
 t_cmd	*merge_commands(t_token *tokens, t_data *data)
 {
-	t_cmd		*commands;
-	t_cmd_var	*tracker;
-	// variable to hold args?
+	t_cmd	*commands;
+	t_cmd_v	*tracker;
 
-	// init_args_tracker?
 	tracker = init_tracker();
-	commands = NULL;
+	commands = init_cmds();
 	while (tokens)
 	{
+		if (redir_in)
+			handle_in;
+		else if (redir_out)
+			handle_out;
 		// if (a_redirection(tokens->type) == true)
 		// {
-		// 	if (handle_redirect(&tokens, &commands, data) == 1)
+		// 	if (handle_redirect(&tokens, &commands, data) != 1)
 		// 		printf("check for failure and free");
 		// }
 		set_command(&tokens, &commands, &tracker);
