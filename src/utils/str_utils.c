@@ -1,28 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                       ::::::::             */
-/*   builtins.c                                        :+:    :+:             */
+/*   str_utils.c                                       :+:    :+:             */
 /*                                                    +:+                     */
 /*   By: sreerink <sreerink@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
-/*   Created: 2024/08/04 18:46:29 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/08/25 00:00:43 by sreerink      ########   odam.nl         */
+/*   Created: 2024/08/24 22:58:09 by sreerink      #+#    #+#                 */
+/*   Updated: 2024/08/24 23:01:02 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	execute_builtin(t_cmd *cmd, t_data *data)
+bool	str_is_all_digits(char *str)
 {
-	int		exit_status;
+	size_t	i;
 
-	if (cmd->builtin == CD)
-		exit_status = cd_builtin(cmd, data);
-	else if (cmd->builtin == ECHO)
-		exit_status = echo_builtin(cmd);
-	else if (cmd->builtin == PWD)
-		exit_status = pwd_builtin();
-	else if (cmd->builtin == EXIT)
-		exit_status = exit_builtin(cmd, data);
-	return (exit_status);
+	i = 0;
+	while (str && str[i])
+	{
+		if (!ft_isdigit(str[i]))
+			return (false);
+		i++;
+	}
+	return (true);
 }
