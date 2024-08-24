@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/20 16:38:50 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/17 00:14:58 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/08/24 21:26:42 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,8 @@ typedef struct s_data
 // Functions //
 // Environment and paths;
 char	**copy_env(char **env);
-bool	replace_env_var(char *new_value, char *var_dst, char **env);
+char	**make_env_var(char *new_var, char *value, char **env);
+bool	replace_var_value(char *new_value, char *var_dst, char **env);
 
 // Lexer
 int		lexer_and_parser(t_data *data);
@@ -196,8 +197,8 @@ void	error_exit(const char *msg, int status);
 int		make_processes(t_data *data);
 
 // Builtins
-int		execute_builtin(t_cmd *cmd);
-int		cd_builtin(t_cmd *cmd);
+int		execute_builtin(t_cmd *cmd, t_data *data);
+int		cd_builtin(t_cmd *cmd, t_data *data);
 int		echo_builtin(t_cmd *cmd);
 int		pwd_builtin(void);
 

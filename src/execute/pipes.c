@@ -6,7 +6,7 @@
 /*   By: sreerink <sreerink@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2024/06/12 20:30:41 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/08/17 01:01:23 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/08/24 21:21:57 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,7 @@ void	child_process(t_cmd *cmd, int fd_in[], int fd_out[])
 	redirect_input(cmd, fd_in, fd_out);
 	redirect_output(cmd, fd_out);
 	if (cmd->builtin)
-		error_exit(NULL, execute_builtin(cmd));
+		error_exit(NULL, execute_builtin(cmd, NULL));
 	cmd->path = find_cmd_path(cmd);
 	execve(cmd->path, cmd->args, cmd->env);
 	error_exit(cmd->cmd, errno_to_exit_status(errno));
@@ -192,7 +192,7 @@ int	redirect_output_parent(t_cmd *cmd)
 	return (EXIT_SUCCESS);
 }
 
-int	builtin_in_parent(t_cmd *cmd)
+int	builtin_in_parent(t_cmd *cmd, t_data *data)
 {
 	int	stdin_fd;
 	int	stdout_fd;
@@ -224,7 +224,7 @@ int	builtin_in_parent(t_cmd *cmd)
 		close(stdout_fd);
 		return (EXIT_FAILURE);
 	}
-	exit_status = execute_builtin(cmd);
+	exit_status = execute_builtin(cmd, data);
 	if (cmd->redirect_in && !redirect_fd(stdin_fd, STDIN_FILENO))
 	{
 		close(stdout_fd);
@@ -249,7 +249,7 @@ int	make_processes(t_data *data)
 	cmds = data->cmd_process;
 	temp = cmds;
 	if (temp->builtin && data->process == 1)
-		return (builtin_in_parent(temp));
+		return (builtin_in_parent(temp, data));
 	while (i < data->process + 1)
 	{
 		if (pipe(pipefd[i]) == -1)

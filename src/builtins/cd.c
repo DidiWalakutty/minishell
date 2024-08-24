@@ -6,7 +6,7 @@
 /*   By: sreerink <sreerink@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2024/08/04 22:34:30 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/08/17 01:00:11 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/08/24 21:37:16 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,11 @@ static char	*check_cd_args(t_cmd *cmd)
 	char	*temp;
 
 	if (!cmd->args[1])
-		return (copy_env_input(cmd->env, "HOME"));
+	{
+		temp = copy_env_input(cmd->env, "HOME");
+		if (!temp)
+			write(STDERR_FILENO, "minishell: cd: HOME not set\n", 28);
+	}
 	else if (cmd->args[2])
 	{
 		write(STDERR_FILENO, "minishell: cd: too many arguments\n", 34);
@@ -37,18 +41,51 @@ static char	*check_cd_args(t_cmd *cmd)
 	else if (!strncmp("-", cmd->args[1], 2))
 	{
 		temp = copy_env_input(cmd->env, "OLDPWD");
-		printf("%s\n", temp);
-		return (temp);
+		if (!temp)
+			write(STDERR_FILENO, "minishell: cd: OLDPWD not set\n", 30);
+		else
+			printf("%s\n", temp);
 	}
-	return (cmd->args[1]);
+	else
+		temp = cmd->args[1];
+	return (temp);
 }
 
-int	cd_builtin(t_cmd *cmd)
+static bool	update_cd_vars(char *old_pwd, t_data *data)
+{
+	char	cur_pwd[PATH_MAX + 1];
+
+	if (!data)
+		return (true);
+	if (!replace_var_value(old_pwd, "OLDPWD=", data->env))
+	{
+		data->env = make_env_var("OLDPWD=", old_pwd, data->env);
+		if (!data->env)
+		{
+			perror("minishell: cd_builtin: make_env_var");
+			return (false);
+		}
+	}
+	if (!get_cur_pwd(cur_pwd))
+		return (false);
+	if (!replace_var_value(cur_pwd, "PWD=", data->env))
+	{
+		data->env = make_env_var("PWD=", cur_pwd, data->env);
+		if (!data->env)
+		{
+			perror("minishell: cd_builtin: make_env_var");
+			return (false);
+		}
+	}
+	return (true);
+}
+
+int	cd_builtin(t_cmd *cmd, t_data *data)
 {
 	char	*path;
-	char	temp[PATH_MAX + 1];
+	char	old_pwd[PATH_MAX + 1];
 
-	if (!get_cur_pwd(temp))
+	if (!get_cur_pwd(old_pwd))
 		return (EXIT_FAILURE);
 	path = check_cd_args(cmd);
 	if (!path)
@@ -63,9 +100,7 @@ int	cd_builtin(t_cmd *cmd)
 	}
 	if (path != cmd->args[1])
 		free(path);
-	if (!replace_env_var(temp, "OLDPWD=", cmd->env) || !get_cur_pwd(temp))
-		return (EXIT_FAILURE);
-	if (!replace_env_var(temp, "PWD=", cmd->env))
+	if (!update_cd_vars(old_pwd, data))
 		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }
