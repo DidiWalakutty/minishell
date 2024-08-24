@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/20 16:38:50 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/24 21:26:42 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/08/24 23:11:31 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,6 +168,9 @@ char	*copy_env_input(char **env, char *to_find);
 int		if_valid_char(char c);
 void	expand_node(t_node *node, t_dollar *var);
 
+// Utils (general)
+bool	str_is_all_digits(char *str);
+
 // Nodes
 t_node	*create_node(char *str, t_token type);
 void	node_to_list(t_node **list, t_node *new);
@@ -201,5 +204,6 @@ int		execute_builtin(t_cmd *cmd, t_data *data);
 int		cd_builtin(t_cmd *cmd, t_data *data);
 int		echo_builtin(t_cmd *cmd);
 int		pwd_builtin(void);
+int		exit_builtin(t_cmd *cmd, t_data *data);
 
 #endif
