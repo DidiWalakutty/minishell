@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:40:07 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/16 21:34:50 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/08/24 21:40:32 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static t_data	*init_shell(char **env_copy)
 		return (NULL);
 	// if (!isatty(STDIN_FILENO))
 	// 	exit_program();
-	data->env = env_copy;
+	data->env = copy_env(env_copy);
 	data->input = NULL;
 	data->list = NULL;
 	data->process = 1;

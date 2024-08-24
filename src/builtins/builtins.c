@@ -6,19 +6,18 @@
 /*   By: sreerink <sreerink@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2024/08/04 18:46:29 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/08/07 16:52:46 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/08/24 21:21:57 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	execute_builtin(t_cmd *cmd)
+int	execute_builtin(t_cmd *cmd, t_data *data)
 {
-	int	exit_status;
+	int		exit_status;
 
-	printf("Inside execute_builtin()\n");
 	if (cmd->builtin == CD)
-		exit_status = cd_builtin(cmd);
+		exit_status = cd_builtin(cmd, data);
 	else if (cmd->builtin == ECHO)
 		exit_status = echo_builtin(cmd);
 	else if (cmd->builtin == PWD)
