@@ -1,30 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                       ::::::::             */
-/*   builtins.c                                        :+:    :+:             */
+/*   env.c                                             :+:    :+:             */
 /*                                                    +:+                     */
 /*   By: sreerink <sreerink@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
-/*   Created: 2024/08/04 18:46:29 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/08/25 22:30:17 by sreerink      ########   odam.nl         */
+/*   Created: 2024/08/25 22:24:08 by sreerink      #+#    #+#                 */
+/*   Updated: 2024/08/25 22:29:15 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	execute_builtin(t_cmd *cmd, t_data *data)
+int	env_builtin(char **env)
 {
-	int		exit_status;
+	size_t	i;
 
-	if (cmd->builtin == CD)
-		exit_status = cd_builtin(cmd, data);
-	else if (cmd->builtin == ECHO)
-		exit_status = echo_builtin(cmd);
-	else if (cmd->builtin == PWD)
-		exit_status = pwd_builtin();
-	else if (cmd->builtin == ENV)
-		exit_status = env_builtin(cmd->env);
-	else if (cmd->builtin == EXIT)
-		exit_status = exit_builtin(cmd, data);
-	return (exit_status);
+	i = 0;
+	if (!env)
+		return (EXIT_SUCCESS);
+	while (env[i])
+	{
+		printf("%s\n", env[i]);
+		i++;
+	}
+	return (EXIT_SUCCESS);
 }

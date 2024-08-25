@@ -16,7 +16,7 @@ IFLAGS	= -I includes -I $(HOME)/.brew/Cellar/readline/8.2.1/include
 
 # Source Files
 SRC =	./src/main.c \
-				./src/environment/env.c \
+				./src/environment/copy_env.c \
 				./src/environment/modify_env.c \
 				./src/nodes/nodes.c \
 				./src/utils/free_and_error.c\
@@ -33,6 +33,7 @@ SRC =	./src/main.c \
 				./src/builtins/cd.c \
 				./src/builtins/echo.c \
 				./src/builtins/pwd.c \
+				./src/builtins/env.c \
 				./src/builtins/exit.c \
 				./src/expanding/expander.c \
 				./src/expanding/expand_dollar.c \

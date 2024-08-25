@@ -6,7 +6,7 @@
 /*   By: sreerink <sreerink@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2024/08/17 00:13:39 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/08/24 21:39:41 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/08/25 22:21:19 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,35 @@ char	**make_env_var(char *new_var, char *value, char **env)
 		new_env[i] = ft_strdup(new_var);
 	if (!new_env[i])
 		return (NULL); // return (free_array(new_env));
+	// free_array(env); (Oude data->env wordt misschien niet corrrect ge-freed)
+	return (new_env);
+}
+
+char	**delete_env_var(char *del_var, char **env)
+{
+	char	**new_env;
+	size_t	i;
+	size_t	j;
+
+	i = 0;
+	while (env[i])
+		i++;
+	new_env = ft_calloc(i, sizeof(char *));
+	if (!new_env)
+		return (NULL);
+	i = 0;
+	j = 0;
+	while (env[i])
+	{
+		if (strncmp(env[i], del_var, ft_strlen(del_var)))
+		{
+			new_env[j] = ft_strdup(env[i]);
+			if (!new_env[j])
+				return (NULL); // return (free_array(new_env));
+			j++;
+		}
+		i++;
+	}
 	// free_array(env); (Oude data->env wordt misschien niet corrrect ge-freed)
 	return (new_env);
 }
