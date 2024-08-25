@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/20 16:38:50 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/25 22:28:38 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/08/25 23:16:50 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,6 +133,7 @@ char	**copy_env(char **env);
 char	**make_env_var(char *new_var, char *value, char **env);
 char	**delete_env_var(char *del_var, char **env);
 bool	replace_var_value(char *new_value, char *var_dst, char **env);
+bool	increment_shlvl(char **env);
 
 // Lexer
 int		lexer_and_parser(t_data *data);

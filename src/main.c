@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:40:07 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/24 21:40:32 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/08/25 23:18:05 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,8 @@ static t_data	*init_shell(char **env_copy)
 	data->list = NULL;
 	data->process = 1;
 	data->exit_status = 0;
+	increment_shlvl(data->env);
 	// data->token = NULL; Not needed?
-	// TODO: PATH's
-	// TODO: unset old PWD
-	// TODO: increment shlvl
 	// signals
 	return (data);
 }

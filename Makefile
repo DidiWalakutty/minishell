@@ -18,6 +18,7 @@ IFLAGS	= -I includes -I $(HOME)/.brew/Cellar/readline/8.2.1/include
 SRC =	./src/main.c \
 				./src/environment/copy_env.c \
 				./src/environment/modify_env.c \
+				./src/environment/shlvl.c \
 				./src/nodes/nodes.c \
 				./src/utils/free_and_error.c\
 				./src/utils/list_utils.c \
