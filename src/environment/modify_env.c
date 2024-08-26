@@ -6,7 +6,7 @@
 /*   By: sreerink <sreerink@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2024/08/17 00:13:39 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/08/25 22:21:19 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/08/26 22:10:13 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,13 +50,15 @@ char	**delete_env_var(char *del_var, char **env)
 	i = 0;
 	while (env[i])
 		i++;
-	new_env = ft_calloc(i, sizeof(char *));
+//	printf("Alloc of %zu\n", i + 1);
+	new_env = ft_calloc(i + 1, sizeof(char *));
 	if (!new_env)
 		return (NULL);
 	i = 0;
 	j = 0;
 	while (env[i])
 	{
+//		printf("i = %zu, j = %zu\n", i , j);
 		if (strncmp(env[i], del_var, ft_strlen(del_var)))
 		{
 			new_env[j] = ft_strdup(env[i]);

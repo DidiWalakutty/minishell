@@ -1,28 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                       ::::::::             */
-/*   env.c                                             :+:    :+:             */
+/*   unset.c                                           :+:    :+:             */
 /*                                                    +:+                     */
 /*   By: sreerink <sreerink@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
-/*   Created: 2024/08/25 22:24:08 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/08/26 22:10:39 by sreerink      ########   odam.nl         */
+/*   Created: 2024/08/26 19:15:16 by sreerink      #+#    #+#                 */
+/*   Updated: 2024/08/26 21:57:46 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	env_builtin(char **env)
+int	unset_builtin(t_cmd *cmd, t_data *data)
 {
 	size_t	i;
 
-	i = 0;
-	if (!env)
-		return (EXIT_SUCCESS);
-	while (env[i])
+	i = 1;
+	while (cmd->args[i])
 	{
-		//printf("i = %zu\n", i);
-		printf("%s\n", env[i]);
+		if (data)
+			data->env = delete_env_var(cmd->args[i], data->env);
+		else
+			cmd->env = delete_env_var(cmd->args[i], cmd->env);
 		i++;
 	}
 	return (EXIT_SUCCESS);

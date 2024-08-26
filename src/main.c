@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:40:07 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/25 23:18:05 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/08/26 17:08:12 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ static t_data	*init_shell(char **env_copy)
 	return (data);
 }
 
-// what to do with exit_code $? exit-status???
 int	main(int argc, char **argv, char **env)
 {
 	t_data	*data;
