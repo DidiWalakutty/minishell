@@ -6,7 +6,7 @@
 /*   By: sreerink <sreerink@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2024/08/25 22:49:38 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/08/27 19:02:38 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/08/27 19:08:45 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ static bool	increment_shlvl(int new_shlvl, char **env)
 bool	init_shlvl(t_data *data)
 {
 	size_t	i;
-	int		shlvl_int;
 
 	i = 0;
 	while (data->env[i])
