@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:40:07 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/26 17:08:12 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/08/27 18:58:51 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static t_data	*init_shell(char **env_copy)
 	data->list = NULL;
 	data->process = 1;
 	data->exit_status = 0;
-	increment_shlvl(data->env);
+	init_shlvl(data);
 	// data->token = NULL; Not needed?
 	// signals
 	return (data);
