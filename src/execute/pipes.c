@@ -6,7 +6,7 @@
 /*   By: sreerink <sreerink@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2024/06/12 20:30:41 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/08/24 21:21:57 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/09/02 20:54:31 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,15 @@ char	*find_cmd_path(t_cmd *cmd)
 		return (cmd->cmd);
 	while (cmd->env[i] && strncmp(cmd->env[i], "PATH=", 5))
 		i++;
+	if (!cmd->env[i] || !cmd->env[i][5])
+	{
+		if (access(cmd->cmd, F_OK) != 0)
+		{
+			write(STDERR_FILENO, "minishell: ", 11);
+			error_exit(cmd->cmd, 1127);
+		}
+		return (cmd->cmd);
+	}
 	path_arr = ft_split(cmd->env[i] + 5, ':');
 	if (!path_arr)
 		error_exit("ft_split", EXIT_FAILURE);
@@ -48,10 +57,10 @@ char	*find_cmd_path(t_cmd *cmd)
 		access_check = access(path_temp, F_OK);
 		i++;
 	}
-	if (access_check != 0)
-		error_exit(cmd->cmd, 127);
 	free(slash_cmd);
 	// free_array(path_arr);
+	if (access_check != 0)
+		error_exit(cmd->cmd, 127);
 	return (path_temp);
 }
 

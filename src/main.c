@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:40:07 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/27 18:58:51 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/09/02 20:54:52 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ void	error_exit(const char *msg, int status)
 	}
 	else if (msg)
 		perror(msg);
+	if (status == 1127)
+		status = 127;
 	exit(status);
 }
 
