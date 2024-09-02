@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:40:07 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/24 21:40:32 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/08/27 18:58:51 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,15 +45,12 @@ static t_data	*init_shell(char **env_copy)
 	data->list = NULL;
 	data->process = 1;
 	data->exit_status = 0;
+	init_shlvl(data);
 	// data->token = NULL; Not needed?
-	// TODO: PATH's
-	// TODO: unset old PWD
-	// TODO: increment shlvl
 	// signals
 	return (data);
 }
 
-// what to do with exit_code $? exit-status???
 int	main(int argc, char **argv, char **env)
 {
 	t_data	*data;

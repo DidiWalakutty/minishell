@@ -6,7 +6,7 @@
 /*   By: sreerink <sreerink@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2024/08/04 18:46:29 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/08/25 00:00:43 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/08/28 22:54:21 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,12 @@ int	execute_builtin(t_cmd *cmd, t_data *data)
 		exit_status = echo_builtin(cmd);
 	else if (cmd->builtin == PWD)
 		exit_status = pwd_builtin();
+	else if (cmd->builtin == EXPORT)
+		exit_status = export_builtin(cmd, data);
+	else if (cmd->builtin == UNSET)
+		exit_status = unset_builtin(cmd, data);
+	else if (cmd->builtin == ENV)
+		exit_status = env_builtin(cmd->env);
 	else if (cmd->builtin == EXIT)
 		exit_status = exit_builtin(cmd, data);
 	return (exit_status);

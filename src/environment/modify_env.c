@@ -6,7 +6,7 @@
 /*   By: sreerink <sreerink@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2024/08/17 00:13:39 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/08/24 21:39:41 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/08/29 21:31:48 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,59 @@ char	**make_env_var(char *new_var, char *value, char **env)
 	return (new_env);
 }
 
+char	**delete_env_var(char *del_var, char **env)
+{
+	char	**new_env;
+	size_t	i;
+	size_t	j;
+
+	i = 0;
+	while (env[i])
+		i++;
+//	printf("Alloc of %zu\n", i + 1);
+	new_env = ft_calloc(i + 1, sizeof(char *));
+	if (!new_env)
+		return (NULL);
+	i = 0;
+	j = 0;
+	while (env[i])
+	{
+//		printf("i = %zu, j = %zu\n", i , j);
+		if (strncmp(env[i], del_var, ft_strlen(del_var)))
+		{
+			new_env[j] = ft_strdup(env[i]);
+			if (!new_env[j])
+				return (NULL); // return (free_array(new_env));
+			j++;
+		}
+		i++;
+	}
+	// free_array(env); (Oude data->env wordt misschien niet corrrect ge-freed)
+	return (new_env);
+}
+
+bool	add_var_value(char *new_value, char *var_dst, char **env)
+{
+	size_t	i;
+	size_t	var_len;
+	char	*var_temp;
+
+	i = 0;
+	var_len = ft_strlen(var_dst);
+	while (env[i] && strncmp(env[i], var_dst, var_len))
+		i++;
+	if (!env[i])
+		return (false);
+	var_temp = ft_strdup(env[i]);
+	if (!var_temp)
+		return (false);
+	free(env[i]);
+	env[i] = ft_strjoin(var_temp, new_value);
+	if (!env[i])
+		return (false);
+	return (true);
+}
+
 bool	replace_var_value(char *new_value, char *var_dst, char **env)
 {
 	size_t	i;
@@ -53,7 +106,10 @@ bool	replace_var_value(char *new_value, char *var_dst, char **env)
 	if (!env[i])
 		return (false);
 	free(env[i]);
-	env[i] = ft_strjoin(var_dst, new_value);
+	if (new_value)
+		env[i] = ft_strjoin(var_dst, new_value);
+	else
+		env[i] = ft_strdup(var_dst);
 	if (!env[i])
 		return (false);
 	return (true);
