@@ -6,7 +6,7 @@
 /*   By: sreerink <sreerink@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2024/08/17 00:13:39 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/08/26 22:10:13 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/08/29 21:31:48 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,28 @@ char	**delete_env_var(char *del_var, char **env)
 	return (new_env);
 }
 
+bool	add_var_value(char *new_value, char *var_dst, char **env)
+{
+	size_t	i;
+	size_t	var_len;
+	char	*var_temp;
+
+	i = 0;
+	var_len = ft_strlen(var_dst);
+	while (env[i] && strncmp(env[i], var_dst, var_len))
+		i++;
+	if (!env[i])
+		return (false);
+	var_temp = ft_strdup(env[i]);
+	if (!var_temp)
+		return (false);
+	free(env[i]);
+	env[i] = ft_strjoin(var_temp, new_value);
+	if (!env[i])
+		return (false);
+	return (true);
+}
+
 bool	replace_var_value(char *new_value, char *var_dst, char **env)
 {
 	size_t	i;
@@ -84,7 +106,10 @@ bool	replace_var_value(char *new_value, char *var_dst, char **env)
 	if (!env[i])
 		return (false);
 	free(env[i]);
-	env[i] = ft_strjoin(var_dst, new_value);
+	if (new_value)
+		env[i] = ft_strjoin(var_dst, new_value);
+	else
+		env[i] = ft_strdup(var_dst);
 	if (!env[i])
 		return (false);
 	return (true);
