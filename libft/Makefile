@@ -10,7 +10,8 @@ SRCS = ft_bzero.c ft_calloc.c ft_isascii.c ft_split.c ft_strdup.c \
 		ft_printf.c print_char.c print_str.c print_nbr.c print_pointer.c \
 		print_uns_dec.c print_lowerhex.c print_upperhex.c \
 		is_alph_or_num.c ft_isalpha.c ft_isdigit.c ft_strjoin.c \
-		ft_strconcat.c ft_itoa.c ft_memcpy.c \
+		ft_strconcat.c ft_itoa.c ft_memcpy.c ft_index_chr.c \
+		ft_strjoin_free.c get_next_line.c \
 
 OBJ = $(SRCS:%.c=$(L_OBJDIR)%.o)
 
