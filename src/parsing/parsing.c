@@ -6,7 +6,7 @@
 /*   By: sreerink <sreerink@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2024/07/25 19:51:53 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/08/15 14:41:01 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/09/03 19:19:17 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,14 @@ void	write_redirect_in(t_cmd **cmd, t_node **list)
 			error_exit("ft_strdup", EXIT_FAILURE);
 		*list = (*list)->next->next;
 	}
+	else if (*list && (*list)->type == HERE_DOC)
+	{
+		(*cmd)->redirect_in = ft_strdup((*list)->next->str);
+		if (!(*cmd)->redirect_in)
+			error_exit("ft_strdup", EXIT_FAILURE);
+		(*cmd)->heredoc = true;
+		*list = (*list)->next->next;
+	}
 	else
 	{
 		(*cmd)->redirect_in = ft_strdup("|");
@@ -121,7 +129,7 @@ void	write_cmd_data(t_cmd **cmd, t_node **list)
 		error_exit("malloc", EXIT_FAILURE);
 	(*cmd)->args[args_len] = NULL;
 	write_cmd_words(cmd, list);
-	if (pipe_in || (*list && (*list)->type == REDIR_IN))
+	if (pipe_in || (*list && (*list)->type == REDIR_IN) || (*list && (*list)->type == HERE_DOC))
 		write_redirect_in(cmd, list);
 	if (*list && ((*list)->type == PIPE || (*list)->type == REDIR_OUT || (*list)->type == APPEND))
 	{
