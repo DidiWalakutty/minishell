@@ -30,6 +30,7 @@ SRC =	./src/main.c \
 				./src/tokenize/tokenizer.c \
 				./src/execute/pipes.c \
 				./src/parsing/parsing.c \
+				./src/redirecting/heredoc.c \
 				./src/builtins/builtins.c \
 				./src/builtins/cd.c \
 				./src/builtins/echo.c \
@@ -89,6 +90,9 @@ $(OBJDIR)/%.o: ./src/execute/%.c
 	@$(CC) $(CFLAGS) $(HEADERS) -c -o $@ $<
 
 $(OBJDIR)/%.o: ./src/parsing/%.c
+	@$(CC) $(CFLAGS) $(HEADERS) -c -o $@ $<
+
+$(OBJDIR)/%.o: ./src/redirecting/%.c
 	@$(CC) $(CFLAGS) $(HEADERS) -c -o $@ $<
 
 $(OBJDIR)/%.o: ./src/builtins/%.c

@@ -6,7 +6,7 @@
 /*   By: sreerink <sreerink@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2024/06/12 20:30:41 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/09/02 20:54:31 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/09/03 21:39:21 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,12 @@ void	redirect_input(t_cmd *cmd, int fd_in[], int fd_out[])
 		if (!redirect_fd(fd_in[0], STDIN_FILENO))
 			error_exit(NULL, EXIT_FAILURE);
 	}
+	else if (cmd->heredoc)
+	{
+		close(fd_in[0]);
+		if (!heredoc(cmd))
+			error_exit("minishell: heredoc", EXIT_FAILURE);
+	}
 	else
 	{
 		close(fd_in[0]);
@@ -164,6 +170,11 @@ int	redirect_input_parent(t_cmd *cmd)
 
 	if (!cmd->redirect_in)
 		return (EXIT_SUCCESS);
+	else if (cmd->heredoc)
+	{
+		if (!heredoc(cmd))
+			return (EXIT_FAILURE);
+	}
 	else
 	{
 		file = open(cmd->redirect_in, O_RDONLY);

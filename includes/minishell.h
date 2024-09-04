@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/20 16:38:50 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/29 20:18:14 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/09/04 18:51:47 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,7 @@ typedef struct s_cmd
 	char		*redirect_out;
 	char		**env;
 	bool		append;
+	bool		heredoc;
 	t_builtin	builtin;
 	t_cmd		*next;
 } t_cmd;
@@ -197,6 +198,10 @@ void		print_env(char **env);
 
 // Parsing
 t_cmd	*make_cmd_nodes(t_data *data);
+
+// Redirecting
+bool	redirect_fd(int fd, int fd_dst);
+bool	heredoc(t_cmd *cmd);
 
 // Executing
 void	error_exit(const char *msg, int status);
