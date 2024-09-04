@@ -36,7 +36,7 @@ int	not_just_spaces(t_token *nodes)
 	return (1);
 }
 
-static void	add_to_array(char **new_array, char **arguments, char *str)
+static int	add_to_array(char **new_array, char **arguments, char *str)
 {
 	int	i;
 
@@ -47,7 +47,7 @@ static void	add_to_array(char **new_array, char **arguments, char *str)
 		{
 			new_array[i] = ft_strdup(arguments[i]);
 			if (!new_array[i])
-				free_array(new_array);
+				return (0);
 			i++;
 		}
 	}
@@ -55,10 +55,11 @@ static void	add_to_array(char **new_array, char **arguments, char *str)
 	{
 		new_array[i] = ft_strdup(str);
 		if (!new_array[i])
-			free_array(new_array);
+			return (0);
 		i++;
 	}
 	new_array[i] = NULL;
+	return (1);
 }
 
 char	**add_to_double_array(char **arguments, char *str)
@@ -79,8 +80,59 @@ char	**add_to_double_array(char **arguments, char *str)
 	new_array = malloc(sizeof(char *) * (size + 2));
 	if (!new_array)
 		return (NULL);
-	add_to_array(new_array, arguments, str);
+	if (add_to_array(new_array, arguments, str) == 0)
+	{
+		free_array(new_array);
+		return (NULL);
+	}
 	if (arguments)
 		free_array(arguments);
 	return (new_array);
+}
+
+int	create_redir_in(t_cmd *cmd, char *result, t_redir_type redir_type, t_type token_type)
+{
+	t_redir_in	*new_node;
+	t_redir_in	*current;
+
+	new_node = create_in_node(cmd, result, redir_type, token_type);
+	if (!new_node)
+	{
+		printf("Failed to alloc memory in creating redirect_in node\n");
+		return (1);
+	}
+	if (!cmd->redir_in)
+		cmd->redir_in = new_node;
+	else
+	{
+		current = cmd->redir_in;
+		while (current->next)
+			current = current->next;
+		current->next = new_node;
+	}
+	return (0);
+}
+
+int	create_redir_out(t_cmd *cmd, char *result, t_redir_type redir_type)
+{
+	t_redir_out *new_node;
+	t_redir_out *current;
+
+	new_node = create_out_node(cmd, result, redir_type);
+	if (!new_node)
+	{
+		// Perror?
+		printf("Failed to alloc memory in creating redirection_out node\n");
+		return (1);
+	}
+	if (!cmd->redir_out)
+		cmd->redir_out = new_node;
+	else
+	{
+		current = cmd->redir_out;
+		while (current->next)
+			current = current->next;
+		current->next = new_node;
+	}
+	return (0);
 }

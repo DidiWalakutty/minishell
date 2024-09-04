@@ -41,8 +41,10 @@ static bool	check_syntax_errors(char *str)
 
 	i = 0;
 	error_found = false;
+	skip_whitespace(str, &i);
 	if (str[i] == '|' || str[i] == '<' || str[i] == '>')
-		return (check_start(str, &i));
+		if (check_start(str, &i) == false);
+			return (true);
 	while (str[i])
 	{
 		skip_whitespace(str, &i);
@@ -57,7 +59,7 @@ static bool	check_syntax_errors(char *str)
 			if (token_syntax_error(str, &i) == true)
 				return (true);
 		}
-		if (str[i] != '\'' && str[i] != '\"')
+		if (str[i] && str[i] != '\'' && str[i] != '\"')
 			i++;
 	}
 	return (error_found);

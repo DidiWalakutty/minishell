@@ -98,12 +98,14 @@ typedef struct s_cmd_var
 	char	**arguments;
 }	t_cmd_v;
 
-// typedef enum s_redir_type
-// {
-// 	UNCLEAR,
-// 	RED_IN,
-// 	RED_OUT
-// }	t_redir_type;
+typedef enum s_redir_type
+{
+	UNCLEAR,
+	RED_IN,
+	RED_OUT,
+	HEREDOC,
+	APPENDING,
+}	t_redir_type;
 
 // //"echo hoi > file1 doei" file1 should have 'hoi doei'
 // // so there's remainder for.
@@ -214,6 +216,7 @@ int		concatenate_quotes(t_token *node);
 // Utils - Expanding
 char	*copy_env_input(char **env, char *to_find);
 int		if_valid_char(char c);
+bool	a_redirection(t_type type);
 void	expand_node(t_token *node, t_dollar *var);
 bool	quote_type_present(t_token *node);
 int		concatenate_quotes(t_token *list);
@@ -221,21 +224,23 @@ bool	spaces_present(t_token *node);
 int		remove_spaces(t_token *list);
 
 // Nodes
-t_token	*create_node(char *str, t_type type);
-void	node_to_list(t_token **list, t_token *new);
+t_token		*create_node(char *str, t_type type);
+void		node_to_list(t_token **list, t_token *new);
+int			create_redir_in(t_cmd *cmd, char *result, t_redir_type redir_type, t_type token_type);
+int			create_redir_out(t_cmd *cmd, char *result, t_redir_type redir_type);
+t_redir_in	*create_in_node(t_cmd *cmd, char *str, t_redir_type redir_type, t_type token_type);
+t_redir_out	*create_out_node(t_cmd *cmd, char *str, t_redir_type redir_type);
 
 // Commands (Didi's Part)
 t_cmd	*build_commands(t_token *nodes, t_data *data);
 t_cmd	*merge_commands(t_token *tokens, t_data *data);
 void	set_command(t_token **token, t_cmd **commands, t_cmd_v **var);
-int		handle_redirect(t_token **token, t_cmd **command, t_data *data);
+int		handle_redirect(t_token **token, t_cmd **command);
 
 // Commands - Utils (Didi's Part)
-t_redir_in	*init_temp_in(void);
-t_redir_out	*init_temp_out(void);
+void	init_redirects(t_cmd *cmd);
 t_cmd_v		*init_tracker(void);
 t_cmd		*init_cmds(void);
-bool	a_redirection(t_type type);
 int		not_just_spaces(t_token *nodes);
 char	**add_to_double_array(char **arguments, char *str);
 

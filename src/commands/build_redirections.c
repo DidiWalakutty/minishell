@@ -25,64 +25,67 @@ static t_redir_type	set_type(t_type type, t_cmd *command)
 	t_redir_type	redir_type;
 
 	redir_type = UNCLEAR;
-	command->redir->heredoc = false;
-	command->redir->append = false;
-	if (type == REDIR_IN || type == HERE_DOC)
-	{
+	if (type == REDIR_IN)
 		redir_type = RED_IN;
-		if (type == HERE_DOC)
-			command->redir->heredoc = true;
-	}
-	else if (type == REDIR_OUT || type == APPEND)
-	{
+	else if (type == REDIR_OUT)
 		redir_type = RED_OUT;
-		if (type == APPEND)
-			command->redir->append = true;
-	}
+	else if (type == HERE_DOC)
+		redir_type = HEREDOC;
+	else if (type == APPEND)
+		redir_type = APPENDING;
 	return (redir_type);
 }
 
-static char	*get_filename(t_token **token, t_type type, bool *quotes)
+static void	get_filename(t_token *token, t_cmd *cmd, t_redir_type type)
 {
-	char	*result;
-
+	char		*result;
+	// t_redir_in	*new_in;
+	// t_redir_out	*new_out;
+	
 	result = NULL;
-	if (type == WORD || type == SINGLE_QUOTE || type == DOUBLE_QUOTE)
+	if (token->type == WORD || token->type == SINGLE_QUOTE || token->type == DOUBLE_QUOTE)
 	{
-		result = ft_strdup((*token)->str);
-		if (type == SINGLE_QUOTE || type == DOUBLE_QUOTE)
-			*quotes = true;
+		result = ft_strdup(token->str);
+		if (!result)
+		{
+			// Perror?
+			printf("Couldn't allocate filename"); 
+		}
+		if (type == RED_IN || type == HERE_DOC)
+		{
+			if (create_redir_in(cmd, result, type, token->type) != 0)
+				printf("Failed to append input redirection\n");
+		}
+		else if (type == RED_OUT || type == APPENDING)
+		{
+			if (create_redir_out(cmd, result, type) != 0)
+				printf("Failed to append output redirection\n");
+		}
+		free(result);
 	}
-	return (result);
 }
 
-int	handle_redirect(t_token **token, t_cmd **command, t_data *data)
+int	handle_redirect(t_token **token, t_cmd **command)
 {
-	t_cmd		*cmd;
-	t_redir_in	*temp_in;
-	t_redir_out	*temp_out;
+	t_cmd			*cmd;
+	t_redir_type	type;
 
 	cmd = *command;
-	temp_in = cmd->redir_in;
-	temp_out = cmd->redir_out;
-	init_temp_in();
-	init_temp_out();
-	while (*token)
+	if (*token)
 	{
 		if (a_redirection((*token)->type))
 		{
-			// handle_in
-			// handle_out
-			cmd->redir->type = set_type((*token)->type, cmd);
+			type = set_type((*token)->type, cmd);
 			(*token) = (*token)->next;
-			{
-				cmd->redir->filename = get_filename(token, (*token)->type, \
-				&(cmd->redir->quotes));
-			}
+			get_filename(*token, cmd, type);
 		}
-		(*token) = (*token)->next;
+		else
+		{
+			printf("Error: expected a filename after redirection\n");
+			return (0);
+		}
 	}
-	if (!token || !cmd->redir->filename)
-		return (0);
+	// if (!token || !cmd->redir->filename)
+	// 	return (0);
 	return (1);
 }

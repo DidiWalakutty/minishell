@@ -12,6 +12,47 @@
 
 #include "minishell.h"
 
+t_redir_in	*create_in_node(t_cmd *cmd, char *str, t_redir_type redir_type, t_type token_type)
+{
+	t_redir_in	*new_node;
+
+	new_node = malloc(sizeof(t_redir_in));
+	if (!new_node)
+		return (NULL);
+	if (str)
+		new_node->str = ft_strdup(str);
+	if (!new_node->str)
+		return (NULL);
+	if (redir_type == HERE_DOC)
+		new_node->heredoc = true;
+	else
+		new_node->heredoc = false;
+	if (token_type == SINGLE_QUOTE || token_type == DOUBLE_QUOTE)
+		new_node->quotes = true;
+	else
+		new_node->quotes = false;
+	new_node->next = NULL;
+	return (new_node);
+}
+t_redir_out	*create_out_node(t_cmd *cmd, char *str, t_redir_type redir_type)
+{
+	t_redir_out	*new_node;
+
+	new_node = malloc(sizeof(t_redir_out));
+	if (!new_node)
+		return (NULL);
+	if (str)
+		new_node->str = ft_strdup(str);
+	if (!new_node->str)
+		return (NULL);
+	if (redir_type == APPENDING)
+		new_node->append = true;
+	else
+		new_node->append = false;
+	new_node->next = NULL;
+	return (new_node);
+}
+
 t_token	*last_token(t_token *head)
 {
 	if (head == NULL)

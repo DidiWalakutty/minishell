@@ -55,30 +55,36 @@ int	add_one_token(char *str, int i, t_data *data, t_token **list)
 	return (i + 1);
 }
 
-bool	check_start(char *str, int *i)
+bool	check_start(char *str, int *j)
 {
-	if (str[*i] == '|')
+	int i;
+
+	i = *j;
+	if (str[i] == '|')
 	{
-		if (str[*i + 1] == '|')
-			return (error_msg("syntax error near unexpected token", \
-					str[*i], str[*i + 1]));
-		else
-			return (error_msg("syntax error near unexpected token", \
-					str[*i], '\0'));
+		return (error_msg("syntax error near unexpected token", \
+				str[i], '\0'));
 	}
 	else
 	{
-		if (str[*i + 1] == str[*i])
+		// Need to check <|, >|, and error message for >> and <<
+		if (str[i] == str[i + 1])
 		{
-			if (str[*i] == '\0')
-			{
-				printf("syntax error near ");
-				return (error_msg("unexpected token `newline'", '\0', '\0'));
-			}
+			i += 2;
+			skip_whitespace(str, &i);
+			if (str[i] == '|')
+				return (error_msg("syntax error near unexpected token", \
+						'|', '\0'));
+			else if (str[i] == '\0')
+				return (error_msg("syntax error near unexpected token", 'n', '\0'));
 		}
 		else
+		{
+			i++;
+			if (str[i] == '\0')
 			return (error_msg("syntax error near unexpected token `newline'", \
 					'\0', '\0'));
+		}
 	}
-	return (true);
+	return (false);
 }
