@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:42:29 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/23 16:47:15 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/05 17:19:35 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static bool	check_syntax_errors(char *str)
 	error_found = false;
 	skip_whitespace(str, &i);
 	if (str[i] == '|' || str[i] == '<' || str[i] == '>')
-		if (check_start(str, &i) == false);
+		if (check_start(str, &i) == false)
 			return (true);
 	while (str[i])
 	{

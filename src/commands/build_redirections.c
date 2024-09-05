@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/08/23 13:07:59 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/23 18:01:50 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/05 16:03:43 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,10 @@ static t_redir_type	set_type(t_type type, t_cmd *command)
 static void	get_filename(t_token *token, t_cmd *cmd, t_redir_type type)
 {
 	char		*result;
-	// t_redir_in	*new_in;
-	// t_redir_out	*new_out;
-	
+
 	result = NULL;
-	if (token->type == WORD || token->type == SINGLE_QUOTE || token->type == DOUBLE_QUOTE)
+	if (token->type == WORD || token->type == SINGLE_QUOTE || \
+		token->type == DOUBLE_QUOTE)
 	{
 		result = ft_strdup(token->str);
 		if (!result)

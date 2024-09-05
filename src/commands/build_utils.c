@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/08/22 18:14:21 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/23 13:12:47 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/05 14:33:19 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,8 +115,8 @@ int	create_redir_in(t_cmd *cmd, char *result, t_redir_type redir_type, t_type to
 
 int	create_redir_out(t_cmd *cmd, char *result, t_redir_type redir_type)
 {
-	t_redir_out *new_node;
-	t_redir_out *current;
+	t_redir_out	*new_node;
+	t_redir_out	*current;
 
 	new_node = create_out_node(cmd, result, redir_type);
 	if (!new_node)

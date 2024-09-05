@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:40:07 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/16 20:34:01 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/05 19:55:52 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,28 @@ int	main(int argc, char **argv, char **env)
 		if (input != NULL)
 			add_history(data->input);
 		tokenizer_and_parser(data);
+		t_cmd *current_cmd = data->cmd_process;
+		int i = 0;
+		int j = 0;
+		while (current_cmd)
+		{
+			printf("!!!next command!!!\n");
+			printf("command - %i: %s\n", i, current_cmd->command);
+
+			j = 0;
+			while (current_cmd->args && current_cmd->args[j])
+			{
+				printf("command->args[%i]: %s\n", j, current_cmd->args[j]);
+				j++;
+			}
+			// while (current_cmd->redir_in)
+			// {
+			// 	int x = 0;
+			// 	printf("command->redir-in: %s\n", )
+			// }
+			current_cmd = current_cmd->next;
+			i++;
+		}
 		// Following two lines will be execute() in the future
 		//  data->cmd_process = make_cmd_nodes(data);
 		//  data->exit_status = make_processes(data);

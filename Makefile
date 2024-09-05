@@ -18,6 +18,7 @@ IFLAGS	= -I includes -I $(HOME)/.brew/Cellar/readline/8.2.1/include
 SRC =	./src/main.c \
 				./src/environment/env.c \
 				./src/nodes/nodes.c \
+				./src/nodes/command_nodes.c \
 				./src/utils/free_and_error.c\
 				./src/utils/utils.c \
 				./src/tokenize/lexer.c \
@@ -37,7 +38,7 @@ SRC =	./src/main.c \
 				./src/commands/build_commands.c \
 				./src/commands/build_redirections.c \
 				./src/commands/build_utils.c \
-				./src/commands/build_inits.c
+				./src/commands/build_inits_and_nodes.c
 
 # Object files and directories
 # obj folder in src?: src/obj 
