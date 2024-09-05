@@ -6,13 +6,29 @@
 /*   By: sreerink <sreerink@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2024/09/02 21:44:34 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/09/04 20:41:10 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/09/05 21:32:35 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-bool	heredoc(t_cmd *cmd)
+static bool	redirect_heredoc(int pipe_hdoc[2], bool redirect)
+{
+	if (redirect)
+	{
+		if (!redirect_fd(pipe_hdoc[0], STDIN_FILENO))
+		{
+			close(pipe_hdoc[1]);
+			return (false);
+		}
+	}
+	else
+		close(pipe_hdoc[0]);
+	close(pipe_hdoc[1]);
+	return (true);
+}
+
+bool	heredoc(t_cmd *cmd, bool redirect)
 {
 	int		pipe_hdoc[2];
 	char	*input;
@@ -27,12 +43,8 @@ bool	heredoc(t_cmd *cmd)
 		free(input);
 		input = readline("> ");
 	}
-	if (!redirect_fd(pipe_hdoc[0], STDIN_FILENO))
-	{
-		close(pipe_hdoc[1]);
+	if (!redirect_heredoc(pipe_hdoc, redirect))
 		return (false);
-	}
-	close(pipe_hdoc[1]);
 	if (!input)
 		return (false);
 	free(input);

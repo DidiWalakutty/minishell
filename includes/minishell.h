@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/20 16:38:50 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/04 18:51:47 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/09/05 21:30:24 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,7 +201,7 @@ t_cmd	*make_cmd_nodes(t_data *data);
 
 // Redirecting
 bool	redirect_fd(int fd, int fd_dst);
-bool	heredoc(t_cmd *cmd);
+bool	heredoc(t_cmd *cmd, bool redirect);
 
 // Executing
 void	error_exit(const char *msg, int status);
