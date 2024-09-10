@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:42:29 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/10 13:03:28 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/10 15:48:36 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,19 +28,6 @@ int	tokenize_and_expand(t_data *data)
 	return (0);
 }
 
-static int	add_space(char *str, int i, t_token **list)
-{
-	t_token	*new;
-	char	*line;
-
-	line = ft_strdup(" ");
-	new = create_node(line, SEPARATOR);
-	node_to_list(list, new);
-	while (iswhitespace(str[i]))
-		i++;
-	return (i);
-}
-
 // Tokenizes input into nodes.
 // currently iterates beyond the \0.
 t_token	*tokenize_input(t_data *data, char *str)
@@ -50,8 +37,6 @@ t_token	*tokenize_input(t_data *data, char *str)
 
 	i = 0;
 	list = NULL;
-	if (!str)
-		return (create_node(NULL, EMPTY));
 	while (iswhitespace(str[i]))
 		i++;
 	while (str[i])

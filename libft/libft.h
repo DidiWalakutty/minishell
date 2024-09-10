@@ -18,6 +18,7 @@
 # include <stddef.h>
 # include <stdarg.h>
 # include <stdbool.h>
+# include "../includes/minishell.h"
 
 // libft
 size_t	ft_strlen(const char *s);

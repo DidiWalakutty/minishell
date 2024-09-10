@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/08/22 18:14:21 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/05 14:33:19 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/10 15:42:54 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,9 +77,7 @@ char	**add_to_double_array(char **arguments, char *str)
 		while (arguments[size])
 			size++;
 	}
-	new_array = malloc(sizeof(char *) * (size + 2));
-	if (!new_array)
-		return (NULL);
+	new_array = mem_check(malloc(sizeof(char *) * (size + 2)));
 	if (add_to_array(new_array, arguments, str) == 0)
 	{
 		free_array(new_array);
@@ -90,17 +88,13 @@ char	**add_to_double_array(char **arguments, char *str)
 	return (new_array);
 }
 
-int	create_redir_in(t_cmd *cmd, char *result, t_redir_type redir_type, t_type token_type)
+int	create_redir_in(t_cmd *cmd, char *result, t_redir_type redir_type, \
+					t_type token_type)
 {
-	t_redir_in	*new_node;
-	t_redir_in	*current;
+	t_redin	*new_node;
+	t_redin	*current;
 
 	new_node = create_in_node(cmd, result, redir_type, token_type);
-	if (!new_node)
-	{
-		printf("Failed to alloc memory in creating redirect_in node\n");
-		return (1);
-	}
 	if (!cmd->redir_in)
 		cmd->redir_in = new_node;
 	else
@@ -115,16 +109,10 @@ int	create_redir_in(t_cmd *cmd, char *result, t_redir_type redir_type, t_type to
 
 int	create_redir_out(t_cmd *cmd, char *result, t_redir_type redir_type)
 {
-	t_redir_out	*new_node;
-	t_redir_out	*current;
+	t_redou	*new_node;
+	t_redou	*current;
 
 	new_node = create_out_node(cmd, result, redir_type);
-	if (!new_node)
-	{
-		// Perror?
-		printf("Failed to alloc memory in creating redirection_out node\n");
-		return (1);
-	}
 	if (!cmd->redir_out)
 		cmd->redir_out = new_node;
 	else

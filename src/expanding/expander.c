@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:36:22 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/06 15:33:47 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/10 15:43:32 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ t_expand	*init_info(t_token *list)
 {
 	t_expand	*info;
 
-	info = malloc(sizeof(t_expand));
+	info = mem_check(malloc(sizeof(t_expand)));
 	info->head = list;
 	return (info);
 }
@@ -57,4 +57,3 @@ void	expand_input(t_data *data, t_token *node, char **env)
 	node = info->head;
 	free(info);
 }
-

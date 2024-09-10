@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/08/23 13:07:59 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/06 14:49:06 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/10 15:42:32 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,21 +45,10 @@ static void	get_filename(t_token *token, t_cmd *cmd, t_redir_type type)
 		token->type == DOUBLE_QUOTE)
 	{
 		result = ft_strdup(token->str);
-		if (!result)
-		{
-			// Perror?
-			printf("Couldn't allocate filename"); 
-		}
 		if (type == RED_IN || type == HEREDOC)
-		{
-			if (create_redir_in(cmd, result, type, token->type) != 0)
-				printf("Failed to append input redirection\n");
-		}
+			create_redir_in(cmd, result, type, token->type);
 		else if (type == RED_OUT || type == APPENDING)
-		{
-			if (create_redir_out(cmd, result, type) != 0)
-				printf("Failed to append output redirection\n");
-		}
+			create_redir_out(cmd, result, type);
 		free(result);
 	}
 }
@@ -84,7 +73,5 @@ int	handle_redirect(t_token **token, t_cmd **command)
 			return (0);
 		}
 	}
-	// if (!token || !cmd->redir->filename)
-	// 	return (0);
 	return (1);
 }

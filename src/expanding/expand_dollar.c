@@ -29,7 +29,7 @@ static t_dollar	*init_dollar(t_token *node)
 {
 	t_dollar	*dollar;
 
-	dollar = malloc(sizeof(t_dollar));
+	dollar = mem_check(malloc(sizeof(t_dollar)));
 	dollar->expanded = NULL;
 	dollar->env_name = NULL;
 	dollar->str_len = ft_strlen(node->str);

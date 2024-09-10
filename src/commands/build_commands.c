@@ -6,32 +6,11 @@
 /*   By: diwalaku <diwalaku@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/08/22 18:14:06 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/10 12:50:22 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/10 15:58:31 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static t_cmd	*last_list_command(t_cmd *list)
-{
-	if (list == NULL)
-		return (NULL);
-	while (list->next)
-		list = list->next;
-	return (list);
-}
-
-void	push_to_cmd_list(t_cmd **list, t_cmd *new)
-{
-	t_cmd	*list_node;
-
-	if (*list == NULL)
-	{
-		*list = new;
-	}
-	list_node = last_list_command(*list);
-	list_node->next = new;
-}
 
 void	set_command_and_args(t_token **token, t_cmd **curr_cmd)
 {
@@ -58,7 +37,6 @@ void	set_command_and_args(t_token **token, t_cmd **curr_cmd)
 	}
 }
 
-// Need to push to list when another pipe is found or if we have no more tokens!
 t_cmd	*merge_commands(t_token *tokens, t_data *data)
 {
 	t_cmd	*command_list;
@@ -89,8 +67,6 @@ t_cmd	*build_commands(t_token *tokens, t_data *data)
 	if (tokens && not_just_spaces(tokens))
 	{
 		commands = merge_commands(tokens, data);
-		// if (!commands)
-			// printf("free things\n");
 		commands->env = data->env;
 	}
 	return (commands);

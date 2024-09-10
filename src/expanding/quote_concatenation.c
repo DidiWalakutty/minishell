@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/08/04 18:09:07 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/22 18:36:35 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/10 15:56:35 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,30 +64,6 @@ int	concatenate_quotes(t_token *list)
 		node = node->next;
 	}
 	return (0);
-}
-
-bool	spaces_present(t_token *node)
-{
-	while (node)
-	{
-		if (node->type == SEPARATOR)
-			return (true);
-		node = node->next;
-	}
-	return (false);
-}
-
-static int	count_tokens(t_token *nodes)
-{
-	int	i;
-
-	i = 0;
-	while (nodes)
-	{
-		nodes = nodes->next;
-		i++;
-	}
-	return (i);
 }
 
 int	remove_spaces(t_token *list)

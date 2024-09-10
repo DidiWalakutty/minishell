@@ -33,7 +33,7 @@ t_dollar	*init_double_dol(t_token *node)
 {
 	t_dollar	*double_dollar;
 
-	double_dollar = malloc(sizeof(t_dollar));
+	double_dollar = mem_check(malloc(sizeof(t_dollar)));
 	double_dollar->expanded = NULL;
 	double_dollar->end_var = 0;
 	double_dollar->str_len = ft_strlen(node->str);

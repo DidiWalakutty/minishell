@@ -6,19 +6,18 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/07/04 15:28:16 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/06 14:53:49 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/10 15:18:07 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_redir_in	*create_in_node(t_cmd *cmd, char *str, t_redir_type redir_type, t_type token_type)
+t_redin	*create_in_node(t_cmd *cmd, char *str, t_redir_type redir_type, \
+							t_type token_type)
 {
-	t_redir_in	*new_node;
+	t_redin	*new_node;
 
-	new_node = malloc(sizeof(t_redir_in));
-	if (!new_node)
-		return (NULL);
+	new_node = mem_check(malloc(sizeof(t_redin)));
 	if (str)
 		new_node->str = ft_strdup(str);
 	if (!new_node->str)
@@ -34,13 +33,12 @@ t_redir_in	*create_in_node(t_cmd *cmd, char *str, t_redir_type redir_type, t_typ
 	new_node->next = NULL;
 	return (new_node);
 }
-t_redir_out	*create_out_node(t_cmd *cmd, char *str, t_redir_type redir_type)
-{
-	t_redir_out	*new_node;
 
-	new_node = malloc(sizeof(t_redir_out));
-	if (!new_node)
-		return (NULL);
+t_redou	*create_out_node(t_cmd *cmd, char *str, t_redir_type redir_type)
+{
+	t_redou	*new_node;
+
+	new_node = mem_check(malloc(sizeof(t_redou)));
 	if (str)
 		new_node->str = ft_strdup(str);
 	if (!new_node->str)
@@ -66,9 +64,7 @@ t_token	*create_node(char *str, t_type type)
 {
 	t_token	*new_node;
 
-	new_node = malloc(sizeof(t_token));
-	if (!new_node)
-		return (NULL);
+	new_node = mem_check(malloc(sizeof(t_token)));
 	if (str)
 		new_node->str = str;
 	else

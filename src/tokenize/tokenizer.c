@@ -6,25 +6,11 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:43:34 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/22 18:36:35 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/10 14:45:21 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	quote_length(char *str, char c)
-{
-	int	i;
-
-	i = 0;
-	if (c == '\'' || c == '\"')
-	{
-		while (str[i] && str[i] != c)
-			i++;
-		return (i);
-	}
-	return (i);
-}
 
 // Add 2 for the opening and closing quote, remove 2 for line
 //  (we don't want to include the quotes).
@@ -122,5 +108,18 @@ int	add_word(char *str, int i, t_token **list)
 	new = create_node(line, WORD);
 	node_to_list(list, new);
 	i = len;
+	return (i);
+}
+
+int	add_space(char *str, int i, t_token **list)
+{
+	t_token	*new;
+	char	*line;
+
+	line = ft_strdup(" ");
+	new = create_node(line, SEPARATOR);
+	node_to_list(list, new);
+	while (iswhitespace(str[i]))
+		i++;
 	return (i);
 }

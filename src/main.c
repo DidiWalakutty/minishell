@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:40:07 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/10 12:53:52 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/10 15:07:50 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,8 @@ int	main(int argc, char **argv, char **env)
 		if (input != NULL)
 			add_history(data->input);
 		tokenize_and_expand(data);
-		// print_linked_list(data->list);
-		// print_commands(data->cmd_process);
+		print_linked_list(data->list);
+		print_commands(data->cmd_process);
 		// Following two lines will be execute() in the future
 		//  data->cmd_process = make_cmd_nodes(data);
 		//  data->exit_status = make_processes(data);

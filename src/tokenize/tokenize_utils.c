@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/07/04 15:38:34 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/06 15:56:57 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/10 15:48:46 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,3 +55,16 @@ int	add_one_token(char *str, int i, t_data *data, t_token **list)
 	return (i + 1);
 }
 
+int	quote_length(char *str, char c)
+{
+	int	i;
+
+	i = 0;
+	if (c == '\'' || c == '\"')
+	{
+		while (str[i] && str[i] != c)
+			i++;
+		return (i);
+	}
+	return (i);
+}

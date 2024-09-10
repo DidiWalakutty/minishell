@@ -33,16 +33,18 @@ char	*ft_strndup(const char *s1, int len)
 char	*ft_strdup(const char *s1)
 {
 	char	*str;
-	int		x;
+	int		len;
+	int		i;
 
-	x = 0;
-	str = (char *)malloc(sizeof(char) * ft_strlen(s1) + 1);
-	if (!str)
-		return (0);
+	if (!s1)
+		return (NULL);
+	i = 0;
+	len = ft_strlen(s1);
+	str = mem_check(malloc(sizeof(char) * (len + 1)));
 	while (*s1)
 	{
-		str[x++] = *s1++;
+		str[i++] = *s1++;
 	}
-	str[x] = '\0';
+	str[i] = '\0';
 	return (str);
 }

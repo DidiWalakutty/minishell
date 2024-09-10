@@ -6,30 +6,30 @@
 /*   By: diwalaku <diwalaku@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/06 14:11:29 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/06 17:34:10 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/10 15:18:07 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	print_redir_in(t_redir_in *redir)
+void	print_redin(t_redin *redir)
 {
 	int i = 0;
 	while (redir)
 	{
-		printf("- %i - string: %s\n", i, redir->str);
-		printf("Heredoc: %d - Quotes: %d\n", redir->heredoc, redir->quotes);
+		printf("- %i - String: %s\n", i, redir->str);
+		printf("      Heredoc: %d - Quotes: %d\n", redir->heredoc, redir->quotes);
 		redir = redir->next;
 	}
 }
 
-void	print_redir_out(t_redir_out *redir)
+void	print_redou(t_redou *redir)
 {
 	int i = 0;
 	while (redir)
 	{
-		printf("- %i - string: %s\n", i, redir->str);
-		printf("Append: %d\n\n", redir->append);
+		printf("- %i - String: %s\n", i, redir->str);
+		printf("      Append: %d\n\n", redir->append);
 		redir = redir->next;
 	}
 }
@@ -49,10 +49,11 @@ void	print_commands(t_cmd *cmd)
 		}
 		printf("____________________\n");
 		printf("- Redirect In: -\n");
-		print_redir_in(cmd->redir_in);
+		print_redin(cmd->redir_in);
+		printf("\n");
 		printf("____________________\n");
 		printf("- Redirect Out: -\n");
-		print_redir_out(cmd->redir_out);
+		print_redou(cmd->redir_out);
 		printf("\n---Next Command---\n\n");
 		cmd = cmd->next;
 	}

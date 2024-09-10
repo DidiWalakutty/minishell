@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/08/02 19:46:22 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/06 15:09:44 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/10 14:49:57 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ t_dollar	*init_exit_variables(t_token *node)
 {
 	t_dollar	*exit_var;
 
-	exit_var = malloc(sizeof(t_dollar));
+	exit_var = mem_check(malloc(sizeof(t_dollar)));
 	exit_var->expanded = NULL;
 	exit_var->end_var = 0;
 	exit_var->str_len = ft_strlen(node->str);
