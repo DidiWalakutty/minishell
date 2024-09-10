@@ -12,12 +12,13 @@
 
 #include "minishell.h"
 
-bool	is_double_dollar(t_token *node)
+bool	is_double_dollar(t_token *node, bool heredoc)
 {
 	int	i;
 
 	i = 0;
-	if (node->type != WORD && node->type != DOUBLE_QUOTE)
+	if (node->type != WORD && node->type != DOUBLE_QUOTE || \
+		heredoc == true)
 		return (false);
 	while (node->str[i])
 	{

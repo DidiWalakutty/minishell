@@ -39,7 +39,6 @@ typedef struct s_redir_out	t_redir_out;
 typedef struct s_token		t_token;
 typedef struct s_data		t_data;
 
-// define the tokens we'll need for now.
 typedef enum s_type
 {
 	EMPTY,
@@ -52,18 +51,11 @@ typedef enum s_type
 	APPEND,			// >> append
 	DOUBLE_QUOTE,	// "  double qyote = expandable
 	SINGLE_QUOTE,	// '  single quote
-	DOLLAR,			// $ dollar = do it during expanding
 }	t_type;
 
 typedef struct s_expand
 {
-	int		char_pos;
-	int		strlen;
-	int		node_i;		// node iterator.
-	int		heredoc_pos;
-	bool	expandable;
 	t_token	*head;
-	t_type	prev_type;
 }	t_expand;
 
 typedef struct s_dollar
@@ -126,6 +118,7 @@ typedef struct s_cmd
 {
 	char		*command;
 	char		**args;
+	char		**env;
 	t_type		type;
 	t_redir_in	*redir_in;
 	t_redir_out	*redir_out;
@@ -158,7 +151,8 @@ typedef struct s_data
 char	**copy_env(char **env);
 
 // Lexer
-int		tokenizer_and_parser(t_data *data);
+int		tokenize_and_expand(t_data *data);
+bool	check_syntax_errors(char *str);
 bool	all_quotes_closed(char *str);
 bool	skip_quotedstring(char *str, int *i);
 t_token	*tokenize_input(t_data *data, char *str);
@@ -176,15 +170,15 @@ bool	one_of_tokens(char c);
 void	skip_to_token(char *str, int *i);
 void	skip_whitespace(char *str, int *i);
 int		quote_length(char *str, char c);
-bool	check_start(char *str, int *i);
+bool	check_start(char *str, int *j, bool *error_found);
 
 // Expanding
 bool	check_null(t_token **node);
-bool	is_exit_status(t_token *node);
+bool	is_exit_status(t_token *node, bool heredoc);
 int		set_exit_status(t_data *data, t_token *node, t_expand *info);
-bool	is_double_dollar(t_token *node);
+bool	is_double_dollar(t_token *node, bool heredoc);
 int		set_pid(t_token *node, t_expand *info);
-bool	is_dollar(t_token *node);
+bool	is_dollar(t_token *node, bool heredoc);
 int		set_dollar(t_token *node, char **env, t_expand *info);
 bool	quote_type_present(t_token *node);
 int		concatenate_quotes(t_token *node);
@@ -239,6 +233,9 @@ t_token	*last_token(t_token *list);
 const char	*type_to_string(t_type type);
 void	print_linked_list(t_token *head);
 void	print_env(char **env);
+void	print_commands(t_cmd *cmd);
+void	print_redir_out(t_redir_out *redir);
+void	print_redir_in(t_redir_in *redir);
 
 // Parsing
 t_cmd	*make_cmd_nodes(t_data *data);

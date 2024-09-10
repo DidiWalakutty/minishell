@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/08/02 19:46:22 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/22 18:36:35 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/06 15:09:44 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,13 @@ bool	check_null(t_token **node)
 	return (false);
 }
 
-bool	is_exit_status(t_token *node)
+bool	is_exit_status(t_token *node, bool heredoc)
 {
 	int	i;
 
 	i = 0;
-	if (node->type != WORD && node->type != DOUBLE_QUOTE)
+	if (node->type != WORD && node->type != DOUBLE_QUOTE || \
+		heredoc == true)
 		return (false);
 	while (node->str[i])
 	{

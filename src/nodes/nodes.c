@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/07/04 15:28:16 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/22 18:36:35 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/06 14:53:49 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ t_redir_in	*create_in_node(t_cmd *cmd, char *str, t_redir_type redir_type, t_typ
 		new_node->str = ft_strdup(str);
 	if (!new_node->str)
 		return (NULL);
-	if (redir_type == HERE_DOC)
+	if (redir_type == HEREDOC)
 		new_node->heredoc = true;
 	else
 		new_node->heredoc = false;

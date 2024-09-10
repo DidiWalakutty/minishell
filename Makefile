@@ -21,6 +21,8 @@ SRC =	./src/main.c \
 				./src/nodes/command_nodes.c \
 				./src/utils/free_and_error.c\
 				./src/utils/utils.c \
+				./src/utils/testing.c \
+				./src/utils/syntax_check.c \
 				./src/tokenize/lexer.c \
 				./src/tokenize/quotes.c \
 				./src/tokenize/tokenize_utils.c \

@@ -12,11 +12,12 @@
 
 #include "minishell.h"
 
-bool	is_dollar(t_token *node)
+bool	is_dollar(t_token *node, bool heredoc)
 {
 	char	*copy;
 
-	if (node->type != WORD && node->type != DOUBLE_QUOTE)
+	if (node->type != WORD && node->type != DOUBLE_QUOTE || \
+		heredoc == true)
 		return (false);
 	copy = ft_strchr(node->str, '$');
 	if (!copy)

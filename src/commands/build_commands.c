@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/08/22 18:14:06 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/05 19:49:41 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/10 12:50:22 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,12 +49,8 @@ void	set_command_and_args(t_token **token, t_cmd **curr_cmd)
 	{
 		if ((*token)->type == PIPE)
 		{
-			// if ((*token)->next == NULL)
-			// 	(*curr_cmd)->args = add_to_double_array((*curr_cmd)->args, \
-			// 					(*token)->str);
 			(*curr_cmd)->next = init_cmds();
 			(*curr_cmd) = (*curr_cmd)->next;
-
 		}
 		else
 			(*curr_cmd)->args = add_to_double_array((*curr_cmd)->args, \
@@ -69,7 +65,6 @@ t_cmd	*merge_commands(t_token *tokens, t_data *data)
 	t_cmd	*current_cmd;
 
 	command_list = init_cmds();
-	// if (!command_list)
 	current_cmd = command_list;
 	init_redirects(current_cmd);
 	while (tokens)
@@ -83,25 +78,6 @@ t_cmd	*merge_commands(t_token *tokens, t_data *data)
 			set_command_and_args(&tokens, &current_cmd);
 		tokens = tokens->next;
 	}
-	// if (current_cmd->command || current_cmd->args)
-	// 	push_to_cmd_list(&command_list, new_cmd_node(current_cmd));
-	// handle last command?
-	// int i = 0;
-	// while (current_cmd->redir_in)
-	// {
-	// 	printf("Input Redirection: %s\n", current_cmd->redir_in->str);
-	// 	current_cmd->redir_in = current_cmd->redir_in->next;
-	// }
-	// while (current_cmd->redir_out)
-	// {
-	// 	printf("Output Redirection: %s\n", current_cmd->redir_out->str);
-	// 	current_cmd->redir_out = current_cmd->redir_out->next;
-	// }
-	// while (current_cmd->args[i])
-	// {
-	// 	printf("%s\n", current_cmd->args[i]);
-	// 	i++;
-	// }
 	return (command_list);
 }
 
@@ -115,7 +91,7 @@ t_cmd	*build_commands(t_token *tokens, t_data *data)
 		commands = merge_commands(tokens, data);
 		// if (!commands)
 			// printf("free things\n");
-		// handle_them
+		commands->env = data->env;
 	}
 	return (commands);
 }

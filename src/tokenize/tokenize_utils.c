@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/07/04 15:38:34 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/22 18:36:35 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/06 15:56:57 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,36 +55,3 @@ int	add_one_token(char *str, int i, t_data *data, t_token **list)
 	return (i + 1);
 }
 
-bool	check_start(char *str, int *j)
-{
-	int i;
-
-	i = *j;
-	if (str[i] == '|')
-	{
-		return (error_msg("syntax error near unexpected token", \
-				str[i], '\0'));
-	}
-	else
-	{
-		// Need to check <|, >|, and error message for >> and <<
-		if (str[i] == str[i + 1])
-		{
-			i += 2;
-			skip_whitespace(str, &i);
-			if (str[i] == '|')
-				return (error_msg("syntax error near unexpected token", \
-						'|', '\0'));
-			else if (str[i] == '\0')
-				return (error_msg("syntax error near unexpected token", 'n', '\0'));
-		}
-		else
-		{
-			i++;
-			if (str[i] == '\0')
-			return (error_msg("syntax error near unexpected token `newline'", \
-					'\0', '\0'));
-		}
-	}
-	return (false);
-}

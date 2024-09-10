@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/08/23 13:07:59 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/05 16:03:43 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/06 14:49:06 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static void	get_filename(t_token *token, t_cmd *cmd, t_redir_type type)
 			// Perror?
 			printf("Couldn't allocate filename"); 
 		}
-		if (type == RED_IN || type == HERE_DOC)
+		if (type == RED_IN || type == HEREDOC)
 		{
 			if (create_redir_in(cmd, result, type, token->type) != 0)
 				printf("Failed to append input redirection\n");
