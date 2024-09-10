@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/08/22 18:14:06 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/10 16:34:09 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/10 20:22:22 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,10 @@ static void	set_command_and_args(t_token **token, t_cmd **curr_cmd)
 	{
 		if ((*token)->type == PIPE)
 		{
+			(*curr_cmd)->pipe_out = true;
 			(*curr_cmd)->next = init_cmds();
 			(*curr_cmd) = (*curr_cmd)->next;
+			(*curr_cmd)->pipe_in = true;
 		}
 		else
 			(*curr_cmd)->args = add_to_double_array((*curr_cmd)->args, \
@@ -64,7 +66,7 @@ t_cmd	*build_commands(t_token *tokens, t_data *data)
 	t_cmd		*commands;
 
 	commands = NULL;
-	if (tokens && not_just_spaces(tokens))
+	if (tokens && not_just_spaces(tokens) && empty_words(tokens))
 	{
 		commands = merge_commands(tokens, data);
 		commands->env = data->env;

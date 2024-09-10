@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:40:07 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/10 16:39:16 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/10 18:04:27 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,3 +69,4 @@ int	main(int argc, char **argv, char **env)
 	}
 	return (0);
 }
+

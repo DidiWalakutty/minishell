@@ -30,6 +30,7 @@
 # define SHELL_NAME "Minishell$ " // which name, colors?
 
 typedef enum s_type			t_type;
+typedef struct s_here_dol	t_heredol;
 typedef struct s_list		t_list;
 typedef struct s_redir		t_redir;
 typedef struct s_cmd		t_cmd;
@@ -53,6 +54,18 @@ typedef enum s_type
 	HERE_DOC,		// << heredoc
 	APPEND,			// >> append
 }	t_type;
+
+typedef struct s_here_dol
+{
+	char	*expanded;	// expanded env-variable
+	char	*env_name;	// env-name
+	int		i;
+	int		start_env;
+	int		end_var;
+	bool	brackets;	// check for brackets
+	bool	quotes;		// check for quotes
+	char	quote_type;	// s_q or d_q
+}	t_here_dol;
 
 typedef struct s_expand
 {
@@ -101,6 +114,8 @@ typedef struct s_cmd
 	char		**env;
 	t_redin		*redir_in;
 	t_redou		*redir_out;
+	bool		pipe_in;
+	bool		pipe_out;
 	t_cmd		*next;
 }	t_cmd;
 
@@ -185,6 +200,7 @@ void	expand_node(t_token *node, t_dollar *var);
 bool	quote_type_present(t_token *node);
 int		concatenate_quotes(t_token *list);
 int		not_just_spaces(t_token *nodes);
+int		empty_words(t_token *nodes);
 int		remove_spaces(t_token *list);
 void	init_redirects(t_cmd *cmd);
 bool	a_redirection(t_type type);
