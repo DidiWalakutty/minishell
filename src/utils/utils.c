@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/07/04 17:06:02 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/10 14:08:57 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/10 16:39:22 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,4 +26,16 @@ void	*mem_check(void *pointer)
 	else
 		error_exit("Error", EXIT_FAILURE);
 	return (NULL);
+}
+
+void	error_exit(const char *msg, int status)
+{
+	if (status == 127)
+	{
+		write(STDERR_FILENO, msg, ft_strlen(msg));
+		write(STDERR_FILENO, ": command not found\n", 20);
+	}
+	else if (msg)
+		perror(msg);
+	exit(status);
 }

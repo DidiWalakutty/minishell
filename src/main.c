@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:40:07 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/10 15:07:50 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/10 16:39:16 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,19 +18,6 @@
 // Sets all variables to NULL.
 // Termcaps???
 // process al op 1 ivm child
-
-void	error_exit(const char *msg, int status)
-{
-	if (status == 127)
-	{
-		write(STDERR_FILENO, msg, ft_strlen(msg));
-		write(STDERR_FILENO, ": command not found\n", 20);
-	}
-	else if (msg)
-		perror(msg);
-	exit(status);
-}
-
 static t_data	*init_shell(char **env_copy)
 {
 	t_data	*data;

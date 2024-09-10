@@ -39,18 +39,19 @@ typedef struct s_redir_out	t_redou;
 typedef struct s_token		t_token;
 typedef struct s_data		t_data;
 
+
 typedef enum s_type
 {
 	EMPTY,
-	SEPARATOR,		// spaces, ' ' used for parsing only.
-	WORD,			// Word
-	PIPE,			// |  pipe
+	SEPARATOR,
+	WORD,
+	PIPE,
+	DOUBLE_QUOTE,
+	SINGLE_QUOTE,
 	REDIR_IN,		// <  in
 	REDIR_OUT,		// >  out
 	HERE_DOC,		// << heredoc
 	APPEND,			// >> append
-	DOUBLE_QUOTE,	// "  double qyote = expandable
-	SINGLE_QUOTE,	// '  single quote
 }	t_type;
 
 typedef struct s_expand
@@ -62,33 +63,12 @@ typedef struct s_dollar
 {
 	char	*expanded;
 	char	*env_name;
-	int		i;					// Position in string.
-	int		str_len;			// Length of full node->str.
-	int		start_env;			// Position after $ and/or ${.
-	int		end_var;			// Position where env-name ends.
-	bool	brackets;			// In case of ${}
+	int		i;
+	int		str_len;
+	int		start_env;
+	int		end_var;
+	bool	brackets;
 }	t_dollar;
-
-// word: 	a pointer to the string stored in a node
-// len: 	the content length
-// type: 	the content token
-typedef enum s_builtin
-{
-	NO_BUILTIN,
-	CD,
-	EXPORT,
-	UNSET,
-	EXIT,
-	ECHO,
-	PWD,
-	ENV,
-}	t_builtin;
-
-typedef struct s_cmd_var
-{
-	char	*command;
-	char	**arguments;
-}	t_cmd_v;
 
 typedef enum s_redir_type
 {
@@ -119,7 +99,6 @@ typedef struct s_cmd
 	char		*command;
 	char		**args;
 	char		**env;
-	t_type		type;
 	t_redin		*redir_in;
 	t_redou		*redir_out;
 	t_cmd		*next;
@@ -185,7 +164,6 @@ int		concatenate_quotes(t_token *node);
 
 t_cmd	*build_commands(t_token *nodes, t_data *data);
 t_cmd	*merge_commands(t_token *tokens, t_data *data);
-void	set_command(t_token **token, t_cmd **commands, t_cmd_v **var);
 int		handle_redirect(t_token **token, t_cmd **command);
 
 //-------------------------------------------------------------------------//
@@ -228,7 +206,7 @@ int		create_redir_in(t_cmd *cmd, char *result, t_redir_type redir_type, \
 						t_type token_type);
 
 //-------------------------------------------------------------------------//
-//                             Free	                                       //
+//                           Free - Exits                                  //
 //-------------------------------------------------------------------------//
 
 void	free_array(char **str);
@@ -236,11 +214,11 @@ bool	error_msg(char *message, char c, char c2);
 void	free_all(t_data	*data);
 void	free_node(t_token *node);
 void	*mem_check(void *pointer);
-
+void	error_exit(const char *msg, int status);
 
 //-------------------------------------------------------------------------//
 //                               Testing                                   //
-//                       not nourminette friendly                          //
+//                       not norminette friendly                          //
 //-------------------------------------------------------------------------//
 
 const char	*type_to_string(t_type type);

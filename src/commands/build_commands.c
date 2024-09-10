@@ -6,13 +6,13 @@
 /*   By: diwalaku <diwalaku@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/08/22 18:14:06 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/10 15:58:31 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/10 16:34:09 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	set_command_and_args(t_token **token, t_cmd **curr_cmd)
+static void	set_command_and_args(t_token **token, t_cmd **curr_cmd)
 {
 	if ((*curr_cmd)->command == NULL)
 	{
