@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:40:07 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/04 18:35:10 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/09/05 17:48:52 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int	main(int argc, char **argv, char **env)
 		if (input != NULL)
 			add_history(data->input);
 		lexer_and_parser(data);
-		data->cmd_process = make_cmd_nodes(data);
+		// Didi's cmd fill in function;
 		data->exit_status = make_processes(data);
 		free_all(data);
 	}

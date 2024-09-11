@@ -6,7 +6,7 @@
 /*   By: sreerink <sreerink@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2024/06/12 20:30:41 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/09/03 21:39:21 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/09/11 18:06:11 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,71 +76,100 @@ bool	redirect_fd(int fd, int fd_dst)
 	return (true);
 }
 
-void	redirect_input(t_cmd *cmd, int fd_in[], int fd_out[])
-{
-	int file;
-
-	close(fd_in[1]);
-	if (!cmd->redirect_in)
-		close(fd_in[0]);
-	// Following line needs to be replaced with a Libft function
-	else if (!strcmp(cmd->redirect_in, "|"))
-	{
-		if (!redirect_fd(fd_in[0], STDIN_FILENO))
-			error_exit(NULL, EXIT_FAILURE);
-	}
-	else if (cmd->heredoc)
-	{
-		close(fd_in[0]);
-		if (!heredoc(cmd))
-			error_exit("minishell: heredoc", EXIT_FAILURE);
-	}
-	else
-	{
-		close(fd_in[0]);
-		file = open(cmd->redirect_in, O_RDONLY);
-		if (file == -1)
-		{
-			close(fd_out[0]);
-			close(fd_out[1]);
-			error_exit(cmd->redirect_in, EXIT_FAILURE);
-		}
-		if (!redirect_fd(file, STDIN_FILENO))
-			error_exit(NULL, EXIT_FAILURE);
-	}
-}
-
-void	redirect_output(t_cmd *cmd, int fd_out[])
+int		redirect_redir_in(t_redir_in *redir_in)
 {
 	int	file;
 
-	close(fd_out[0]);
-	if (!cmd->redirect_out)
-		close(fd_out[1]);
-	// Following line needs to be replaced with a Libft function
-	else if (!strcmp(cmd->redirect_out, "|"))
+	if (!check_heredocs(redir_in))
+		return (EXIT_FAILURE);
+	while (redir_in)
 	{
-		if (!redirect_fd(fd_out[1], STDOUT_FILENO))
-			error_exit(NULL, EXIT_FAILURE);
+		if (!redir_in->heredoc)
+		{
+			file = open(redir_in->str, O_RDONLY);
+			if (file == -1)
+			{
+				perror(redir_in->str);
+				return (EXIT_FAILURE);
+			}
+			if (!redirect_fd(file, STDIN_FILENO))
+				return (EXIT_FAILURE);
+		}
+		redir_in = redir_in->next;
+	}
+	return (EXIT_SUCCESS);
+}
+
+int		redirect_redir_out(t_redir_out *redir_out)
+{
+	int	file;
+
+	while (redir_out)
+	{
+		if (redir_out->append)
+			file = open(redir_out->str, O_WRONLY | O_CREAT | O_APPEND, 0644);
+		else
+			file = open(redir_out->str, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		if (file == -1)
+		{
+			perror(redir_out->str);
+			return (EXIT_FAILURE);
+		}
+		if (!redirect_fd(file, STDOUT_FILENO))
+			return (EXIT_FAILURE);
+		redir_out = redir_out->next;
+	}
+	return (EXIT_SUCCESS);
+}
+
+bool	redirect_input(t_cmd *cmd, int fd_in[])
+{
+	close(fd_in[1]);
+	if (!cmd->redir_in && !cmd->pipe_in)
+		close(fd_in[0]);
+	else if (!cmd->redir_in && cmd->pipe_in)
+	{
+		if (!redirect_fd(fd_in[0], STDIN_FILENO))
+			return (false);
 	}
 	else
 	{
-		close(fd_out[1]);
-		if (cmd->append)
-			file = open(cmd->redirect_out, O_WRONLY | O_CREAT | O_APPEND, 0644);
-		else
-			file = open(cmd->redirect_out, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		if (file == -1)
-			error_exit(cmd->redirect_out, EXIT_FAILURE);
-		if (!redirect_fd(file, STDOUT_FILENO))
-			error_exit(NULL, EXIT_FAILURE);
+		close(fd_in[0]);
+		if (redirect_redir_in(cmd->redir_in) == 1)
+			return (false);
 	}
+	return (true);
+}
+
+bool	redirect_output(t_cmd *cmd, int fd_out[])
+{
+	close(fd_out[0]);
+	if (!cmd->redir_out && !cmd->pipe_out)
+		close(fd_out[1]);
+	else if (!cmd->redir_out && cmd->pipe_out)
+	{
+		if (!redirect_fd(fd_out[1], STDOUT_FILENO))
+			return (false);
+	}
+	else
+	{
+		close(fd_out[0]);
+		if (redirect_redir_out(cmd->redir_out) == 1)
+			return (false);
+	}
+	return (true);
 }
 
 void	child_process(t_cmd *cmd, int fd_in[], int fd_out[])
 {
-	redirect_input(cmd, fd_in, fd_out);
-	redirect_output(cmd, fd_out);
+	if (!redirect_input(cmd, fd_in))
+	{
+		close(fd_out[0]);
+		close(fd_out[1]);
+		error_exit(NULL, EXIT_FAILURE);
+	}
+	if (!redirect_output(cmd, fd_out))
+		error_exit(NULL, EXIT_FAILURE);
 	if (cmd->builtin)
 		error_exit(NULL, execute_builtin(cmd, NULL));
 	cmd->path = find_cmd_path(cmd);
@@ -164,50 +193,57 @@ void	close_unused_pipes(int pipefd[][2], size_t cur_pipe, size_t total_pipes)
 	}
 }
 
-int	redirect_input_parent(t_cmd *cmd)
+int	redirect_input_parent(t_redir_in *redir_in)
 {
 	int file;
 
-	if (!cmd->redirect_in)
+	if (!redir_in)
 		return (EXIT_SUCCESS);
-	else if (cmd->heredoc)
+	if (!check_heredocs(redir_in))
+		return (EXIT_FAILURE);
+	while (redir_in)
 	{
-		if (!heredoc(cmd))
-			return (EXIT_FAILURE);
-	}
-	else
-	{
-		file = open(cmd->redirect_in, O_RDONLY);
-		if (file == -1)
+		if (!redir_in->heredoc)
 		{
-			perror(cmd->redirect_in);
-			return (EXIT_FAILURE);
+			file = open(redir_in->str, O_RDONLY);
+			if (file == -1)
+			{
+				perror(redir_in->str);
+				return (EXIT_FAILURE);
+			}
+			if (!redirect_fd(file, STDIN_FILENO))
+				return (EXIT_FAILURE);
 		}
-		if (!redirect_fd(file, STDIN_FILENO))
-			return (EXIT_FAILURE);
+		redir_in = redir_in->next;
 	}
 	return (EXIT_SUCCESS);
 }
 
-int	redirect_output_parent(t_cmd *cmd)
+int	redirect_output_parent(t_redir_out *redir_out)
 {
 	int	file;
 
-	if (!cmd->redirect_out)
+	if (!redir_out)
 		return (EXIT_SUCCESS);
-	else
+	while (redir_out)
 	{
-		if (cmd->append)
-			file = open(cmd->redirect_out, O_WRONLY | O_CREAT | O_APPEND, 0644);
+		if (redir_out->append)
+			file = open(redir_out->str, O_WRONLY | O_CREAT | O_APPEND, 0644);
 		else
-			file = open(cmd->redirect_out, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+			file = open(redir_out->str, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (file == -1)
 		{
-			perror(cmd->redirect_out);
+			perror(redir_out->str);
 			return (EXIT_FAILURE);
 		}
-		if (!redirect_fd(file, STDOUT_FILENO))
-			return (EXIT_FAILURE);
+		if (!redir_out->next)
+		{
+			if (!redirect_fd(file, STDOUT_FILENO))
+				return (EXIT_FAILURE);
+		}
+		else
+			close(file);
+		redir_out = redir_out->next;
 	}
 	return (EXIT_SUCCESS);
 }
@@ -231,13 +267,13 @@ int	builtin_in_parent(t_cmd *cmd, t_data *data)
 		close(stdin_fd);
 		return (EXIT_FAILURE);
 	}
-	if (redirect_input_parent(cmd) == 1)
+	if (redirect_input_parent(cmd->redir_in) == 1)
 	{
 		close(stdin_fd);
 		close(stdout_fd);
 		return (EXIT_FAILURE);
 	}
-	if (redirect_output_parent(cmd) == 1)
+	if (redirect_output_parent(cmd->redir_out) == 1)
 	{
 
 		close(stdin_fd);
@@ -245,12 +281,12 @@ int	builtin_in_parent(t_cmd *cmd, t_data *data)
 		return (EXIT_FAILURE);
 	}
 	exit_status = execute_builtin(cmd, data);
-	if (cmd->redirect_in && !redirect_fd(stdin_fd, STDIN_FILENO))
+	if (cmd->redir_in && !redirect_fd(stdin_fd, STDIN_FILENO))
 	{
 		close(stdout_fd);
 		error_exit(NULL, EXIT_FAILURE);
 	}
-	if (cmd->redirect_out && !redirect_fd(stdout_fd, STDOUT_FILENO))
+	if (cmd->redir_out && !redirect_fd(stdout_fd, STDOUT_FILENO))
 		error_exit(NULL, EXIT_FAILURE);
 	close(stdin_fd);
 	close(stdout_fd);
