@@ -30,6 +30,7 @@ SRC =	./src/main.c \
 				./src/tokenize/tokenizer.c \
 				./src/execute/pipes.c \
 				./src/parsing/parsing.c \
+				./src/redirecting/check_heredocs.c \
 				./src/redirecting/heredoc.c \
 				./src/builtins/builtins.c \
 				./src/builtins/cd.c \

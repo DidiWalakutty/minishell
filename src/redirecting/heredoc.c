@@ -6,7 +6,7 @@
 /*   By: sreerink <sreerink@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2024/09/02 21:44:34 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/09/05 21:32:35 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/09/05 21:28:54 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static bool	redirect_heredoc(int pipe_hdoc[2], bool redirect)
 	return (true);
 }
 
-bool	heredoc(t_cmd *cmd, bool redirect)
+bool		heredoc(t_redir_in *redir_in, bool redirect)
 {
 	int		pipe_hdoc[2];
 	char	*input;
@@ -36,7 +36,7 @@ bool	heredoc(t_cmd *cmd, bool redirect)
 	if (pipe(pipe_hdoc) == -1)
 		return (false);
 	input = readline("> ");
-	while (strncmp(input, cmd->redirect_in, ft_strlen(cmd->redirect_in) + 1))
+	while (strncmp(input, redir_in->str, ft_strlen(redir_in->str) + 1))
 	{
 		write(pipe_hdoc[1], input, ft_strlen(input));
 		write(pipe_hdoc[1], "\n", 1);

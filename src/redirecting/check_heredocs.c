@@ -1,28 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                       ::::::::             */
-/*   env.c                                             :+:    :+:             */
+/*   check_heredocs.c                                  :+:    :+:             */
 /*                                                    +:+                     */
 /*   By: sreerink <sreerink@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
-/*   Created: 2024/08/25 22:24:08 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/09/11 18:09:54 by sreerink      ########   odam.nl         */
+/*   Created: 2024/09/08 19:46:52 by sreerink      #+#    #+#                 */
+/*   Updated: 2024/09/08 20:27:03 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	env_builtin(char **env)
+bool	check_heredocs(t_redir_in *redir_in)
 {
-	size_t	i;
-
-	i = 0;
-	if (!env)
-		return (EXIT_SUCCESS);
-	while (env[i])
+	while (redir_in)
 	{
-		printf("%s\n", env[i]);
-		i++;
+		if (redir_in->heredoc && !redir_in->next)
+		{
+			if (!heredoc(redir_in, true))
+				return (false);
+		}
+		else if (redir_in->heredoc)
+		{
+			if (!heredoc(redir_in, false))
+				return (false);
+		}
+		redir_in = redir_in->next;
 	}
-	return (EXIT_SUCCESS);
+	return (true);
 }

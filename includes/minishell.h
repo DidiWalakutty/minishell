@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/20 16:38:50 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/05 21:30:24 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/09/10 19:06:26 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@
 
 typedef enum s_token		t_token;
 typedef struct s_list		t_list;
+typedef struct s_redir_in	t_redir_in;
+typedef struct s_redir_out	t_redir_out;
 typedef struct s_cmd		t_cmd;
 typedef struct s_expand		t_expand;
 typedef struct s_node		t_node;
@@ -89,20 +91,35 @@ typedef enum s_builtin
 	ENV,
 } t_builtin;
 
+typedef struct s_redir_in
+{
+    char        *str;
+    bool        heredoc;
+    bool        quotes;
+    t_redir_in *next;
+}   t_redir_in;
+
+typedef struct s_redir_out
+{
+    char        *str;
+    bool        append;
+    t_redir_out *next;
+}   t_redir_out;
+
 typedef struct s_cmd
 {
-	pid_t	pid;
-	char		*cmd;
+	pid_t		pid;
+    char        *cmd;
 	char		*path;
-	char		**args;
-	char		*redirect_in;
-	char		*redirect_out;
+    char        **args;
+    t_redir_in  *redir_in;
+    t_redir_out *redir_out;
+	bool		pipe_in;
+	bool		pipe_out;
 	char		**env;
-	bool		append;
-	bool		heredoc;
 	t_builtin	builtin;
-	t_cmd		*next;
-} t_cmd;
+    t_cmd		*next;
+}	t_cmd;
 
 typedef struct s_node
 {
@@ -117,13 +134,11 @@ typedef struct s_node
 
 typedef struct s_data
 {
-	// int		i; add for iterating with data->i in tokenize_input?
 	char	*input;
 	char	**env;
 	t_node	*list;
 	t_token	*token;
 	t_cmd	*cmd_process;
-	// t_token	*token;	// needed in t_node??
 	size_t	process;
 	int		exit_status;
 }	t_data;
@@ -201,7 +216,8 @@ t_cmd	*make_cmd_nodes(t_data *data);
 
 // Redirecting
 bool	redirect_fd(int fd, int fd_dst);
-bool	heredoc(t_cmd *cmd, bool redirect);
+bool	check_heredocs(t_redir_in *redir_in);
+bool	heredoc(t_redir_in *redir_in, bool redirect);
 
 // Executing
 void	error_exit(const char *msg, int status);
