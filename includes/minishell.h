@@ -65,7 +65,7 @@ typedef struct s_here_dol
 	bool	brackets;	// check for brackets
 	bool	quotes;		// check for quotes
 	char	quote_type;	// s_q or d_q
-}	t_here_dol;
+}	t_h_dol;
 
 typedef struct s_expand
 {
@@ -151,7 +151,6 @@ char	**copy_env(char **env);
 //                               Tokenizer                                 //
 //-------------------------------------------------------------------------//
 
-int		tokenize_and_expand(t_data *data);
 t_token	*tokenize_input(t_data *data, char *str);
 int		add_quote(char *str, int i, char c, t_token **list);
 int		add_space(char *str, int i, t_token **list);
@@ -180,6 +179,17 @@ int		concatenate_quotes(t_token *node);
 t_cmd	*build_commands(t_token *nodes, t_data *data);
 t_cmd	*merge_commands(t_token *tokens, t_data *data);
 int		handle_redirect(t_token **token, t_cmd **command);
+
+//-------------------------------------------------------------------------//
+//                          Heredoc Expanding	                           //
+//-------------------------------------------------------------------------//
+
+char	*heredoc_expanding(char *str, char **env);
+bool		is_heredoc_dollar(char *str, int i);
+t_h_dol	*init_heredol(void);
+void	check_quote_and_brackets(char *str, int *i, t_h_dol *var);
+bool	update_here_brackets(char *str, t_h_dol *info);
+void	set_env_and_expand(char *str, int *i, t_h_dol *info, char **env);
 
 //-------------------------------------------------------------------------//
 //                             Utils	                                   //
@@ -229,6 +239,7 @@ void	free_array(char **str);
 bool	error_msg(char *message, char c, char c2);
 void	free_all(t_data	*data);
 void	free_node(t_token *node);
+void	free_heredoc_info(t_h_dol *info);
 void	*mem_check(void *pointer);
 void	error_exit(const char *msg, int status);
 

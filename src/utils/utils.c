@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/07/04 17:06:02 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/10 16:39:22 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/11 19:09:57 by didi          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,4 +38,16 @@ void	error_exit(const char *msg, int status)
 	else if (msg)
 		perror(msg);
 	exit(status);
+}
+
+void	free_heredoc_info(t_h_dol *info)
+{
+	if (info)
+	{
+		if (info->expanded)
+			free(info->expanded);
+		if (info->env_name)
+			free(info->env_name);
+		free(info);
+	}
 }

@@ -31,11 +31,13 @@ SRC =	./src/main.c \
 				./src/expanding/expander_utils.c \
 				./src/expanding/expand_exit_and_empty.c \
 				./src/expanding/quote_concatenation.c \
-				./src/expanding/heredoc_expanding.c \
 				./src/commands/build_commands.c \
 				./src/commands/build_inits_and_nodes.c \
 				./src/commands/build_redirections.c \
 				./src/commands/build_utils.c \
+				./src/expanding_heredoc/heredoc_expanding.c \
+				./src/expanding_heredoc/heredoc_dollar.c \
+				./src/expanding_heredoc/heredoc_pid.c \
 				./src/utils/testing.c
 
 # Object files and directories
@@ -79,18 +81,11 @@ $(OBJDIR)/%.o: ./src/expanding/%.c
 $(OBJDIR)/%.o: ./src/commands/%.c
 	@$(CC) $(CFLAGS) $(HEADERS) -c -o $@ $<
 
+$(OBJDIR)/%.o: ./src/expandig_heredoc/&.c
+	@$(CC) $(CFLAGS) $(HEADERS) -c -o $@ $<
+
 $(OBJDIR)/%.o: ./src/utils/%.c
 	@$(CC) $(CFLAGS) $(HEADERS) -c -o $@ $<
-
-$(OBJDIR)/%.o: ./src/execute/%.c
-	@$(CC) $(CFLAGS) $(HEADERS) -c -o $@ $<
-
-$(OBJDIR)/%.o: ./src/parsing/%.c
-	@$(CC) $(CFLAGS) $(HEADERS) -c -o $@ $<
-
-$(OBJDIR)/%.o: ./src/builtins/%.c
-	@$(CC) $(CFLAGS) $(HEADERS) -c -o $@ $<
-
 
 # Cleaning
 clean:
