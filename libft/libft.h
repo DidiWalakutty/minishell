@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   libft.h                                           :+:    :+:             */
+/*   libft.h                                            :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/12 18:27:25 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/04 18:39:08 by sreerink      ########   odam.nl         */
+/*   Updated: 2023/12/08 15:33:50 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <stddef.h>
 # include <stdarg.h>
 # include <stdbool.h>
+# include "../includes/minishell.h"
 
 // libft
 size_t	ft_strlen(const char *s);
@@ -41,15 +42,5 @@ int		is_alph_or_num(char c);
 char	*ft_strconcat(char *s1, char *s2);
 char	*ft_itoa(int i);
 void	*ft_memcpy(void *dst, const void *src, size_t n);
-
-// printf
-int		ft_printf(const char *format, ...);
-int		print_char(char c);
-int		print_str(char *s);
-int		print_nbr(int n);
-int		print_uns_dec(unsigned int n);
-int		print_lowerhex(unsigned long n);
-int		print_upperhex(unsigned int n);
-int		print_pointer(unsigned long ptr);
 
 #endif

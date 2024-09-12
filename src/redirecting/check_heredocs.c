@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                       ::::::::             */
-/*   check_heredocs.c                                  :+:    :+:             */
-/*                                                    +:+                     */
-/*   By: sreerink <sreerink@student.codam.nl>        +#+                      */
-/*                                                  +#+                       */
+/*                                                        ::::::::            */
+/*   check_heredocs.c                                   :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: sreerink <sreerink@student.codam.nl>         +#+                     */
+/*                                                   +#+                      */
 /*   Created: 2024/09/08 19:46:52 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/09/08 20:27:03 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/09/12 18:03:50 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-bool	check_heredocs(t_redir_in *redir_in)
+bool	check_heredocs(t_redin *redir_in)
 {
 	while (redir_in)
 	{

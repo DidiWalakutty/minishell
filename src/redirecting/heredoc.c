@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                       ::::::::             */
-/*   heredoc.c                                         :+:    :+:             */
-/*                                                    +:+                     */
-/*   By: sreerink <sreerink@student.codam.nl>        +#+                      */
-/*                                                  +#+                       */
+/*                                                        ::::::::            */
+/*   heredoc.c                                          :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: sreerink <sreerink@student.codam.nl>         +#+                     */
+/*                                                   +#+                      */
 /*   Created: 2024/09/02 21:44:34 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/09/05 21:28:54 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/09/12 19:06:16 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static bool	redirect_heredoc(int pipe_hdoc[2], bool redirect)
 	return (true);
 }
 
-bool		heredoc(t_redir_in *redir_in, bool redirect)
+bool		heredoc(t_redin *redir_in, bool redirect)
 {
 	int		pipe_hdoc[2];
 	char	*input;

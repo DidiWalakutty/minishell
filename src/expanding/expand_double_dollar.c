@@ -12,13 +12,13 @@
 
 #include "minishell.h"
 
-bool	is_double_dollar(t_node *node, bool is_expandable)
+bool	is_double_dollar(t_token *node, bool heredoc)
 {
 	int	i;
 
 	i = 0;
-	if (is_expandable == false || (node->type != WORD && \
-		node->type != DOUBLE_QUOTE))
+	if (node->type != WORD && node->type != DOUBLE_QUOTE || \
+		heredoc == true)
 		return (false);
 	while (node->str[i])
 	{
@@ -29,11 +29,11 @@ bool	is_double_dollar(t_node *node, bool is_expandable)
 	return (false);
 }
 
-t_dollar	*init_double_dol(t_node *node)
+t_dollar	*init_double_dol(t_token *node)
 {
 	t_dollar	*double_dollar;
 
-	double_dollar = malloc(sizeof(t_dollar));
+	double_dollar = mem_check(malloc(sizeof(t_dollar)));
 	double_dollar->expanded = NULL;
 	double_dollar->end_var = 0;
 	double_dollar->str_len = ft_strlen(node->str);
@@ -41,7 +41,7 @@ t_dollar	*init_double_dol(t_node *node)
 	return (double_dollar);
 }
 
-int	set_pid(t_node *node, t_expand *info)
+int	set_pid(t_token *node, t_expand *info)
 {
 	t_dollar	*dub_var;
 	char		*pid;

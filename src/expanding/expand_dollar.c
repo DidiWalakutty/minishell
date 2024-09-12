@@ -12,12 +12,12 @@
 
 #include "minishell.h"
 
-bool	is_dollar(t_node *node, bool is_expandable)
+bool	is_dollar(t_token *node, bool heredoc)
 {
 	char	*copy;
 
-	if (is_expandable == false || (node->type != WORD && \
-		node->type != DOUBLE_QUOTE))
+	if (node->type != WORD && node->type != DOUBLE_QUOTE || \
+		heredoc == true)
 		return (false);
 	copy = ft_strchr(node->str, '$');
 	if (!copy)
@@ -25,27 +25,37 @@ bool	is_dollar(t_node *node, bool is_expandable)
 	return (true);
 }
 
-static t_dollar	*init_dollar(t_node *node)
+static t_dollar	*init_dollar(t_token *node)
 {
 	t_dollar	*dollar;
 
-	dollar = malloc(sizeof(t_dollar));
+	dollar = mem_check(malloc(sizeof(t_dollar)));
 	dollar->expanded = NULL;
 	dollar->env_name = NULL;
 	dollar->str_len = ft_strlen(node->str);
 	dollar->i = 0;
 	dollar->start_env = 0;
 	dollar->end_var = 0;
-	dollar->env_length = 0;
 	dollar->brackets = false;
-	dollar->remainder = false;
 	return (dollar);
+}
+
+static bool	update_dol_brackets(t_token *node, t_dollar *dol)
+{
+	if (node->str[dol->end_var + ft_strlen(dol->expanded) + 1] != '}')
+	{
+		dol->expanded = ft_strdup("");
+		return (false);
+	}
+	dol->start_env--;
+	dol->end_var++;
+	return (true);
 }
 
 // start_env is $ +1, where ENV-name starts.
 // end is where env_name ends.
 // Searches the env-name and its info.
-static void	expand_dollar(t_node *node, t_dollar *dol, char **env)
+static void	expand_dollar(t_token *node, t_dollar *dol, char **env)
 {
 	dol->start_env = dol->i + 1;
 	if (node->str[dol->start_env] == '{')
@@ -66,39 +76,13 @@ static void	expand_dollar(t_node *node, t_dollar *dol, char **env)
 	dol->expanded = copy_env_input(env, dol->env_name);
 	if (!dol->expanded)
 		dol->expanded = ft_strdup("");
-	dol->env_length = ft_strlen(dol->expanded);
 	if (dol->brackets == true)
-	{
-		dol->start_env--;
-		dol->end_var++;
-	}
+		update_dol_brackets(node, dol);
 	expand_node(node, dol);
 }
 
-// still needed?
-// void	reset_var_info(t_node *node, t_node *head, t_expand *info)
-// {
-// 	int	temp;
-
-// 	temp = 0;
-// 	node = head;
-// 	temp = info->node_i;
-// 	while (info->node_i--)
-// 		node = (node)->next;
-// 	info->node_i = temp;
-// }
-
-// Check for $ as last char?
-// Check for if strlen(dol_var->expanded) == 0? If so, free(dol_var) + ret 0;
 // This function expands a $-env for the whole D-Q node.
-// first while loop: node->next && node->previous == NULL
-//  following for under while_loop, needed???
-// if (dol_var->i >= dol_var->str_len)
-// {
-// 	printf("in reset_var_info!!!\n");
-// 	reset_var_info(node, info->head, info);
-// }
-int	set_dollar(t_node *node, char **env, t_expand *info)
+int	set_dollar(t_token *node, char **env, t_expand *info)
 {
 	t_dollar	*dol_var;
 

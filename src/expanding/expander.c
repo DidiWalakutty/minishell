@@ -6,54 +6,54 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:36:22 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/02 22:46:06 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/10 15:43:32 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 // info->node_i = 0; // Tracks node position and where to insert expansion
-t_expand	*init_info(t_node *list)
+t_expand	*init_info(t_token *list)
 {
 	t_expand	*info;
 
-	info = malloc(sizeof(t_expand));
+	info = mem_check(malloc(sizeof(t_expand)));
 	info->head = list;
-	info->char_pos = 0;
-	info->expandable = false;
-	info->prev_type = WORD;
 	return (info);
 }
 
-static void	expandable_type(t_expand *info, t_token type)
+static void	skip_heredoc_and_spaces(t_token **node, bool *heredoc)
 {
-	if (type == HERE_DOC)
-		info->expandable = false;
-	else
-		info->expandable = true;
+	*heredoc = true;
+	*node = (*node)->next;
+	while (*node && (*node)->type == SEPARATOR)
+		*node = (*node)->next;
 }
 
-// Currently keeps seeing the expanded node as the next.
-// if we use info->i: // info->node_i++; at to_next_node == true
-void	expand_input(t_data *data, t_node *node, char **env)
+void	expand_input(t_data *data, t_token *node, char **env)
 {
 	t_expand	*info;
+	bool		heredoc;
 
 	info = init_info(node);
+	heredoc = false;
 	while (node)
 	{
-		expandable_type(info, node->type);
 		if (check_null(&node) == true)
 			continue ;
-		// check tilde ~
-		if (is_dollar(node, info->expandable) == true)
+		if (node->type == HERE_DOC)
+			skip_heredoc_and_spaces(&node, &heredoc);
+		if (is_dollar(node, heredoc) == true)
 			set_dollar(node, env, info);
-		if (is_exit_status(node, info->expandable) == true)
+		if (is_exit_status(node, heredoc) == true)
 			set_exit_status(data, node, info);
-		if (is_double_dollar(node, info->expandable) == true)
+		if (is_double_dollar(node, heredoc) == true)
 			set_pid(node, info);
+		heredoc = false;
 		node = node->next;
 	}
+	if (quote_type_present(info->head) == true)
+		concatenate_quotes(info->head);
 	node = info->head;
 	free(info);
 }

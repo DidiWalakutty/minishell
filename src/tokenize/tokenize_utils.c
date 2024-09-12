@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/07/04 15:38:34 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/07/26 13:16:44 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/10 15:48:46 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,9 @@ void	skip_whitespace(char *str, int *i)
 
 // Add one token to the list: either |, < or >.
 // Return i + 1, so we get the i immediately after the token.
-int	add_one_token(char *str, int i, t_data *data, t_node **list)
+int	add_one_token(char *str, int i, t_data *data, t_token **list)
 {
-	t_node	*new;
+	t_token	*new;
 	char	*line;
 
 	line = ft_substr(str, i, 1);
@@ -55,18 +55,16 @@ int	add_one_token(char *str, int i, t_data *data, t_node **list)
 	return (i + 1);
 }
 
-int	variable_len(char *str)
+int	quote_length(char *str, char c)
 {
 	int	i;
 
 	i = 0;
-	while (str[i])
+	if (c == '\'' || c == '\"')
 	{
-		if (str[i] == '$' || iswhitespace(str[i]) || \
-			str[i] == '\'' || str[i] == '\"' || \
-			str[i] == '<' || str[i] == '>' || str[i] == '|')
-			break ;
-		i++;
+		while (str[i] && str[i] != c)
+			i++;
+		return (i);
 	}
 	return (i);
 }

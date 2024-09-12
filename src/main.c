@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   main.c                                            :+:    :+:             */
+/*   main.c                                             :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:40:07 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/05 17:48:52 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/09/12 18:59:32 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,25 +14,6 @@
 
 // isatty checks if the standard input is pointing to our terminal,
 // still needs to have a quit_program function.
-// Copies env, unsets old PWD and increments shlvl.
-// Sets all variables to NULL.
-// Termcaps???
-// process al op 1 ivm child
-
-void	error_exit(const char *msg, int status)
-{
-	if (status == 127)
-	{
-		write(STDERR_FILENO, msg, ft_strlen(msg));
-		write(STDERR_FILENO, ": command not found\n", 20);
-	}
-	else if (msg)
-		perror(msg);
-	if (status == 1127)
-		status = 127;
-	exit(status);
-}
-
 static t_data	*init_shell(char **env_copy)
 {
 	t_data	*data;
@@ -48,6 +29,7 @@ static t_data	*init_shell(char **env_copy)
 	data->process = 1;
 	data->exit_status = 0;
 	init_shlvl(data);
+	// do we still need data->home??: data->home = copy_env_input(env_copy, "HOME");
 	// data->token = NULL; Not needed?
 	// signals
 	return (data);
@@ -71,8 +53,11 @@ int	main(int argc, char **argv, char **env)
 		data->input = input;
 		if (input != NULL)
 			add_history(data->input);
-		lexer_and_parser(data);
+		tokenize_and_expand(data);
+		// print_linked_list(data->list);
+		print_commands(data->cmd_process);
 		// Didi's cmd fill in function;
+		// For expanding heredoc, check: expanding_heredoc;
 		data->exit_status = make_processes(data);
 		free_all(data);
 	}
