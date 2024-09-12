@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/10 18:10:20 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/11 19:15:04 by didi          ########   odam.nl         */
+/*   Updated: 2024/09/12 16:41:42 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,11 @@ void	set_heredoc_pid(char *str, int *i, char **new_string, char **env)
 	new_string = ft_strjoin(*new_string, info->expanded);
 	free(temp);
 	free_heredoc_info(info);
+}
 
+void	set_heredoc_exit(char *str, int *i, char **new_string, char **env)
+{
+	
 }
 
 char	*heredoc_expanding(char *str, char **env)
