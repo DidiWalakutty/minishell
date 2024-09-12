@@ -6,7 +6,7 @@
 /*   By: didi <didi@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 17:00:49 by didi          #+#    #+#                 */
-/*   Updated: 2024/09/11 19:20:50 by didi          ########   odam.nl         */
+/*   Updated: 2024/09/12 19:20:26 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,5 +40,6 @@ void	expand_heredoc_pid(char *str, int *i, t_h_dol *info, char **env)
 	if (str[j + 1] && (str[j + 1] == '$'))
 	{
 		if (info->brackets == true)
+			// ended here
 	}
 }

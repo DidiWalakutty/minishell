@@ -124,7 +124,7 @@ typedef enum s_builtin
 typedef struct s_cmd
 {
 	pid_t		pid;
-	char		*cmd; // call it cmd or command??
+	char		*cmd;
 	char		*path;
 	char		**args;
 	char		**env;
