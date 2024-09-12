@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   ft_strdup.c                                       :+:    :+:             */
+/*   ft_strdup.c                                        :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/11/13 20:24:00 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/28 21:38:09 by sreerink      ########   odam.nl         */
+/*   Updated: 2023/09/28 18:22:17 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ char	*ft_strndup(const char *s1, int len)
 	int		i;
 
 	i = 0;
-	copy = (char *)malloc(sizeof(char) * (len + 1));
+	copy = (char *)malloc(sizeof(char) * ft_strlen((s1) + 1));
 	if (!copy)
 		return (NULL);
 	while (s1[i] && i < len)
@@ -33,16 +33,18 @@ char	*ft_strndup(const char *s1, int len)
 char	*ft_strdup(const char *s1)
 {
 	char	*str;
-	int		x;
+	int		len;
+	int		i;
 
-	x = 0;
-	str = (char *)malloc(sizeof(char) * (ft_strlen(s1) + 1));
-	if (!str)
-		return (0);
+	if (!s1)
+		return (NULL);
+	i = 0;
+	len = ft_strlen(s1);
+	str = mem_check(malloc(sizeof(char) * (len + 1)));
 	while (*s1)
 	{
-		str[x++] = *s1++;
+		str[i++] = *s1++;
 	}
-	str[x] = '\0';
+	str[i] = '\0';
 	return (str);
 }

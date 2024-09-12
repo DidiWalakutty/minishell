@@ -6,13 +6,13 @@
 /*   By: diwalaku <diwalaku@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/08/02 19:46:22 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/02 22:40:23 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/10 14:49:57 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-bool	check_null(t_node **node)
+bool	check_null(t_token **node)
 {
 	if (*node && ((*node)->null == true))
 	{
@@ -22,13 +22,13 @@ bool	check_null(t_node **node)
 	return (false);
 }
 
-bool	is_exit_status(t_node *node, bool expandable)
+bool	is_exit_status(t_token *node, bool heredoc)
 {
 	int	i;
 
 	i = 0;
-	if (expandable == false || (node->type != WORD && \
-		node->type != DOUBLE_QUOTE))
+	if (node->type != WORD && node->type != DOUBLE_QUOTE || \
+		heredoc == true)
 		return (false);
 	while (node->str[i])
 	{
@@ -39,11 +39,11 @@ bool	is_exit_status(t_node *node, bool expandable)
 	return (false);
 }
 
-t_dollar	*init_exit_variables(t_node *node)
+t_dollar	*init_exit_variables(t_token *node)
 {
 	t_dollar	*exit_var;
 
-	exit_var = malloc(sizeof(t_dollar));
+	exit_var = mem_check(malloc(sizeof(t_dollar)));
 	exit_var->expanded = NULL;
 	exit_var->end_var = 0;
 	exit_var->str_len = ft_strlen(node->str);
@@ -51,7 +51,7 @@ t_dollar	*init_exit_variables(t_node *node)
 	return (exit_var);
 }
 
-int	set_exit_status(t_data *data, t_node *node, t_expand *info)
+int	set_exit_status(t_data *data, t_token *node, t_expand *info)
 {
 	t_dollar	*exit_var;
 	char		*exit_status;

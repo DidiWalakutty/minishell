@@ -6,11 +6,27 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/07/04 15:35:01 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/02 22:44:16 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/10 14:48:56 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+bool	is_heredoc(t_token *node)
+{
+	int	i;
+
+	i = 0;
+	if (node->type != HERE_DOC)
+		return (false);
+	while (node->str[i])
+	{
+		if (node->str[i] == '<' && node->str[i + 1] == '<')
+			return (true);
+		i++;
+	}
+	return (false);
+}
 
 static char	*check_joined(char *before, char *fill_in)
 {
@@ -31,7 +47,7 @@ static char	*check_joined(char *before, char *fill_in)
 // Expand nodes checks and concatenates before expansion, 
 // the expansion and the possible remainder, 
 // creates a node and adds it to the list.
-void	expand_node(t_node *node, t_dollar *dol)
+void	expand_node(t_token *node, t_dollar *dol)
 {
 	char	*before;
 	char	*remainder;

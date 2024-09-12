@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:43:34 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/02 21:57:42 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/10 14:45:21 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@
 // the closing quote's position that we return.
 // Should we consider "" as an empty string and add it to the node-list?
 //  free line?
-int	add_quote(char *str, int i, char c, t_node **list)
+int	add_quote(char *str, int i, char c, t_token **list)
 {
-	t_node	*new;
+	t_token	*new;
 	int		start;
 	int		len;
 	char	*line;
@@ -36,7 +36,7 @@ int	add_quote(char *str, int i, char c, t_node **list)
 	}
 	else
 		line = ft_substr(str, start, len - 2);
-	i = len + start + 1;
+	i = len + start;
 	new = create_node(line, EMPTY);
 	if (c == '\'')
 		new->type = SINGLE_QUOTE;
@@ -49,12 +49,12 @@ int	add_quote(char *str, int i, char c, t_node **list)
 
 // We add a token, either >> or <<.
 // It the i + 1 isn't equal, it adds one token.
-int	add_redir_or_pipe(char *str, int i, t_data *data, t_node **list)
+int	add_redir_or_pipe(char *str, int i, t_data *data, t_token **list)
 {
-	t_node	*new;
+	t_token	*new;
 	char	*line;
 
-	if (str[i + 1] == str[i])
+	if (str[i + 1] == str[i] && (str[i] == '<' || str[i] == '>'))
 	{
 		line = ft_substr(str, i, 2);
 		new = create_node(line, EMPTY);
@@ -70,10 +70,10 @@ int	add_redir_or_pipe(char *str, int i, t_data *data, t_node **list)
 	return (i);
 }
 
-int	add_pipe(char *str, int i, t_node **list)
+int	add_pipe(char *str, int i, t_token **list)
 {
 	char	*line;
-	t_node	*new;
+	t_token	*new;
 
 	line = ft_substr(str, i, 1);
 	new = create_node(line, PIPE);
@@ -84,9 +84,9 @@ int	add_pipe(char *str, int i, t_node **list)
 
 // !in_quote toggles the value of the current in_quote 
 // flag during the while-loop.
-int	add_word(char *str, int i, t_node **list)
+int	add_word(char *str, int i, t_token **list)
 {
-	t_node	*new;
+	t_token	*new;
 	char	*line;
 	int		start;
 	int		len;
@@ -108,5 +108,18 @@ int	add_word(char *str, int i, t_node **list)
 	new = create_node(line, WORD);
 	node_to_list(list, new);
 	i = len;
+	return (i);
+}
+
+int	add_space(char *str, int i, t_token **list)
+{
+	t_token	*new;
+	char	*line;
+
+	line = ft_strdup(" ");
+	new = create_node(line, SEPARATOR);
+	node_to_list(list, new);
+	while (iswhitespace(str[i]))
+		i++;
 	return (i);
 }

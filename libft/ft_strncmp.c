@@ -1,5 +1,16 @@
-# include "libft.h"
-#include <stdio.h>
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   ft_strncmp.c                                       :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: diwalaku <diwalaku@student.codam.nl>         +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/09/10 15:12:21 by diwalaku      #+#    #+#                 */
+/*   Updated: 2024/09/10 15:12:21 by diwalaku      ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "libft.h"
 
 int	ft_strncmp(const char *s1, const char *s2, size_t d)
 {

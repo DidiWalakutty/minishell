@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                       ::::::::             */
-/*   pipes.c                                           :+:    :+:             */
-/*                                                    +:+                     */
-/*   By: sreerink <sreerink@student.codam.nl>        +#+                      */
-/*                                                  +#+                       */
+/*                                                        ::::::::            */
+/*   pipes.c                                            :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: sreerink <sreerink@student.codam.nl>         +#+                     */
+/*                                                   +#+                      */
 /*   Created: 2024/06/12 20:30:41 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/09/11 18:06:11 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/09/12 17:19:52 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ bool	redirect_fd(int fd, int fd_dst)
 	return (true);
 }
 
-int		redirect_redir_in(t_redir_in *redir_in)
+int		redirect_redir_in(t_redin *redir_in)
 {
 	int	file;
 
@@ -100,7 +100,7 @@ int		redirect_redir_in(t_redir_in *redir_in)
 	return (EXIT_SUCCESS);
 }
 
-int		redirect_redir_out(t_redir_out *redir_out)
+int		redirect_redir_out(t_redou *redir_out)
 {
 	int	file;
 
@@ -193,7 +193,7 @@ void	close_unused_pipes(int pipefd[][2], size_t cur_pipe, size_t total_pipes)
 	}
 }
 
-int	redirect_input_parent(t_redir_in *redir_in)
+int	redirect_input_parent(t_redin *redir_in)
 {
 	int file;
 
@@ -219,7 +219,7 @@ int	redirect_input_parent(t_redir_in *redir_in)
 	return (EXIT_SUCCESS);
 }
 
-int	redirect_output_parent(t_redir_out *redir_out)
+int	redirect_output_parent(t_redou *redir_out)
 {
 	int	file;
 
