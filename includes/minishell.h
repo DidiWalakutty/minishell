@@ -153,8 +153,6 @@ typedef struct s_data
 	t_cmd	*cmd_process;
 	size_t	process;
 	int		exit_status;
-	char	*home;
-	int		shlvl;
 }	t_data;
 
 //-------------------------------------------------------------------------//
