@@ -38,6 +38,9 @@ t_dollar	*init_double_dol(t_token *node)
 	double_dollar->end_var = 0;
 	double_dollar->str_len = ft_strlen(node->str);
 	double_dollar->i = 0;
+	double_dollar->brackets = false;
+	double_dollar->no_closing_bracket = false;
+	double_dollar->exp_kind = IS_PID;
 	return (double_dollar);
 }
 

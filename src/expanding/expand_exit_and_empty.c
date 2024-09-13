@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/08/02 19:46:22 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/12 19:53:23 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/13 20:58:53 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ bool	is_exit_status(t_token *node, bool heredoc)
 	if (node->type != WORD && node->type != DOUBLE_QUOTE || \
 		heredoc == true)
 		return (false);
-	if (node->str[i] && node->str[i + 1])
+	while (node->str[i] && node->str[i + 1])
 	{
 		if (node->str[i] == '$' && (node->str[i + 1] == '?' || \
 			node->str[i + 1] == '{'))
@@ -40,6 +40,33 @@ bool	is_exit_status(t_token *node, bool heredoc)
 	}
 	return (false);
 }
+
+// bool	is_exit_status(t_token *node, bool heredoc)
+// {
+// 	int	i;
+// 	int	max;
+
+// 	i = 0;
+// 	max = ft_strlen(node->str);
+// 	if (node->type != WORD && node->type != DOUBLE_QUOTE || \
+// 		heredoc == true)
+// 		return (false);
+// 	while (node->str[i] && i <= max)
+// 	{
+// 		if (node->str[i] == '$' && (node->str[i + 1] == '?' || \
+// 			node->str[i + 1] == '{'))
+// 		{
+// 			if (node->str[i + 1] == '{')
+// 			{
+// 				if (node->str[i + 2] != '?')
+// 					return (false);
+// 			}
+// 			return (true);
+// 		}
+// 		i++;
+// 	}
+// 	return (false);
+// }
 
 t_dollar	*init_exit_variables(t_token *node)
 {
@@ -52,6 +79,8 @@ t_dollar	*init_exit_variables(t_token *node)
 	exit_var->str_len = ft_strlen(node->str);
 	exit_var->i = 0;
 	exit_var->brackets = false;
+	exit_var->no_closing_bracket = false;
+	exit_var->exp_kind = IS_EXIT;
 	return (exit_var);
 }
 
@@ -67,10 +96,12 @@ int	set_exit_status(t_data *data, t_token *node, t_expand *info)
 		if (node->str[exit_var->i] == '$' && (node->str[exit_var->i + 1] == \
 			'?' || node->str[exit_var->i + 1] == '{'))
 		{
-			if (node->str[exit_var->i + 1] == '{')
+			if (node->str[exit_var->i + 1] == '{') // if too much when $?, set end_var in the if-statement +2.
 				exit_var->brackets = true;
 			exit_var->expanded = exit_status;
 			exit_var->end_var = exit_var->i + 2;
+			if (exit_var->brackets == true)
+				exit_var->end_var += 2;
 			expand_node(node, exit_var);
 		}
 		exit_var->i++;

@@ -30,6 +30,7 @@
 # define SHELL_NAME "Minishell$ " // which name, colors?
 
 typedef enum s_type			t_type;
+typedef enum s_exp			t_exp;
 typedef struct s_here_dol	t_h_dol;
 typedef struct s_list		t_list;
 typedef struct s_redir		t_redir;
@@ -53,6 +54,13 @@ typedef enum s_type
 	HERE_DOC,		// << heredoc
 	APPEND,			// >> append
 }	t_type;
+
+typedef enum s_exp
+{
+	IS_DOLLAR,
+	IS_EXIT,
+	IS_PID,
+}	t_exp;
 
 typedef struct s_here_dol
 {
@@ -80,6 +88,8 @@ typedef struct s_dollar
 	int		start_env;
 	int		end_var;
 	bool	brackets;
+	bool	no_closing_bracket;
+	t_exp	exp_kind;
 }	t_dollar;
 
 typedef enum s_redir_type
@@ -234,7 +244,7 @@ int		empty_words(t_token *nodes);
 int		remove_spaces(t_token *list);
 void	init_redirects(t_cmd *cmd);
 bool	a_redirection(t_type type);
-t_cmd	*init_cmds(void);
+t_cmd	*init_cmds(t_data *data);
 char	**add_to_double_array(char **arguments, char *str);
 bool	str_is_all_digits(char *str);
 
@@ -275,6 +285,8 @@ void	print_env(char **env);
 void	print_commands(t_cmd *cmd);
 void	print_redou(t_redou *redir);
 void	print_redin(t_redin *redir);
+
+char	*update_remainder(char *str, t_dollar *var);
 
 // OLD !!!
 

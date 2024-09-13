@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/08/23 15:45:42 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/13 17:09:56 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/13 20:28:07 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,9 +72,15 @@ int	empty_words(t_token *nodes)
 	bool	flag;
 	t_token	*copy;
 
+	count = 0;
+	flag = false;
+	copy = nodes;
+	if (!nodes)
+		return (0);
 	while (nodes)
 	{
-		if (nodes->type == WORD && strcmp(nodes->str, "") == 0)
+		if ((nodes->type == WORD || nodes->type == DOUBLE_QUOTE || \
+			nodes->type == SINGLE_QUOTE) && strcmp(nodes->str, "") == 0)
 			flag = true;
 		count++;
 		nodes = nodes->next;

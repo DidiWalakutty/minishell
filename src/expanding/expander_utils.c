@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/07/04 15:35:01 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/12 19:47:55 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/13 21:01:54 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,19 +40,39 @@ static char	*check_joined(char *before, char *fill_in)
 	return (replacement);
 }
 
-static bool	check_exit_brackets(char *str, t_dollar *var)
+static bool	check_exit_brackets(char *str, t_dollar *var, char **joined_update)
 {
-	if (str[var->i + 1] == '{')
+	int	max;
+
+	max = var->str_len;
+	if (var->exp_kind == IS_EXIT)
 	{
-		if (str[var->i + 2] && str[var->i + 3])
+		if (str[var->i + 1] == '{')
 		{
-			if (str[var->i + 2] == '?' && str[var->i + 3] != '}')
+			if (str[var->i + 2] == '?' && (var->i + 3 <= max))
+			{
+				if (str[var->i + 3] != '}')
+				{
+					free(var->expanded);
+					*joined_update = ft_strdup("");
+					return (false);
+				}
+			}
+			else
 			{
 				free(var->expanded);
-				var->expanded = ft_strdup("");
+				*joined_update = ft_strdup("");
 				return (false);
 			}
 		}
+	}
+	else if (var->exp_kind == IS_DOLLAR)
+	{
+
+	}
+	else if (var->exp_kind == IS_PID)
+	{
+
 	}
 	var->start_env--;
 	var->end_var++;
@@ -76,6 +96,8 @@ void	expand_node(t_token *node, t_dollar *dol)
 		return ;
 	joined = NULL;
 	before = ft_substr(node->str, 0, dol->i);
+	// if (dol->brackets == true)
+	// 	dol->end_var += 1;
 	remainder = ft_substr(node->str, dol->end_var, dol->str_len);
 	if (before && before[0] != '\0')
 		joined = ft_strdup(before);
@@ -86,7 +108,7 @@ void	expand_node(t_token *node, t_dollar *dol)
 	if (!joined)
 		joined = ft_strdup("");
 	if (dol->brackets == true)
-		check_exit_brackets(node->str, dol);
+		check_exit_brackets(node->str, dol, &joined);
 	free(node->str);
 	node->str = joined;
 	free(before);
