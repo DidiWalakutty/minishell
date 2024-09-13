@@ -1,19 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   main.c                                             :+:    :+:            */
+/*   main.c                                            :+:    :+:             */
 /*                                                     +:+                    */
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:40:07 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/12 19:52:15 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/13 17:29:16 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-// isatty checks if the standard input is pointing to our terminal,
-// still needs to have a quit_program function.
 static t_data	*init_shell(char **env_copy)
 {
 	t_data	*data;
@@ -21,15 +19,12 @@ static t_data	*init_shell(char **env_copy)
 	data = malloc(sizeof(t_data));
 	if (!data)
 		return (NULL);
-	// if (!isatty(STDIN_FILENO))
-	// 	exit_program();
 	data->env = copy_env(env_copy);
 	data->input = NULL;
 	data->list = NULL;
 	data->process = 1;
 	data->exit_status = 0;
 	init_shlvl(data);
-	// data->token = NULL; Not needed?
 	// signals
 	return (data);
 }
@@ -54,9 +49,7 @@ int	main(int argc, char **argv, char **env)
 			add_history(data->input);
 		tokenize_and_expand(data);
 		// print_linked_list(data->list);
-		print_commands(data->cmd_process);
-		// Didi's cmd fill in function;
-		// For expanding heredoc, check: expanding_heredoc;
+		// print_commands(data->cmd_process);
 		data->exit_status = make_processes(data);
 		free_all(data);
 	}

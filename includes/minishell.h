@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/20 16:38:50 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/10 19:06:26 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/09/13 17:24:26 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -234,7 +234,7 @@ int		empty_words(t_token *nodes);
 int		remove_spaces(t_token *list);
 void	init_redirects(t_cmd *cmd);
 bool	a_redirection(t_type type);
-t_cmd	*init_cmds(void);
+t_cmd	*init_cmds(t_data *data);
 char	**add_to_double_array(char **arguments, char *str);
 bool	str_is_all_digits(char *str);
 
