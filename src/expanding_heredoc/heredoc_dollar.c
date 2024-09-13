@@ -6,7 +6,7 @@
 /*   By: didi <didi@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 16:29:08 by didi          #+#    #+#                 */
-/*   Updated: 2024/09/11 19:27:02 by didi          ########   odam.nl         */
+/*   Updated: 2024/09/12 19:20:01 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ t_h_dol	*init_heredol(void)
 
 void	check_quote_and_brackets(char *str, int *i, t_h_dol *var)
 {
-
 	if (str[*i - 1] == '\'')
 	{
 		var->quote_type = '\'';
@@ -63,7 +62,7 @@ static bool	update_here_brackets(char *str, t_h_dol *info)
 	if (str[info->end_var + ft_strlen(info->expanded) + 1] != '}')
 	{
 		info->expanded = ft_strdup("");
-			return (false);
+		return (false);
 	}
 	info->start_env--;
 	info->end_var--;
@@ -89,7 +88,8 @@ void	set_env_and_expand(char *str, int *i, t_h_dol *info, char **env)
 			break ;
 		}
 	}
-	info->env_name = ft_substr(str, info->start_env, info->end_var - info->start_env);
+	info->env_name = ft_substr(str, info->start_env, \
+					info->end_var - info->start_env);
 	info->expanded = copy_env_input(env, info->env_name);
 	if (!info->expanded)
 		info->expanded = ft_strdup("");

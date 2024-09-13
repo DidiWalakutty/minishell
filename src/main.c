@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:40:07 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/12 18:59:32 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/12 19:52:15 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ static t_data	*init_shell(char **env_copy)
 	data->process = 1;
 	data->exit_status = 0;
 	init_shlvl(data);
-	// do we still need data->home??: data->home = copy_env_input(env_copy, "HOME");
 	// data->token = NULL; Not needed?
 	// signals
 	return (data);

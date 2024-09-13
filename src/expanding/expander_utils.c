@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/07/04 15:35:01 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/10 14:48:56 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/12 19:47:55 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,25 @@ static char	*check_joined(char *before, char *fill_in)
 	return (replacement);
 }
 
+static bool	check_exit_brackets(char *str, t_dollar *var)
+{
+	if (str[var->i + 1] == '{')
+	{
+		if (str[var->i + 2] && str[var->i + 3])
+		{
+			if (str[var->i + 2] == '?' && str[var->i + 3] != '}')
+			{
+				free(var->expanded);
+				var->expanded = ft_strdup("");
+				return (false);
+			}
+		}
+	}
+	var->start_env--;
+	var->end_var++;
+	return (true);
+}
+
 // 	free(dol->expanded); ???
 // Can't free(joined), because it's now owned by ceate_node;
 // It would deallocate the memory while the node still needs to use it.
@@ -66,6 +85,8 @@ void	expand_node(t_token *node, t_dollar *dol)
 		joined = check_joined(joined, remainder);
 	if (!joined)
 		joined = ft_strdup("");
+	if (dol->brackets == true)
+		check_exit_brackets(node->str, dol);
 	free(node->str);
 	node->str = joined;
 	free(before);
