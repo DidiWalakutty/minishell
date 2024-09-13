@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/08/22 18:14:06 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/13 17:07:13 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/13 17:11:43 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,19 @@
 
 static void	check_cmd_builtin(t_cmd **cmd)
 {
-	if (!strncmp("cd", (*cmd)->cmd, 3))
+	if (!ft_strncmp("cd", (*cmd)->cmd, 3))
 		(*cmd)->builtin = CD;
-	else if (!strncmp("export", (*cmd)->cmd, 7))
+	else if (!ft_strncmp("export", (*cmd)->cmd, 7))
 		(*cmd)->builtin = EXPORT;
-	else if (!strncmp("unset", (*cmd)->cmd, 6))
+	else if (!ft_strncmp("unset", (*cmd)->cmd, 6))
 		(*cmd)->builtin = UNSET;
-	else if (!strncmp("exit", (*cmd)->cmd, 5))
+	else if (!ft_strncmp("exit", (*cmd)->cmd, 5))
 		(*cmd)->builtin = EXIT;
-	else if (!strncmp("echo", (*cmd)->cmd, 5))
+	else if (!ft_strncmp("echo", (*cmd)->cmd, 5))
 		(*cmd)->builtin = ECHO;
-	else if (!strncmp("pwd", (*cmd)->cmd, 4))
+	else if (!ft_strncmp("pwd", (*cmd)->cmd, 4))
 		(*cmd)->builtin = PWD;
-	else if (!strncmp("env", (*cmd)->cmd, 4))
+	else if (!ft_strncmp("env", (*cmd)->cmd, 4))
 		(*cmd)->builtin = ENV;
 }
 
