@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   build_commands.c                                   :+:    :+:            */
+/*   build_commands.c                                  :+:    :+:             */
 /*                                                     +:+                    */
 /*   By: diwalaku <diwalaku@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/08/22 18:14:06 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/13 17:11:43 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/13 23:47:19 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../includes/minishell.h"
 
 static void	check_cmd_builtin(t_cmd **cmd)
 {
@@ -23,7 +23,7 @@ static void	check_cmd_builtin(t_cmd **cmd)
 	else if (!ft_strncmp("exit", (*cmd)->cmd, 5))
 		(*cmd)->builtin = EXIT;
 	else if (!ft_strncmp("echo", (*cmd)->cmd, 5))
-		(*cmd)->builtin = ECHO;
+		(*cmd)->builtin = ECHO_BUILTIN;
 	else if (!ft_strncmp("pwd", (*cmd)->cmd, 4))
 		(*cmd)->builtin = PWD;
 	else if (!ft_strncmp("env", (*cmd)->cmd, 4))

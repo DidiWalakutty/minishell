@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/20 16:38:50 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/13 22:04:02 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/09/13 23:45:42 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include "../libft/libft.h"
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <termios.h>
 # include <signal.h>
 # include <fcntl.h>
 # include <sys/wait.h>
@@ -118,7 +119,7 @@ typedef enum s_builtin
 	EXPORT,
 	UNSET,
 	EXIT,
-	ECHO,
+	ECHO_BUILTIN,
 	PWD,
 	ENV,
 }	t_builtin;
@@ -218,6 +219,8 @@ void	set_env_and_expand(char *str, int *i, t_h_dol *info, char **env);
 //-------------------------------------------------------------------------//
 //                          Signals                                        //
 //-------------------------------------------------------------------------//
+
+void	set_signals_ia_mode(t_data *data);
 
 //-------------------------------------------------------------------------//
 //                             Utils	                                   //
