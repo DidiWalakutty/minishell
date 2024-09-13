@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:40:07 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/13 20:08:27 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/09/13 22:16:50 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,11 @@ int	main(int argc, char **argv, char **env)
 	{
 		input = readline(SHELL_NAME);
 		if (!input)
-			error_exit("readline", EXIT_FAILURE);
+		{
+			// Will be changed to a proper exit function (Purpose: Ctrl-D)
+			write(STDERR_FILENO, "exit\n", 5);
+			exit(data->exit_status);
+		}
 		data->input = input;
 		if (input[0] != '\0')
 			add_history(data->input);

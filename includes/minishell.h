@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/20 16:38:50 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/13 17:54:19 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/09/13 22:04:02 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include "../libft/libft.h"
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <signal.h>
 # include <fcntl.h>
 # include <sys/wait.h>
 
@@ -39,6 +40,7 @@ typedef struct s_redir_in	t_redin;
 typedef struct s_redir_out	t_redou;
 typedef struct s_token		t_token;
 typedef struct s_data		t_data;
+typedef struct sigaction	t_sig_a;
 
 typedef enum s_type
 {
@@ -148,6 +150,8 @@ typedef struct s_data
 {
 	char	*input;
 	char	**env;
+	t_sig_a	sa_int;
+	t_sig_a	sa_quit;
 	t_token	*list;
 	t_type	*token;
 	t_cmd	*cmd_process;
