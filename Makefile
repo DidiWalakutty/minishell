@@ -37,6 +37,8 @@ SRC =	./src/main.c \
 				./src/execute/pipes.c \
 				./src/redirecting/check_heredocs.c \
 				./src/redirecting/heredoc.c \
+				./src/signals/ia_signals.c \
+				./src/signals/nia_signals.c \
 				./src/builtins/builtins.c \
 				./src/builtins/cd.c \
 				./src/builtins/echo.c \
@@ -108,6 +110,9 @@ $(OBJDIR)/%.o: ./src/redirecting/%.c
 	@$(CC) $(CFLAGS) $(HEADERS) -c -o $@ $<
 
 $(OBJDIR)/%.o: ./src/expandig_heredoc/&.c
+	@$(CC) $(CFLAGS) $(HEADERS) -c -o $@ $<
+
+$(OBJDIR)/%.o: ./src/signals/%.c
 	@$(CC) $(CFLAGS) $(HEADERS) -c -o $@ $<
 
 $(OBJDIR)/%.o: ./src/builtins/%.c

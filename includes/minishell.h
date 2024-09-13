@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/20 16:38:50 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/13 17:24:26 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/09/13 17:54:19 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,6 +210,10 @@ t_h_dol	*init_heredol(void);
 void	check_quote_and_brackets(char *str, int *i, t_h_dol *var);
 bool	update_here_brackets(char *str, t_h_dol *info);
 void	set_env_and_expand(char *str, int *i, t_h_dol *info, char **env);
+
+//-------------------------------------------------------------------------//
+//                          Signals                                        //
+//-------------------------------------------------------------------------//
 
 //-------------------------------------------------------------------------//
 //                             Utils	                                   //
