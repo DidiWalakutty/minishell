@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   pipes.c                                            :+:    :+:            */
+/*   pipes.c                                           :+:    :+:             */
 /*                                                     +:+                    */
 /*   By: sreerink <sreerink@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/12 20:30:41 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/09/12 17:19:52 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/13 20:12:18 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -302,6 +302,8 @@ int	make_processes(t_data *data)
 	int		pipefd[data->process + 1][2];
 
 	i = 0;
+	if (!data->cmd_process)
+		return (data->exit_status);
 	cmds = data->cmd_process;
 	temp = cmds;
 	if (temp->builtin && data->process == 1)
