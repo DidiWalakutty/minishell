@@ -6,7 +6,7 @@
 /*   By: sreerink <sreerink@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2024/09/13 17:50:16 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/09/14 19:49:39 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/09/14 21:27:31 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	ia_sigint_handler(int sig)
 {
 	rl_replace_line("", 0);
-	printf("\n^C\n");
+	write(STDERR_FILENO, "\n^C\n", 4);
 	rl_on_new_line();
 	rl_redisplay();
 }

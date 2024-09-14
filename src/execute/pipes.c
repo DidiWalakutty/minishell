@@ -6,7 +6,7 @@
 /*   By: sreerink <sreerink@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/12 20:30:41 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/09/14 19:55:35 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/09/14 21:12:10 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -308,7 +308,7 @@ int	make_processes(t_data *data)
 	temp = cmds;
 	if (temp->builtin && data->process == 1)
 		return (builtin_in_parent(temp, data));
-	enable_echoctl();
+	set_signals_nia_mode(data);
 	while (i < data->process + 1)
 	{
 		if (pipe(pipefd[i]) == -1)
@@ -336,8 +336,7 @@ int	make_processes(t_data *data)
 	temp = cmds;
 	while (temp)
 	{
-		if (waitpid(temp->pid, &status, 0) == -1)
-			error_exit("waitpid", EXIT_FAILURE);
+		waitpid(temp->pid, &status, 0);
 		temp = temp->next;
 	}
 	return (WEXITSTATUS(status));

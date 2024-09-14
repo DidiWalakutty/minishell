@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/20 16:38:50 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/14 01:53:59 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/09/14 21:51:18 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -223,6 +223,7 @@ void	set_env_and_expand(char *str, int *i, t_h_dol *info, char **env);
 bool	disable_echoctl(void);
 void	enable_echoctl(void);
 void	set_signals_ia_mode(t_data *data);
+void	set_signals_nia_mode(t_data *data);
 
 //-------------------------------------------------------------------------//
 //                             Utils	                                   //
