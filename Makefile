@@ -37,6 +37,7 @@ SRC =	./src/main.c \
 				./src/execute/pipes.c \
 				./src/redirecting/check_heredocs.c \
 				./src/redirecting/heredoc.c \
+				./src/signals/echoctl.c \
 				./src/signals/ia_signals.c \
 				./src/signals/nia_signals.c \
 				./src/builtins/builtins.c \
