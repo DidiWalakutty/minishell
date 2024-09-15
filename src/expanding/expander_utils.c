@@ -40,43 +40,15 @@ static char	*check_joined(char *before, char *fill_in)
 	return (replacement);
 }
 
-static bool	check_exit_brackets(char *str, t_dollar *var, char **joined_update)
+static t_joined	*init_join(t_token *node, t_dollar *dol)
 {
-	int	max;
+	t_joined	*new;
 
-	max = var->str_len;
-	if (var->exp_kind == IS_EXIT)
-	{
-		if (str[var->i + 1] == '{')
-		{
-			if (str[var->i + 2] == '?' && (var->i + 3 <= max))
-			{
-				if (str[var->i + 3] != '}')
-				{
-					free(var->expanded);
-					*joined_update = ft_strdup("");
-					return (false);
-				}
-			}
-			else
-			{
-				free(var->expanded);
-				*joined_update = ft_strdup("");
-				return (false);
-			}
-		}
-	}
-	else if (var->exp_kind == IS_DOLLAR)
-	{
-
-	}
-	else if (var->exp_kind == IS_PID)
-	{
-
-	}
-	var->start_env--;
-	var->end_var++;
-	return (true);
+	new = mem_check(malloc(sizeof(t_joined)));
+	new->before = ft_substr(node->str, 0, dol->i);
+	new->remainder = ft_substr(node->str, dol->end_var, dol->str_len);
+	new->joined = NULL;
+	return (new);
 }
 
 // 	free(dol->expanded); ???
@@ -88,31 +60,29 @@ static bool	check_exit_brackets(char *str, t_dollar *var, char **joined_update)
 // creates a node and adds it to the list.
 void	expand_node(t_token *node, t_dollar *dol)
 {
-	char	*before;
-	char	*remainder;
-	char	*joined;
+	t_joined	*var;
+
+	var = init_join(node, dol);
 
 	if (!node->str)
 		return ;
-	joined = NULL;
-	before = ft_substr(node->str, 0, dol->i);
-	// if (dol->brackets == true)
-	// 	dol->end_var += 1;
-	remainder = ft_substr(node->str, dol->end_var, dol->str_len);
-	if (before && before[0] != '\0')
-		joined = ft_strdup(before);
-	if (dol->expanded && dol->expanded[0] != '\0')
-		joined = check_joined(joined, dol->expanded);
-	if (remainder && remainder[0] != '\0')
-		joined = check_joined(joined, remainder);
-	if (!joined)
-		joined = ft_strdup("");
-	if (dol->brackets == true)
-		check_exit_brackets(node->str, dol, &joined);
+	if (var->before && var->before[0] != '\0')
+		var->joined = ft_strdup(var->before);
+	if (dol->expanded && dol->expanded[0] != '\0') // && dol->no_closing_bracket = false
+		var->joined = check_joined(var->joined, dol->expanded);
+	if (var->remainder && var->remainder[0] != '\0')
+		var->joined = check_joined(var->joined, var->remainder);
+	if (!var->joined)
+		var->joined = ft_strdup("");
+	if (dol->brackets == true || (dol->exp_kind == IS_DOLLAR && 
+								dol->no_closing_bracket == true ))
+		check_exit_brackets(node->str, dol, &var->joined, var);
 	free(node->str);
-	node->str = joined;
-	free(before);
-	free(remainder);
+	node->str = var->joined;
+	free(var->before);
+	free(var->remainder);
+	dol->brackets = false;
+	dol->no_closing_bracket = false;
 }
 
 // Compares each line of env with the given string, like

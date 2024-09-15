@@ -31,42 +31,15 @@ bool	is_exit_status(t_token *node, bool heredoc)
 	if (node->type != WORD && node->type != DOUBLE_QUOTE || \
 		heredoc == true)
 		return (false);
-	while (node->str[i] && node->str[i + 1])
+	while (i < ft_strlen(node->str))
 	{
 		if (node->str[i] == '$' && (node->str[i + 1] == '?' || \
-			node->str[i + 1] == '{'))
+			(node->str[i + 2] && node->str[i + 1] == '{' && node->str[i + 2] == '?')))
 			return (true);
 		i++;
 	}
 	return (false);
 }
-
-// bool	is_exit_status(t_token *node, bool heredoc)
-// {
-// 	int	i;
-// 	int	max;
-
-// 	i = 0;
-// 	max = ft_strlen(node->str);
-// 	if (node->type != WORD && node->type != DOUBLE_QUOTE || \
-// 		heredoc == true)
-// 		return (false);
-// 	while (node->str[i] && i <= max)
-// 	{
-// 		if (node->str[i] == '$' && (node->str[i + 1] == '?' || \
-// 			node->str[i + 1] == '{'))
-// 		{
-// 			if (node->str[i + 1] == '{')
-// 			{
-// 				if (node->str[i + 2] != '?')
-// 					return (false);
-// 			}
-// 			return (true);
-// 		}
-// 		i++;
-// 	}
-// 	return (false);
-// }
 
 t_dollar	*init_exit_variables(t_token *node)
 {

@@ -32,6 +32,7 @@
 typedef enum s_type			t_type;
 typedef enum s_exp			t_exp;
 typedef struct s_here_dol	t_h_dol;
+typedef struct s_joined		t_joined;
 typedef struct s_list		t_list;
 typedef struct s_redir		t_redir;
 typedef struct s_cmd		t_cmd;
@@ -73,6 +74,13 @@ typedef struct s_here_dol
 	bool	quotes;		// check for quotes
 	char	quote_type;	// s_q or d_q
 }	t_h_dol;
+
+typedef struct s_joined
+{
+	char *joined;
+	char *before;
+	char *remainder;
+}	t_joined;
 
 typedef struct s_expand
 {
@@ -201,6 +209,8 @@ bool	is_double_dollar(t_token *node, bool heredoc);
 int		set_pid(t_token *node, t_expand *info);
 bool	quote_type_present(t_token *node);
 int		concatenate_quotes(t_token *node);
+bool	check_exit_brackets(char *str, t_dollar *var, char **new_str, t_joined *join);
+// bool	check_exit_brackets(char *str, t_dollar *var, char **joined_update);
 
 //-------------------------------------------------------------------------//
 //                          Build Commands                                 //

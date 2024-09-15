@@ -70,22 +70,21 @@ static void	expand_dollar(t_token *node, t_dollar *dol, char **env)
 	while (node->str[dol->end_var] && (is_alph_or_num(node->str[dol->end_var]) \
 		|| node->str[dol->end_var] == '_'))
 	{
-		printf("end_var is: %c\n", node->str[dol->end_var]);
 		dol->end_var++;
 		if (node->str[dol->end_var] == '$')
 			break ;
 	}
-	printf("after env-name: %c\n", node->str[dol->end_var]);
 	if (dol->brackets == true && node->str[dol->end_var] != '}')
-		dol->no_closing_bracket = true;
+		dol->no_closing_bracket = true; // if true, maybe expand node and just add before and remain?
 	dol->env_name = ft_substr(node->str, dol->start_env, \
 					dol->end_var - dol->start_env);
 	dol->expanded = copy_env_input(env, dol->env_name);
 	if (!dol->expanded)
 		dol->expanded = ft_strdup("");
-	if (dol->brackets == true)
+	// following line, when using '\' to make a shorter line
+	// will end_var++ even if no_closing_bracket == true.
+	if (dol->brackets == true && dol->no_closing_bracket == false && (dol->end_var < dol->str_len))
 		dol->end_var++;
-		// update_dol_brackets(node, dol);
 	expand_node(node, dol);
 }
 
@@ -104,7 +103,11 @@ int	set_dollar(t_token *node, char **env, t_expand *info)
 			if (node->str[dol_var->i + 2])
 				if (node->str[dol_var->i + 2] != '?' && \
 					node->str[dol_var->i + 2] != '$' )
+				{
 					expand_dollar(node, dol_var, env);
+					dol_var->str_len = ft_strlen(node->str);
+					continue;
+				}
 		}
 		dol_var->i++;
 		while (node->str[dol_var->i] && node->str[dol_var->i] != '$')

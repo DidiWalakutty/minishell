@@ -30,6 +30,7 @@ SRC =	./src/main.c \
 				./src/expanding/expander_utils.c \
 				./src/expanding/expand_exit_and_empty.c \
 				./src/expanding/quote_concatenation.c \
+				./src/expanding/expand_brackets.c \
 				./src/commands/build_commands.c \
 				./src/commands/build_inits_and_nodes.c \
 				./src/commands/build_redirections.c \

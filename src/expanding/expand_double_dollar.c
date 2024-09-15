@@ -15,14 +15,16 @@
 bool	is_double_dollar(t_token *node, bool heredoc)
 {
 	int	i;
+	// int	len;
 
 	i = 0;
 	if (node->type != WORD && node->type != DOUBLE_QUOTE || \
 		heredoc == true)
 		return (false);
-	while (node->str[i])
+	while (i < ft_strlen(node->str))
 	{
-		if (node->str[i] == '$' && node->str[i + 1] == '$')
+		if (node->str[i] == '$' && (node->str[i + 1] == '$' || \
+			(node->str[i + 2] && node->str[i + 1] == '{' && node->str[i + 2] == '$')))
 			return (true);
 		i++;
 	}
@@ -53,11 +55,18 @@ int	set_pid(t_token *node, t_expand *info)
 	dub_var = init_double_dol(node);
 	while (dub_var->i < dub_var->str_len)
 	{
-		if (node->str[dub_var->i] == '$' && node->str[dub_var->i + 1] == '$')
+		if (node->str[dub_var->i] == '$' && (node->str[dub_var->i + 1] == \
+			'$' || node->str[dub_var->i + 1] == '{'))
 		{
-			dub_var->expanded = pid;
+			if (node->str[dub_var->i + 1] == '{')
+				dub_var->brackets = true;
+			dub_var->expanded = ft_strdup(pid);
 			dub_var->end_var = dub_var->i + 2;
+			if (dub_var->brackets == true)
+				dub_var->end_var += 1;
 			expand_node(node, dub_var);
+			dub_var->str_len = ft_strlen(node->str);
+			continue;
 		}
 		dub_var->i++;
 		while (node->str[dub_var->i] && node->str[dub_var->i] != '$')
