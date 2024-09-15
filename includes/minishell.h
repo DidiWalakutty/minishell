@@ -70,6 +70,7 @@ typedef struct s_here_dol
 	int		i;
 	int		start_env;
 	int		end_var;
+	int		str_len;
 	bool	brackets;	// check for brackets
 	bool	quotes;		// check for quotes
 	char	quote_type;	// s_q or d_q
@@ -226,7 +227,7 @@ int		handle_redirect(t_token **token, t_cmd **command);
 
 char	*heredoc_expanding(char *str, char **env);
 bool	is_heredoc_dollar(char *str, int i);
-t_h_dol	*init_heredol(void);
+t_h_dol	*init_heredol(char *str);
 void	check_quote_and_brackets(char *str, int *i, t_h_dol *var);
 bool	update_here_brackets(char *str, t_h_dol *info);
 void	set_env_and_expand(char *str, int *i, t_h_dol *info, char **env);

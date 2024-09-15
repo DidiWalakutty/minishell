@@ -6,7 +6,7 @@
 /*   By: didi <didi@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 16:29:08 by didi          #+#    #+#                 */
-/*   Updated: 2024/09/12 19:20:01 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/15 20:59:05 by didi          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,16 +16,21 @@ bool	is_heredoc_dollar(char *str, int i)
 {
 	if (str[i] == '$')
 	{
-		if (str[i + 1] == '{' && (is_alph_or_num(str[i + 2] || \
-			str[i + 1] == '_')))
-			return (true);
-		else if (is_alph_or_num(str[i + 1] || str[i + 1] == '_'))
+		if (str[i + 1] == '{')
+		{
+			i += 2;
+			if (str[i] == '?' || str[i] == '$')
+				return (false);
+			if (is_alph_or_num(str[i] || str[i] == '_'))
+				return (true);
+		}
+		else if (is_alph_or_num(str[i + 1]) || str[i + 1] == '_')
 			return (true);
 	}
 	return (false);
 }
 
-t_h_dol	*init_heredol(void)
+t_h_dol	*init_heredol(char *str)
 {
 	t_h_dol	*new;
 
@@ -33,6 +38,7 @@ t_h_dol	*init_heredol(void)
 	new->expanded = NULL;
 	new->env_name = NULL;
 	new->i = 0;
+	new->str_len = ft_strlen(str);
 	new->start_env = 0;
 	new->end_var = 0;
 	new->brackets = false;
@@ -43,6 +49,8 @@ t_h_dol	*init_heredol(void)
 
 void	check_quote_and_brackets(char *str, int *i, t_h_dol *var)
 {
+	// Probably don't need to check for the quotes, because it'll
+	// add them to the new_string anyways.
 	if (str[*i - 1] == '\'')
 	{
 		var->quote_type = '\'';
@@ -54,10 +62,13 @@ void	check_quote_and_brackets(char *str, int *i, t_h_dol *var)
 		var->quotes = true;
 	}
 	if (str[*i + 1] == '{')
+	{
 		var->brackets = true;
+		(*i)++;
+	}
 }
 
-static bool	update_here_brackets(char *str, t_h_dol *info)
+bool	update_here_brackets(char *str, t_h_dol *info)
 {
 	if (str[info->end_var + ft_strlen(info->expanded) + 1] != '}')
 	{
@@ -74,12 +85,10 @@ void	set_env_and_expand(char *str, int *i, t_h_dol *info, char **env)
 	int	j;
 
 	j = *i + 1;
-	if (str[j] == '{')
-		j++;
 	info->start_env = j;
 	info->end_var = j;
-	while (str[info->end_var] && (is_alph_or_num(str[info->end_var] || \
-			str[info->end_var] == '_')))
+	while (str[info->end_var] && (is_alph_or_num(str[info->end_var]) || \
+		str[info->end_var] == '_'))
 	{
 		info->end_var++;
 		if (str[info->end_var] == '$')
@@ -95,5 +104,6 @@ void	set_env_and_expand(char *str, int *i, t_h_dol *info, char **env)
 		info->expanded = ft_strdup("");
 	if (info->brackets == true)
 		update_here_brackets(str, info);
-	*i = info->end_var;
+	expand_heredoc_string(info)
+	// *i = info->end_var;
 }

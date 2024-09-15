@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/10 18:10:20 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/12 16:41:42 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/15 21:10:19 by didi          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,39 +15,55 @@
 void	set_heredoc_dollar(char *str, int *i, char **new_string, char **env)
 {
 	t_h_dol	*info;
-	char	*temp;
 
-	info = init_heredol();
+	info = init_heredol(str);
+	while (info->i < info->str_len)
+	{
+
+	}
 	if (*i > 0)
 		check_quote_and_brackets(str, i, info);
 	set_env_and_expand(str, i, info, env);
+	before = ft_substr(str, 0, *i);
+	after = ft_substr(str, *i + 1, (info->str_len - (*i + 1)));
 	temp = *new_string;
-	new_string = ft_strjoin(*new_string, info->expanded);
+	*new_string = ft_strjoin(before, info->expanded);
 	free(temp);
+	temp = *new_string;
+	*new_string = ft_strjoin(*new_string, after);
+	free(temp);
+	free(before);
+	free(after);
 	free_heredoc_info(info);
 }
 
-void	set_heredoc_pid(char *str, int *i, char **new_string, char **env)
-{
-	t_h_dol	*info;
-	char	*pid;
-	char	*temp;
+// void	set_heredoc_pid(char *str, int *i, char **new_string, char **env)
+// {
+// 	t_h_dol	*info;
+// 	char	*pid;
+// 	char	*temp;
 
-	pid = ft_itoa(getpid());
-	info = init_heredol();
-	if (*i > 0)
-		check_quote_and_brackets(str, i, info);
-	expand_heredoc_pid(str, i, info, env);
-	temp = *new_string;
-	new_string = ft_strjoin(*new_string, info->expanded);
-	free(temp);
-	free_heredoc_info(info);
-}
+// 	pid = ft_itoa(getpid());
+// 	info = init_heredol();
+// 	if (*i > 0)
+// 		check_quote_and_brackets(str, i, info);
+// 	expand_heredoc_pid(str, i, info, env);
+// 	temp = *new_string;
+// 	new_string = ft_strjoin(new_string, info->expanded);
+// 	free(temp);
+// 	free_heredoc_info(info);
+// }
 
-void	set_heredoc_exit(char *str, int *i, char **new_string, char **env)
-{
+// void	set_heredoc_exit(char *str, int *i, char **new_string, char **env)
+// {
 	
-}
+// }
+
+// void	expand_heredoc_string(char *str, int *i, t_h_dol *info)
+// {
+// 	char	*
+// }
+
 
 char	*heredoc_expanding(char *str, char **env)
 {
@@ -60,12 +76,12 @@ char	*heredoc_expanding(char *str, char **env)
 	{
 		if (is_heredoc_dollar(str, i))
 			set_heredoc_dollar(str, &i, &new_str, env);
-		else if (is_heredoc_pid(str, i))
-			set_heredoc_pid(str, &i, &new_str, env);
-		else if (is_heredoc_exit(str, i))
-			heredoc_exit_status(str, &i, &new_str, env);
-		else
-			new_str = add_to_heredoc_string(new_str, str[i]);
+		// else if (is_heredoc_pid(str, i))
+		// 	set_heredoc_pid(str, &i, &new_str, env);
+		// else if (is_heredoc_exit(str, i))
+		// 	heredoc_exit_status(str, &i, &new_str, env);
+		// else
+		// 	new_str = add_to_heredoc_string(new_str, str[i]);
 		i++;
 	}
 	return (new_str);
