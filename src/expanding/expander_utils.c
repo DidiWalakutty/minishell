@@ -28,7 +28,7 @@ bool	is_heredoc(t_token *node)
 	return (false);
 }
 
-static char	*check_joined(char *before, char *fill_in)
+char	*check_joined(char *before, char *fill_in)
 {
 	char	*replacement;
 
@@ -74,7 +74,7 @@ void	expand_node(t_token *node, t_dollar *dol)
 		var->joined = check_joined(var->joined, var->remainder);
 	if (!var->joined)
 		var->joined = ft_strdup("");
-	if (dol->brackets == true || (dol->exp_kind == IS_DOLLAR && 
+	if (dol->brackets == true || (dol->exp_kind == IS_DOLLAR && \
 								dol->no_closing_bracket == true ))
 		check_exit_brackets(node->str, dol, &var->joined, var);
 	free(node->str);

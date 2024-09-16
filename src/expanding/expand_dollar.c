@@ -98,7 +98,7 @@ int	set_dollar(t_token *node, char **env, t_expand *info)
 	{
 		if (node->str[dol_var->i] == '$' && \
 			(if_valid_char(node->str[dol_var->i + 1]) || \
-			node->str[dol_var->i + 1] == '{'))
+			(node->str[dol_var->i + 1] == '{')))
 		{
 			if (node->str[dol_var->i + 2])
 				if (node->str[dol_var->i + 2] != '?' && \

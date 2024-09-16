@@ -6,83 +6,123 @@
 /*   By: diwalaku <diwalaku@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/10 18:10:20 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/15 21:10:19 by didi          ########   odam.nl         */
+/*   Updated: 2024/09/16 22:24:24 by didi          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	set_heredoc_dollar(char *str, int *i, char **new_string, char **env)
+static void	set_heredoc_dollar(char **copy, char **new_string, char **env, bool *expanded)
 {
 	t_h_dol	*info;
 
-	info = init_heredol(str);
+	info = init_here_dol(*copy);
 	while (info->i < info->str_len)
 	{
-
+		if (info->copy[info->i] == '$' && (if_valid_char(info->copy[info->i + 1]) || \
+			info->copy[info->i + 1] == '{'))
+		{
+			if (info->copy[info->i + 2] && info->copy[info->i + 2] != '$' && \
+				info->copy[info->i + 2] != '?')
+			{
+				set_env_and_expand(info->copy, info, env, expanded);
+				info->str_len = ft_strlen(info->copy);
+				continue;
+			}
+		}
+		info->i++;
+		while (info->copy[info->i] && info->copy[info->i] != '$')
+			info->i++;
+		info->str_len = ft_strlen(info->copy);
 	}
-	if (*i > 0)
-		check_quote_and_brackets(str, i, info);
-	set_env_and_expand(str, i, info, env);
-	before = ft_substr(str, 0, *i);
-	after = ft_substr(str, *i + 1, (info->str_len - (*i + 1)));
-	temp = *new_string;
-	*new_string = ft_strjoin(before, info->expanded);
-	free(temp);
-	temp = *new_string;
-	*new_string = ft_strjoin(*new_string, after);
-	free(temp);
-	free(before);
-	free(after);
+	*copy = ft_strdup(info->copy);
 	free_heredoc_info(info);
 }
 
-// void	set_heredoc_pid(char *str, int *i, char **new_string, char **env)
-// {
-// 	t_h_dol	*info;
-// 	char	*pid;
-// 	char	*temp;
+static void	set_heredoc_pid(char **copy, char **new_string, char **env, bool *expanded)
+{
+	t_h_dol	*info;
 
-// 	pid = ft_itoa(getpid());
-// 	info = init_heredol();
-// 	if (*i > 0)
-// 		check_quote_and_brackets(str, i, info);
-// 	expand_heredoc_pid(str, i, info, env);
-// 	temp = *new_string;
-// 	new_string = ft_strjoin(new_string, info->expanded);
-// 	free(temp);
-// 	free_heredoc_info(info);
-// }
+	info = init_here_pid(*copy);
+	while (info->i < info->str_len)
+	{
+		if (info->copy[info->i] == '$' && (info->copy[info->i + 1] == '$' || \
+			info->copy[info->i + 1] == '{'))
+		{
+			if (info->copy[info->i + 1] == '{')
+				info->brackets = true;
+			info->expanded = ft_strdup(info->env_name);
+			info->end_var = info->i + 2;
+			if (info->brackets == true)
+				info->end_var += 2;
+			expand_heredoc_string(info->copy, info, expanded);
+			info->str_len = ft_strlen(info->copy);
+			continue;
+		}
+		info->i++;
+		while (info->copy[info->i] && info->copy[info->i] != '$')
+			info->i++;
+		info->str_len = ft_strlen(info->copy);
+	}
+	*copy = ft_strdup(info->copy);
+	free_heredoc_info(info);
+}
 
-// void	set_heredoc_exit(char *str, int *i, char **new_string, char **env)
-// {
-	
-// }
+static void	set_heredoc_exit(char **copy, char **new_string, char **env, bool *expanded)
+{
+	t_h_dol *info;
 
-// void	expand_heredoc_string(char *str, int *i, t_h_dol *info)
-// {
-// 	char	*
-// }
-
+	info = init_here_exit(*copy);
+	while (info->i < info->str_len)
+	{
+		if (info->copy[info->i] == '$' && (info->copy[info->i + 1] == '?' || \
+			info->copy[info->i + 1] == '{'))
+		{
+			if (info->copy[info->i + 1] == '{')
+				info->brackets = true;
+			info->expanded = ft_strdup(info->env_name);
+			info->end_var = info->i + 2;
+			if (info->brackets == true)
+				info->end_var += 2;
+			expand_heredoc_string(info->copy, info, expanded);
+			info->str_len = ft_strlen(info->copy);
+			continue;
+		}
+		info->i++;
+		while (info->copy[info->i] && info->copy[info->i] != '$')
+			info->i++;
+		info->str_len = ft_strlen(info->copy);
+	}
+	*copy = ft_strdup(info->copy);
+	free_heredoc_info(info);
+}
 
 char	*heredoc_expanding(char *str, char **env)
 {
 	char	*new_str;
+	char	*copy;
 	int		i;
+	bool	expanded;
 
 	i = 0;
+	copy = ft_strdup(str);
 	new_str = ft_strdup("");
 	while (str[i])
 	{
-		if (is_heredoc_dollar(str, i))
-			set_heredoc_dollar(str, &i, &new_str, env);
-		// else if (is_heredoc_pid(str, i))
-		// 	set_heredoc_pid(str, &i, &new_str, env);
-		// else if (is_heredoc_exit(str, i))
-		// 	heredoc_exit_status(str, &i, &new_str, env);
-		// else
-		// 	new_str = add_to_heredoc_string(new_str, str[i]);
-		i++;
+		expanded = true;
+		if (is_heredoc_dollar(copy, i))
+			set_heredoc_dollar(&copy, &new_str, env, &expanded);
+		if (is_heredoc_double(copy, i))
+			set_heredoc_pid(&copy, &new_str, env, &expanded);
+		if (is_heredoc_exit(copy, i))
+			set_heredoc_exit(&copy, &new_str, env, &expanded);
+		if (expanded == true)
+			i++;
 	}
+	free(new_str);
+	new_str = ft_strdup(copy);
+	free(copy);
 	return (new_str);
 }
+
+

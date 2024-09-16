@@ -15,7 +15,6 @@
 bool	is_double_dollar(t_token *node, bool heredoc)
 {
 	int	i;
-	// int	len;
 
 	i = 0;
 	if (node->type != WORD && node->type != DOUBLE_QUOTE || \
@@ -38,8 +37,8 @@ t_dollar	*init_double_dol(t_token *node)
 	double_dollar = mem_check(malloc(sizeof(t_dollar)));
 	double_dollar->expanded = NULL;
 	double_dollar->end_var = 0;
-	double_dollar->str_len = ft_strlen(node->str);
 	double_dollar->i = 0;
+	double_dollar->str_len = ft_strlen(node->str);
 	double_dollar->brackets = false;
 	double_dollar->no_closing_bracket = false;
 	double_dollar->exp_kind = IS_PID;
