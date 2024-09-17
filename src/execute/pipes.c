@@ -6,7 +6,7 @@
 /*   By: sreerink <sreerink@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/12 20:30:41 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/09/14 22:09:56 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/09/17 22:39:58 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,8 +80,6 @@ int		redirect_redir_in(t_redin *redir_in)
 {
 	int	file;
 
-	if (!check_heredocs(redir_in))
-		return (EXIT_FAILURE);
 	while (redir_in)
 	{
 		if (!redir_in->heredoc)
@@ -93,6 +91,12 @@ int		redirect_redir_in(t_redin *redir_in)
 				return (EXIT_FAILURE);
 			}
 			if (!redirect_fd(file, STDIN_FILENO))
+				return (EXIT_FAILURE);
+		}
+		else if (!redir_in->next)
+		{
+			close(redir_in->pipe_hdoc[1]);
+			if (!redirect_fd(redir_in->pipe_hdoc[0], STDIN_FILENO))
 				return (EXIT_FAILURE);
 		}
 		redir_in = redir_in->next;
@@ -199,8 +203,8 @@ int	redirect_input_parent(t_redin *redir_in)
 
 	if (!redir_in)
 		return (EXIT_SUCCESS);
-	if (!check_heredocs(redir_in))
-		return (EXIT_FAILURE);
+	//if (!check_heredocs(redir_in))
+	//	return (EXIT_FAILURE);
 	while (redir_in)
 	{
 		if (!redir_in->heredoc)
@@ -293,6 +297,37 @@ int	builtin_in_parent(t_cmd *cmd, t_data *data)
 	return (exit_status);
 }
 
+void	close_pipes_heredoc(t_cmd *cmd, ssize_t cur_cmd)
+{
+	ssize_t	i;
+	t_cmd	*temp;
+	t_redin	*redir_in;
+
+	i = 0;
+	if (i == cur_cmd)
+		temp = cmd->next;
+	else
+		temp = cmd;
+	while (temp)
+	{
+		redir_in = temp->redir_in;
+		while (redir_in)
+		{
+			if (redir_in->heredoc && !redir_in->next)
+			{
+				close(redir_in->pipe_hdoc[0]);
+				close(redir_in->pipe_hdoc[1]);
+			}
+			redir_in = redir_in->next;
+		}
+		i++;
+		if (i == cur_cmd)
+			temp = temp->next->next;
+		else
+			temp = temp->next;
+	}
+}
+
 int	make_processes(t_data *data)
 {
 	size_t	i;
@@ -308,6 +343,7 @@ int	make_processes(t_data *data)
 	temp = cmds;
 	if (temp->builtin && data->process == 1)
 		return (builtin_in_parent(temp, data));
+	check_heredocs(data);
 	set_signals_nia_mode(data);
 	while (i < data->process + 1)
 	{
@@ -321,8 +357,9 @@ int	make_processes(t_data *data)
 		temp->pid = fork();
 		if (temp->pid == -1)
 			error_exit("fork", EXIT_FAILURE);
-		else if (temp->pid == 0)
+		if (temp->pid == 0)
 		{
+			close_pipes_heredoc(cmds, i);
 			close_unused_pipes(pipefd, i, data->process + 1);
 			child_process(temp, pipefd[i], pipefd[i + 1]);
 		}
@@ -334,6 +371,7 @@ int	make_processes(t_data *data)
 	close(pipefd[i][0]);
 	close(pipefd[i][1]);
 	temp = cmds;
+	close_pipes_heredoc(cmds, -1);
 	while (temp)
 	{
 		waitpid(temp->pid, &status, 0);

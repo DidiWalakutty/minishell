@@ -6,27 +6,34 @@
 /*   By: sreerink <sreerink@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/08 19:46:52 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/09/14 22:10:38 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/09/17 22:39:49 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-bool	check_heredocs(t_redin *redir_in)
+bool	check_heredocs(t_data *data)
 {
-	while (redir_in)
+	t_cmd	*temp;
+	t_redin	*redir_in;
+
+	temp = data->cmd_process;
+	while (temp)
 	{
-		if (redir_in->heredoc && !redir_in->next)
+		redir_in = temp->redir_in;
+		while (redir_in)
 		{
-			if (!heredoc(redir_in, true))
-				return (false);
+			if (redir_in->heredoc && !redir_in->next)
+			{
+				if (pipe(temp->redir_in->pipe_hdoc) == -1)
+					return (false);
+				heredoc(temp->redir_in, true);
+			}
+			else if (redir_in->heredoc)
+				heredoc(temp->redir_in, false);
+			redir_in = redir_in->next;
 		}
-		else if (redir_in->heredoc)
-		{
-			if (!heredoc(redir_in, false))
-				return (false);
-		}
-		redir_in = redir_in->next;
+		temp = temp->next;
 	}
 	return (true);
 }

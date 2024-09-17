@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/20 16:38:50 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/14 22:10:10 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/09/17 18:18:55 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,7 @@ typedef struct s_redir_in
 	char		*str;
 	bool		heredoc;
 	bool		quotes;
+	int			pipe_hdoc[2];
 	t_redin		*next;
 }	t_redin;
 
@@ -304,8 +305,8 @@ int		make_processes(t_data *data);
 //-------------------------------------------------------------------------//
 
 bool	redirect_fd(int fd, int fd_dst);
-bool	check_heredocs(t_redin *redir_in);
-bool	heredoc(t_redin *redir_in, bool redirect);
+bool	check_heredocs(t_data *data);
+void	heredoc(t_redin *redir_in, bool redirect);
 
 //-------------------------------------------------------------------------//
 //                           Builtins                                  //
