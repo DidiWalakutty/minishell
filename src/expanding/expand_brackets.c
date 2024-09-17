@@ -6,7 +6,7 @@
 /*   By: didi <didi@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/14 16:18:18 by didi          #+#    #+#                 */
-/*   Updated: 2024/09/14 21:41:38 by didi          ########   odam.nl         */
+/*   Updated: 2024/09/17 19:44:53 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static bool	exit_brackets(char *str, t_dollar *var, int max)
 			return (false);
 	}
 	return (true);
-}	
+}
 
 void	reset_joined(t_dollar *var, char **updated_joined, t_joined *join)
 {
@@ -50,7 +50,8 @@ void	reset_joined(t_dollar *var, char **updated_joined, t_joined *join)
 		*updated_joined = ft_strconcat(join->before, join->remainder);
 }
 
-bool	check_exit_brackets(char *str, t_dollar *var, char **new_str, t_joined *join)
+bool	check_exit_brackets(char *str, t_dollar *var, char **new_str, \
+							t_joined *join)
 {
 	if (var->exp_kind == IS_EXIT || var->exp_kind == IS_PID)
 	{

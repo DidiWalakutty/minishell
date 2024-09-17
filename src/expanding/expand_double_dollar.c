@@ -23,7 +23,8 @@ bool	is_double_dollar(t_token *node, bool heredoc)
 	while (i < ft_strlen(node->str))
 	{
 		if (node->str[i] == '$' && (node->str[i + 1] == '$' || \
-			(node->str[i + 2] && node->str[i + 1] == '{' && node->str[i + 2] == '$')))
+			(node->str[i + 2] && node->str[i + 1] == '{' && \
+			node->str[i + 2] == '$')))
 			return (true);
 		i++;
 	}
@@ -35,7 +36,7 @@ t_dollar	*init_double_dol(t_token *node)
 	t_dollar	*double_dollar;
 
 	double_dollar = mem_check(malloc(sizeof(t_dollar)));
-	double_dollar->expanded = NULL;
+	double_dollar->expanded = ft_itoa(getpid());
 	double_dollar->end_var = 0;
 	double_dollar->i = 0;
 	double_dollar->str_len = ft_strlen(node->str);
@@ -48,9 +49,7 @@ t_dollar	*init_double_dol(t_token *node)
 int	set_pid(t_token *node, t_expand *info)
 {
 	t_dollar	*dub_var;
-	char		*pid;
 
-	pid = ft_itoa(getpid());
 	dub_var = init_double_dol(node);
 	while (dub_var->i < dub_var->str_len)
 	{
@@ -59,13 +58,13 @@ int	set_pid(t_token *node, t_expand *info)
 		{
 			if (node->str[dub_var->i + 1] == '{')
 				dub_var->brackets = true;
-			dub_var->expanded = ft_strdup(pid);
+			dub_var->expanded = ft_strdup(dub_var->expanded);
 			dub_var->end_var = dub_var->i + 2;
 			if (dub_var->brackets == true)
-				dub_var->end_var += 1;
+				dub_var->end_var += 2;
 			expand_node(node, dub_var);
 			dub_var->str_len = ft_strlen(node->str);
-			continue;
+			continue ;
 		}
 		dub_var->i++;
 		while (node->str[dub_var->i] && node->str[dub_var->i] != '$')

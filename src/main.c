@@ -52,16 +52,14 @@ int	main(int argc, char **argv, char **env)
 		data->input = input;
 		if (input != NULL)
 			add_history(data->input);
-		char *outcome = heredoc_expanding(data->input, data->env);
-		printf("Heredoc outcome:\n%s\n", outcome);
-		// tokenize_and_expand(data);
-		// printf("before print commands\n");
-		// print_linked_list(data->list);
+		tokenize_and_expand(data);
+		print_linked_list(data->list);
 		// print_commands(data->cmd_process);
-		// Didi's cmd fill in function;
-		// For expanding heredoc, check: expanding_heredoc;
 		// data->exit_status = make_processes(data);
 		free_all(data);
 	}
 	return (0);
 }
+
+		// char *outcome = heredoc_expanding(data->input, data->env);
+		// printf("Heredoc outcome:\n%s\n", outcome);

@@ -75,15 +75,14 @@ static void	expand_dollar(t_token *node, t_dollar *dol, char **env)
 			break ;
 	}
 	if (dol->brackets == true && node->str[dol->end_var] != '}')
-		dol->no_closing_bracket = true; // if true, maybe expand node and just add before and remain?
+		dol->no_closing_bracket = true;
 	dol->env_name = ft_substr(node->str, dol->start_env, \
 					dol->end_var - dol->start_env);
 	dol->expanded = copy_env_input(env, dol->env_name);
 	if (!dol->expanded)
 		dol->expanded = ft_strdup("");
-	// following line, when using '\' to make a shorter line
-	// will end_var++ even if no_closing_bracket == true.
-	if (dol->brackets == true && dol->no_closing_bracket == false && (dol->end_var < dol->str_len))
+	if (dol->brackets == true && dol->no_closing_bracket == false && \
+		(dol->end_var < dol->str_len))
 		dol->end_var++;
 	expand_node(node, dol);
 }
@@ -100,14 +99,13 @@ int	set_dollar(t_token *node, char **env, t_expand *info)
 			(if_valid_char(node->str[dol_var->i + 1]) || \
 			(node->str[dol_var->i + 1] == '{')))
 		{
-			if (node->str[dol_var->i + 2])
-				if (node->str[dol_var->i + 2] != '?' && \
-					node->str[dol_var->i + 2] != '$' )
-				{
-					expand_dollar(node, dol_var, env);
-					dol_var->str_len = ft_strlen(node->str);
-					continue;
-				}
+			if (node->str[dol_var->i + 2] && (node->str[dol_var->i + 2] \
+							!= '?' && node->str[dol_var->i + 2] != '$'))
+			{
+				expand_dollar(node, dol_var, env);
+				dol_var->str_len = ft_strlen(node->str);
+				continue ;
+			}
 		}
 		dol_var->i++;
 		while (node->str[dol_var->i] && node->str[dol_var->i] != '$')

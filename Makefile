@@ -36,6 +36,7 @@ SRC =	./src/main.c \
 				./src/expanding_heredoc/heredoc_pid.c \
 				./src/expanding_heredoc/heredoc_utils.c \
 				./src/expanding_heredoc/heredoc_exit.c \
+				./src/expanding_heredoc/free_heredocs.c \
 				./src/commands/build_commands.c \
 				./src/commands/build_inits_and_nodes.c \
 				./src/commands/build_redirections.c \

@@ -63,30 +63,30 @@ void	expand_node(t_token *node, t_dollar *dol)
 	t_joined	*var;
 
 	var = init_join(node, dol);
-
 	if (!node->str)
 		return ;
 	if (var->before && var->before[0] != '\0')
 		var->joined = ft_strdup(var->before);
-	if (dol->expanded && dol->expanded[0] != '\0') // && dol->no_closing_bracket = false
+	if (dol->expanded && dol->expanded[0] != '\0')
 		var->joined = check_joined(var->joined, dol->expanded);
 	if (var->remainder && var->remainder[0] != '\0')
 		var->joined = check_joined(var->joined, var->remainder);
 	if (!var->joined)
 		var->joined = ft_strdup("");
 	if (dol->brackets == true || (dol->exp_kind == IS_DOLLAR && \
-								dol->no_closing_bracket == true ))
+								dol->no_closing_bracket == true))
 		check_exit_brackets(node->str, dol, &var->joined, var);
 	free(node->str);
 	node->str = var->joined;
 	free(var->before);
 	free(var->remainder);
+	free(var->joined);
+	free(dol->expanded);
+	free(dol->env_name);
 	dol->brackets = false;
 	dol->no_closing_bracket = false;
 }
 
-// Compares each line of env with the given string, like
-// pwd, user etc.
 char	*copy_env_input(char **env, char *to_find)
 {
 	int		i;
