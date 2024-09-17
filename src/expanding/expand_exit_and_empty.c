@@ -34,7 +34,8 @@ bool	is_exit_status(t_token *node, bool heredoc)
 	while (i < ft_strlen(node->str))
 	{
 		if (node->str[i] == '$' && (node->str[i + 1] == '?' || \
-			(node->str[i + 2] && node->str[i + 1] == '{' && node->str[i + 2] == '?')))
+			(node->str[i + 2] && node->str[i + 1] == '{' && \
+			node->str[i + 2] == '?')))
 			return (true);
 		i++;
 	}
@@ -69,7 +70,7 @@ int	set_exit_status(t_data *data, t_token *node, t_expand *info)
 		if (node->str[exit_var->i] == '$' && (node->str[exit_var->i + 1] == \
 			'?' || node->str[exit_var->i + 1] == '{'))
 		{
-			if (node->str[exit_var->i + 1] == '{') // if too much when $?, set end_var in the if-statement +2.
+			if (node->str[exit_var->i + 1] == '{')
 				exit_var->brackets = true;
 			exit_var->expanded = exit_status;
 			exit_var->end_var = exit_var->i + 2;

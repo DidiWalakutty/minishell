@@ -6,7 +6,7 @@
 /*   By: didi <didi@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 17:00:49 by didi          #+#    #+#                 */
-/*   Updated: 2024/09/16 20:54:58 by didi          ########   odam.nl         */
+/*   Updated: 2024/09/17 18:20:23 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,21 +45,4 @@ t_h_dol	*init_here_pid(char *str)
 	new->no_closing_brackets = false;
 	new->exp_kind = IS_PID;
 	return (new);
-}
-
-void	expand_heredoc_pid(char *str, int *i, t_h_dol *info, char **env)
-{
-	int	j;
-
-	j = *i + 1;
-	if (str[j] == '{')
-		j++;
-	info->start_env = j;
-	info->end_var = j;
-	if (str[j + 1] && (str[j + 1] == '$'))
-	{
-		if (info->brackets == true)
-			printf("theres brackets\n");
-			// ended here
-	}
 }
