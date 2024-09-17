@@ -230,13 +230,13 @@ int		handle_redirect(t_token **token, t_cmd **command);
 //                          Heredoc Expanding	                           //
 //-------------------------------------------------------------------------//
 
-char	*heredoc_expanding(char *str, char **env);
+char	*heredoc_expanding(char *str, t_data *data);
 bool	is_heredoc_dollar(char *str, int i);
 bool	is_heredoc_double(char *str, int i);
 bool	is_heredoc_exit(char *str, int i);
 t_h_dol	*init_here_dol(char *str);
 t_h_dol	*init_here_pid(char *str);
-t_h_dol	*init_here_exit(char *str);
+t_h_dol	*init_here_exit(char *str, int exit);
 bool	is_heredoc_exit(char *str, int i);
 void	check_quote_and_brackets(char *str, int *i, t_h_dol *var);
 bool	update_here_brackets(char *str, t_h_dol *info);

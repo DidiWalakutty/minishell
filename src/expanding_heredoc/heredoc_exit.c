@@ -6,7 +6,7 @@
 /*   By: didi <didi@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/16 20:16:15 by didi          #+#    #+#                 */
-/*   Updated: 2024/09/17 18:16:43 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/17 21:39:51 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,13 @@ bool	is_heredoc_exit(char *str, int i)
 	return (false);
 }
 
-t_h_dol	*init_here_exit(char *str)
+t_h_dol	*init_here_exit(char *str, int exit)
 {
 	t_h_dol	*new;
 
 	new = mem_check(malloc(sizeof(t_h_dol)));
 	new->expanded = NULL;
-	new->env_name = ft_strdup("0");
+	new->env_name = ft_itoa(exit);
 	// exit status nodig, bovenstaande voor testing purposes.
 	// new->env_name = ft_itoa(data->exit_status); 
 	new->copy = ft_strdup(str);
