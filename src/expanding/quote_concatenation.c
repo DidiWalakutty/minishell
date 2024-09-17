@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/08/04 18:09:07 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/10 15:56:35 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/13 15:13:21 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,4 +93,23 @@ int	remove_spaces(t_token *list)
 			before = before->next;
 	}
 	return (0);
+}
+
+char	*update_remainder(char *str, t_dollar *var)
+{
+	char	*result;
+	int		len;
+	int		i;
+
+	len = 0;
+	i = var->end_var;
+	while (str[len])
+		len++;
+	if (str[i] == '?' && str[i + 1] == '}')
+	{
+		result = mem_check(malloc(sizeof(char) * (len - 1)));
+		if (str[i + 2] != '\0')
+			result = ft_substr(str, var->end_var + 2, len);
+	}
+	return (result);
 }

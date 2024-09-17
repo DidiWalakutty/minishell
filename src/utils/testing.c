@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/06 14:11:29 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/12 18:07:44 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/13 15:50:21 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,14 +48,14 @@ void	print_commands(t_cmd *cmd)
 				printf("- %i - %s\n", i, cmd->args[i]);
 		}
 		printf("____________________\n");
-		printf("- Redirect In: -\n");
-		print_redin(cmd->redir_in);
-		printf("\n");
-		printf("____________________\n");
-		printf("- Redirect Out: -\n");
-		print_redou(cmd->redir_out);
-		printf("____________________\n");
-		printf("Pipe_out = %i\nPipe_in = %i\n", cmd->pipe_out, cmd->pipe_in);
+		// printf("- Redirect In: -\n");
+		// print_redin(cmd->redir_in);
+		// printf("\n");
+		// printf("____________________\n");
+		// printf("- Redirect Out: -\n");
+		// print_redou(cmd->redir_out);
+		// printf("____________________\n");
+		// printf("Pipe_out = %i\nPipe_in = %i\n", cmd->pipe_out, cmd->pipe_in);
 		printf("\n---Next Command---\n\n");
 		cmd = cmd->next;
 	}
