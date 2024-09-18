@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/20 16:38:50 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/17 18:18:55 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/09/18 22:52:26 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ typedef struct s_redir_in	t_redin;
 typedef struct s_redir_out	t_redou;
 typedef struct s_token		t_token;
 typedef struct s_data		t_data;
-typedef struct sigaction	t_sig_a;
 
 typedef enum s_type
 {
@@ -152,8 +151,6 @@ typedef struct s_data
 {
 	char	*input;
 	char	**env;
-	t_sig_a	sa_int;
-	t_sig_a	sa_quit;
 	t_token	*list;
 	t_type	*token;
 	t_cmd	*cmd_process;
@@ -223,8 +220,10 @@ void	set_env_and_expand(char *str, int *i, t_h_dol *info, char **env);
 
 bool	disable_echoctl(void);
 void	enable_echoctl(void);
-void	set_signals_ia_mode(t_data *data);
-void	set_signals_nia_mode(t_data *data);
+void	set_signals_ia_mode(void);
+void	set_signals_nia_mode(void);
+void	set_signals_hdoc_mode(void);
+void	set_signals_hdoc_parent_mode(void);
 
 //-------------------------------------------------------------------------//
 //                             Utils	                                   //
@@ -305,7 +304,8 @@ int		make_processes(t_data *data);
 //-------------------------------------------------------------------------//
 
 bool	redirect_fd(int fd, int fd_dst);
-bool	check_heredocs(t_data *data);
+int		check_heredocs(t_data *data);
+bool	check_heredocs_parent(t_redin *redir_in);
 void	heredoc(t_redin *redir_in, bool redirect);
 
 //-------------------------------------------------------------------------//

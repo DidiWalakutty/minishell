@@ -40,6 +40,8 @@ SRC =	./src/main.c \
 				./src/signals/echoctl.c \
 				./src/signals/ia_signals.c \
 				./src/signals/nia_signals.c \
+				./src/signals/hdoc_signals.c \
+				./src/signals/hdoc_parent_signals.c \
 				./src/builtins/builtins.c \
 				./src/builtins/cd.c \
 				./src/builtins/echo.c \

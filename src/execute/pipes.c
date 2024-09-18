@@ -6,7 +6,7 @@
 /*   By: sreerink <sreerink@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/12 20:30:41 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/09/17 22:39:58 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/09/18 22:57:21 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -203,23 +203,10 @@ int	redirect_input_parent(t_redin *redir_in)
 
 	if (!redir_in)
 		return (EXIT_SUCCESS);
-	//if (!check_heredocs(redir_in))
-	//	return (EXIT_FAILURE);
-	while (redir_in)
-	{
-		if (!redir_in->heredoc)
-		{
-			file = open(redir_in->str, O_RDONLY);
-			if (file == -1)
-			{
-				perror(redir_in->str);
-				return (EXIT_FAILURE);
-			}
-			if (!redirect_fd(file, STDIN_FILENO))
-				return (EXIT_FAILURE);
-		}
-		redir_in = redir_in->next;
-	}
+	if (!check_heredocs_parent(redir_in))
+		return (EXIT_FAILURE);
+	if (redirect_redir_in(redir_in) == 1)
+		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }
 
@@ -343,8 +330,11 @@ int	make_processes(t_data *data)
 	temp = cmds;
 	if (temp->builtin && data->process == 1)
 		return (builtin_in_parent(temp, data));
-	check_heredocs(data);
-	set_signals_nia_mode(data);
+	set_signals_hdoc_parent_mode();
+	status = check_heredocs(data);
+	if (status != 0)
+		return (status);
+	set_signals_nia_mode();
 	while (i < data->process + 1)
 	{
 		if (pipe(pipefd[i]) == -1)

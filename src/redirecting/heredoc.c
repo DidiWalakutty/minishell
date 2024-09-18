@@ -6,7 +6,7 @@
 /*   By: sreerink <sreerink@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/02 21:44:34 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/09/17 22:08:56 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/09/18 23:13:07 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ void	heredoc(t_redin *redir_in, bool redirect)
 {
 	char	*input;
 
+	set_signals_hdoc_mode();
 	input = readline("> ");
 	while (input && strncmp(input, redir_in->str, ft_strlen(redir_in->str) + 1))
 	{
@@ -34,5 +35,11 @@ void	heredoc(t_redin *redir_in, bool redirect)
 		write(STDERR_FILENO, redir_in->str, ft_strlen(redir_in->str));
 		write(STDERR_FILENO, "')\n", 3);
 	}
+	if (redirect)
+	{
+		close(redir_in->pipe_hdoc[0]);
+		close(redir_in->pipe_hdoc[1]);
+	}
 	free(input);
+	exit(0);
 }

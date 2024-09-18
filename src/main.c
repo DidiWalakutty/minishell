@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:40:07 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/14 19:49:39 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/09/18 22:30:33 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	main(int argc, char **argv, char **env)
 	data = init_shell(env);
 	while (1)
 	{
-		set_signals_ia_mode(data);
+		set_signals_ia_mode();
 		input = readline(SHELL_NAME);
 		if (!input)
 		{
