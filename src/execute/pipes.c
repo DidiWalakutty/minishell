@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   pipes.c                                            :+:    :+:            */
+/*   pipes.c                                           :+:    :+:             */
 /*                                                     +:+                    */
 /*   By: sreerink <sreerink@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/12 20:30:41 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/09/12 17:19:52 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/18 22:57:21 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,8 +80,6 @@ int		redirect_redir_in(t_redin *redir_in)
 {
 	int	file;
 
-	if (!check_heredocs(redir_in))
-		return (EXIT_FAILURE);
 	while (redir_in)
 	{
 		if (!redir_in->heredoc)
@@ -93,6 +91,12 @@ int		redirect_redir_in(t_redin *redir_in)
 				return (EXIT_FAILURE);
 			}
 			if (!redirect_fd(file, STDIN_FILENO))
+				return (EXIT_FAILURE);
+		}
+		else if (!redir_in->next)
+		{
+			close(redir_in->pipe_hdoc[1]);
+			if (!redirect_fd(redir_in->pipe_hdoc[0], STDIN_FILENO))
 				return (EXIT_FAILURE);
 		}
 		redir_in = redir_in->next;
@@ -199,23 +203,10 @@ int	redirect_input_parent(t_redin *redir_in)
 
 	if (!redir_in)
 		return (EXIT_SUCCESS);
-	if (!check_heredocs(redir_in))
+	if (!check_heredocs_parent(redir_in))
 		return (EXIT_FAILURE);
-	while (redir_in)
-	{
-		if (!redir_in->heredoc)
-		{
-			file = open(redir_in->str, O_RDONLY);
-			if (file == -1)
-			{
-				perror(redir_in->str);
-				return (EXIT_FAILURE);
-			}
-			if (!redirect_fd(file, STDIN_FILENO))
-				return (EXIT_FAILURE);
-		}
-		redir_in = redir_in->next;
-	}
+	if (redirect_redir_in(redir_in) == 1)
+		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }
 
@@ -293,6 +284,37 @@ int	builtin_in_parent(t_cmd *cmd, t_data *data)
 	return (exit_status);
 }
 
+void	close_pipes_heredoc(t_cmd *cmd, ssize_t cur_cmd)
+{
+	ssize_t	i;
+	t_cmd	*temp;
+	t_redin	*redir_in;
+
+	i = 0;
+	if (i == cur_cmd)
+		temp = cmd->next;
+	else
+		temp = cmd;
+	while (temp)
+	{
+		redir_in = temp->redir_in;
+		while (redir_in)
+		{
+			if (redir_in->heredoc && !redir_in->next)
+			{
+				close(redir_in->pipe_hdoc[0]);
+				close(redir_in->pipe_hdoc[1]);
+			}
+			redir_in = redir_in->next;
+		}
+		i++;
+		if (i == cur_cmd)
+			temp = temp->next->next;
+		else
+			temp = temp->next;
+	}
+}
+
 int	make_processes(t_data *data)
 {
 	size_t	i;
@@ -302,10 +324,17 @@ int	make_processes(t_data *data)
 	int		pipefd[data->process + 1][2];
 
 	i = 0;
+	if (!data->cmd_process)
+		return (data->exit_status);
 	cmds = data->cmd_process;
 	temp = cmds;
 	if (temp->builtin && data->process == 1)
 		return (builtin_in_parent(temp, data));
+	set_signals_hdoc_parent_mode();
+	status = check_heredocs(data);
+	if (status != 0)
+		return (status);
+	set_signals_nia_mode();
 	while (i < data->process + 1)
 	{
 		if (pipe(pipefd[i]) == -1)
@@ -318,8 +347,9 @@ int	make_processes(t_data *data)
 		temp->pid = fork();
 		if (temp->pid == -1)
 			error_exit("fork", EXIT_FAILURE);
-		else if (temp->pid == 0)
+		if (temp->pid == 0)
 		{
+			close_pipes_heredoc(cmds, i);
 			close_unused_pipes(pipefd, i, data->process + 1);
 			child_process(temp, pipefd[i], pipefd[i + 1]);
 		}
@@ -331,10 +361,10 @@ int	make_processes(t_data *data)
 	close(pipefd[i][0]);
 	close(pipefd[i][1]);
 	temp = cmds;
+	close_pipes_heredoc(cmds, -1);
 	while (temp)
 	{
-		if (waitpid(temp->pid, &status, 0) == -1)
-			error_exit("waitpid", EXIT_FAILURE);
+		waitpid(temp->pid, &status, 0);
 		temp = temp->next;
 	}
 	return (WEXITSTATUS(status));
