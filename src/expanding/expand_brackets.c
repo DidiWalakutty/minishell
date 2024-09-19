@@ -6,7 +6,7 @@
 /*   By: didi <didi@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/14 16:18:18 by didi          #+#    #+#                 */
-/*   Updated: 2024/09/18 18:59:57 by didi          ########   odam.nl         */
+/*   Updated: 2024/09/19 19:10:02 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ bool	check_exit_brackets(char *str, t_dollar *var, char **new_str, \
 	{
 		if (exit_brackets(str, var, var->str_len) == false)
 		{
-			temp = ft_substr(str, var->end_var - 1, var->str_len);
+			temp = ft_substr(str, var->end_var, var->str_len);
 			reset_joined(var, new_str, join, temp);
 			free(temp);
 			return (false);

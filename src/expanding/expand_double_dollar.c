@@ -61,7 +61,7 @@ int	set_pid(t_token *node, t_expand *info)
 			dol->expanded = ft_strdup(dol->expanded);
 			dol->end_var = dol->i + 2;
 			if (dol->brackets == true)
-				dol->end_var += 2;
+				dol->end_var += 1;
 			expand_node(node, dol);
 			dol->str_len = ft_strlen(node->str);
 			continue ;

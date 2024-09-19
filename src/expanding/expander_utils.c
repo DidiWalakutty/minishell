@@ -46,7 +46,12 @@ static t_joined	*init_join(t_token *node, t_dollar *dol)
 
 	new = mem_check(malloc(sizeof(t_joined)));
 	new->before = ft_substr(node->str, 0, dol->i);
-	new->remainder = ft_substr(node->str, dol->end_var, dol->str_len);
+	if (dol->end_var + 1 == dol->str_len || dol->brackets == true && dol->exp_kind == IS_PID)
+		new->remainder = ft_substr(node->str, dol->end_var + 1, dol->str_len);
+	// else if (dol->brackets == true && dol->exp_kind == IS_PID)
+	// 	new->remainder = ft_substr(node->str, dol->end_var + 1, dol->str_len);
+	else
+		new->remainder = ft_substr(node->str, dol->end_var, dol->str_len);
 	new->joined = NULL;
 	return (new);
 }
@@ -83,8 +88,6 @@ void	expand_node(t_token *node, t_dollar *dol)
 	free(var->before);
 	free(var->remainder);
 	free(var->joined);
-	// free(dol->expanded);
-	// free(dol->env_name);
 	dol->brackets = false;
 	dol->no_closing_bracket = false;
 }

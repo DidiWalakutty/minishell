@@ -49,6 +49,7 @@ t_dollar	*init_exit_variables(t_token *node)
 	exit_var = mem_check(malloc(sizeof(t_dollar)));
 	exit_var->expanded = NULL;
 	exit_var->env_name = NULL;
+	exit_var->start_env = 0;
 	exit_var->end_var = 0;
 	exit_var->str_len = ft_strlen(node->str);
 	exit_var->i = 0;
@@ -74,9 +75,11 @@ int	set_exit_status(t_data *data, t_token *node, t_expand *info)
 				ex->brackets = true;
 			ex->expanded = exit_status;
 			ex->end_var = ex->i + 2;
-			if (ex->brackets == true)
+			if (ex->brackets == true && node->str[ex->end_var + 1])
 				ex->end_var += 2;
 			expand_node(node, ex);
+			ex->str_len = ft_strlen(node->str);
+			continue ;
 		}
 		ex->i++;
 		while (node->str[ex->i] && node->str[ex->i] != '$')
