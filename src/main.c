@@ -52,13 +52,18 @@ int	main(int argc, char **argv, char **env)
 		data->input = input;
 		if (input != NULL)
 			add_history(data->input);
-		// tokenize_and_expand(data);
-		// print_linked_list(data->list);
-		char *outcome = heredoc_expanding(data->input, data);
-		printf("Heredoc outcome:\n%s\n", outcome);
+		tokenize_and_expand(data);
+		print_linked_list(data->list);
+		// char *outcome = heredoc_expanding(data->input, data);
+		// printf("Heredoc outcome:\n%s\n", outcome);
 		// print_commands(data->cmd_process);
 		// data->exit_status = make_processes(data);
 		free_all(data);
 	}
 	return (0);
 }
+
+
+
+// ${USER}${$}$$${?${?}
+// Didi1234512345-0

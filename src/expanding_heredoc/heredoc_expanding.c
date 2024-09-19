@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/10 18:10:20 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/17 21:46:12 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/18 18:09:14 by didi          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static void	set_heredoc_pid(char **copy, char **env, bool *expand)
 	while (info->i < info->str_len)
 	{
 		if (info->copy[info->i] == '$' && (info->copy[info->i + 1] == '$' || \
-			info->copy[info->i + 1] == '{'))
+			(info->copy[info->i + 1] == '{' && info->copy[info->i + 2] == '$')))
 		{
 			if (info->copy[info->i + 1] == '{')
 				info->brackets = true;
@@ -77,7 +77,7 @@ static void	set_heredoc_exit(char **copy, t_data *data, bool *expand)
 	while (info->i < info->str_len)
 	{
 		if (info->copy[info->i] == '$' && (info->copy[info->i + 1] == '?' || \
-			info->copy[info->i + 1] == '{'))
+			(info->copy[info->i + 1] == '{' && info->copy[info->i + 2] == '?')))
 		{
 			if (info->copy[info->i + 1] == '{')
 				info->brackets = true;

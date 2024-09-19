@@ -6,23 +6,23 @@
 /*   By: didi <didi@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/16 14:03:40 by didi          #+#    #+#                 */
-/*   Updated: 2024/09/17 19:29:09 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/18 18:23:06 by didi          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	reset_here_joined(t_h_dol *info, char **update_join, t_joined *join)
+static void	reset_here_joined(t_h_dol *info, char **update_join, t_joined *join, char *remain)
 {
-	if ((!join->remainder || join->remainder[0] == '\0') && (!join->before || \
+	if ((!remain || remain[0] == '\0') && (!join->before || \
 		join->before[0] == '\0'))
 		*update_join = ft_strdup("");
-	else if (!join->remainder || join->remainder[0] == '\0')
+	else if (!remain || remain[0] == '\0')
 		*update_join = ft_strdup(join->before);
 	else if (!join->before || join->before[0] == '\0')
-		*update_join = ft_strdup(join->remainder);
+		*update_join = ft_strdup(remain);
 	else
-		*update_join = ft_strconcat(join->before, join->remainder);
+		*update_join = ft_strconcat(join->before, remain);
 }
 
 static bool	exit_here_brackets(char *str, t_h_dol *info, int max)
@@ -56,12 +56,16 @@ static bool	exit_here_brackets(char *str, t_h_dol *info, int max)
 
 bool	hexit_brack(char *str, t_h_dol *info, t_joined *join, bool *expand)
 {
+	char	*temp;
+
 	if (info->exp_kind == IS_EXIT || info->exp_kind == IS_PID)
 	{
 		if (exit_here_brackets(str, info, info->str_len) == false)
 		{
-			reset_here_joined(info, &join->joined, join);
+			temp = ft_substr(str, info->end_var - 1, info->str_len);
+			reset_here_joined(info, &join->joined, join, temp);
 			*expand = false;
+			free(temp);
 			return (false);
 		}
 	}
@@ -69,7 +73,8 @@ bool	hexit_brack(char *str, t_h_dol *info, t_joined *join, bool *expand)
 	{
 		if (info->no_closing_brackets == true)
 		{
-			reset_here_joined(info, &join->joined, join);
+			// temp = ft_substr(str, info->end_var - 1, info->str_len);
+			reset_here_joined(info, &join->joined, join, join->remainder);
 			*expand = false;
 			return (false);
 		}

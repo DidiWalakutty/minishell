@@ -6,7 +6,7 @@
 /*   By: didi <didi@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/14 16:18:18 by didi          #+#    #+#                 */
-/*   Updated: 2024/09/17 19:44:53 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/18 18:59:57 by didi          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,27 +37,30 @@ static bool	exit_brackets(char *str, t_dollar *var, int max)
 	return (true);
 }
 
-void	reset_joined(t_dollar *var, char **updated_joined, t_joined *join)
+void	reset_joined(t_dollar *var, char **updated_joined, t_joined *join, char *remain)
 {
-	free(var->expanded);
-	if (!join->remainder && !join->before)
+	if ((!remain || remain[0] == '\0') && !join->before || join->before[0] == '\0')
 		*updated_joined = ft_strdup("");
-	else if (!join->remainder)
+	else if (!remain || remain[0] == '\0')
 		*updated_joined = ft_strdup(join->before);
-	else if (!join->before)
-		*updated_joined = ft_strdup(join->remainder);
+	else if (!join->before || join->before[0] == '\0')
+		*updated_joined = ft_strdup(remain);
 	else
-		*updated_joined = ft_strconcat(join->before, join->remainder);
+		*updated_joined = ft_strconcat(join->before, remain);
 }
 
 bool	check_exit_brackets(char *str, t_dollar *var, char **new_str, \
 							t_joined *join)
 {
+	char	*temp;
+
 	if (var->exp_kind == IS_EXIT || var->exp_kind == IS_PID)
 	{
 		if (exit_brackets(str, var, var->str_len) == false)
 		{
-			reset_joined(var, new_str, join);
+			temp = ft_substr(str, var->end_var - 1, var->str_len);
+			reset_joined(var, new_str, join, temp);
+			free(temp);
 			return (false);
 		}
 	}
@@ -65,8 +68,7 @@ bool	check_exit_brackets(char *str, t_dollar *var, char **new_str, \
 	{
 		if (var->no_closing_bracket == true)
 		{
-			free(var->env_name);
-			reset_joined(var, new_str, join);
+			reset_joined(var, new_str, join, join->remainder);
 			return (false);
 		}
 	}

@@ -73,16 +73,18 @@ void	expand_node(t_token *node, t_dollar *dol)
 		var->joined = check_joined(var->joined, var->remainder);
 	if (!var->joined)
 		var->joined = ft_strdup("");
+	// need to update here when ${?
+	// Input is: ${USER}${$}$$${?${?}
 	if (dol->brackets == true || (dol->exp_kind == IS_DOLLAR && \
 								dol->no_closing_bracket == true))
 		check_exit_brackets(node->str, dol, &var->joined, var);
 	free(node->str);
-	node->str = var->joined;
+	node->str = ft_strdup(var->joined);
 	free(var->before);
 	free(var->remainder);
 	free(var->joined);
-	free(dol->expanded);
-	free(dol->env_name);
+	// free(dol->expanded);
+	// free(dol->env_name);
 	dol->brackets = false;
 	dol->no_closing_bracket = false;
 }

@@ -46,7 +46,7 @@ static bool	update_dol_brackets(t_token *node, t_dollar *dol)
 {
 	if (node->str[dol->end_var + ft_strlen(dol->expanded) + 1] != '}')
 	{
-		free(dol->expanded);
+		// free(dol->expanded);
 		dol->expanded = ft_strdup("");
 		return (false);
 	}
