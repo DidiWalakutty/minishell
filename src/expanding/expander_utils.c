@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/07/04 15:35:01 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/12 19:47:55 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/13 21:01:54 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ bool	is_heredoc(t_token *node)
 	return (false);
 }
 
-static char	*check_joined(char *before, char *fill_in)
+char	*check_joined(char *before, char *fill_in)
 {
 	char	*replacement;
 
@@ -40,23 +40,15 @@ static char	*check_joined(char *before, char *fill_in)
 	return (replacement);
 }
 
-static bool	check_exit_brackets(char *str, t_dollar *var)
+static t_joined	*init_join(t_token *node, t_dollar *dol)
 {
-	if (str[var->i + 1] == '{')
-	{
-		if (str[var->i + 2] && str[var->i + 3])
-		{
-			if (str[var->i + 2] == '?' && str[var->i + 3] != '}')
-			{
-				free(var->expanded);
-				var->expanded = ft_strdup("");
-				return (false);
-			}
-		}
-	}
-	var->start_env--;
-	var->end_var++;
-	return (true);
+	t_joined	*new;
+
+	new = mem_check(malloc(sizeof(t_joined)));
+	new->before = ft_substr(node->str, 0, dol->i);
+	new->remainder = ft_substr(node->str, dol->end_var, dol->str_len);
+	new->joined = NULL;
+	return (new);
 }
 
 // 	free(dol->expanded); ???
@@ -68,33 +60,33 @@ static bool	check_exit_brackets(char *str, t_dollar *var)
 // creates a node and adds it to the list.
 void	expand_node(t_token *node, t_dollar *dol)
 {
-	char	*before;
-	char	*remainder;
-	char	*joined;
+	t_joined	*var;
 
+	var = init_join(node, dol);
 	if (!node->str)
 		return ;
-	joined = NULL;
-	before = ft_substr(node->str, 0, dol->i);
-	remainder = ft_substr(node->str, dol->end_var, dol->str_len);
-	if (before && before[0] != '\0')
-		joined = ft_strdup(before);
+	if (var->before && var->before[0] != '\0')
+		var->joined = ft_strdup(var->before);
 	if (dol->expanded && dol->expanded[0] != '\0')
-		joined = check_joined(joined, dol->expanded);
-	if (remainder && remainder[0] != '\0')
-		joined = check_joined(joined, remainder);
-	if (!joined)
-		joined = ft_strdup("");
-	if (dol->brackets == true)
-		check_exit_brackets(node->str, dol);
+		var->joined = check_joined(var->joined, dol->expanded);
+	if (var->remainder && var->remainder[0] != '\0')
+		var->joined = check_joined(var->joined, var->remainder);
+	if (!var->joined)
+		var->joined = ft_strdup("");
+	if (dol->brackets == true || (dol->exp_kind == IS_DOLLAR && \
+								dol->no_closing_bracket == true))
+		check_exit_brackets(node->str, dol, &var->joined, var);
 	free(node->str);
-	node->str = joined;
-	free(before);
-	free(remainder);
+	node->str = var->joined;
+	free(var->before);
+	free(var->remainder);
+	free(var->joined);
+	free(dol->expanded);
+	free(dol->env_name);
+	dol->brackets = false;
+	dol->no_closing_bracket = false;
 }
 
-// Compares each line of env with the given string, like
-// pwd, user etc.
 char	*copy_env_input(char **env, char *to_find)
 {
 	int		i;

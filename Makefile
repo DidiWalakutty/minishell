@@ -30,6 +30,13 @@ SRC =	./src/main.c \
 				./src/expanding/expander_utils.c \
 				./src/expanding/expand_exit_and_empty.c \
 				./src/expanding/quote_concatenation.c \
+				./src/expanding/expand_brackets.c \
+				./src/expanding_heredoc/heredoc_dollar.c \
+				./src/expanding_heredoc/heredoc_expanding.c \
+				./src/expanding_heredoc/heredoc_pid.c \
+				./src/expanding_heredoc/heredoc_utils.c \
+				./src/expanding_heredoc/heredoc_exit.c \
+				./src/expanding_heredoc/free_heredocs.c \
 				./src/commands/build_commands.c \
 				./src/commands/build_inits_and_nodes.c \
 				./src/commands/build_redirections.c \
@@ -55,11 +62,6 @@ SRC =	./src/main.c \
 				./src/utils/syntax_check.c \
 				./src/utils/str_utils.c \
 				./src/utils/testing.c
-
-# Add to SRC when ready
-#				./src/expanding_heredoc/heredoc_expanding.c \
-#				./src/expanding_heredoc/heredoc_dollar.c \
-#				./src/expanding_heredoc/heredoc_pid.c \
 
 
 # Object files and directories
@@ -112,7 +114,7 @@ $(OBJDIR)/%.o: ./src/parsing/%.c
 $(OBJDIR)/%.o: ./src/redirecting/%.c
 	@$(CC) $(CFLAGS) $(HEADERS) -c -o $@ $<
 
-$(OBJDIR)/%.o: ./src/expandig_heredoc/&.c
+$(OBJDIR)/%.o: ./src/expanding_heredoc/%.c
 	@$(CC) $(CFLAGS) $(HEADERS) -c -o $@ $<
 
 $(OBJDIR)/%.o: ./src/signals/%.c

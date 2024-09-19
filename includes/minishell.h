@@ -32,7 +32,9 @@
 # define SHELL_NAME "Minishell$ " // which name, colors?
 
 typedef enum s_type			t_type;
+typedef enum s_exp			t_exp;
 typedef struct s_here_dol	t_h_dol;
+typedef struct s_joined		t_joined;
 typedef struct s_list		t_list;
 typedef struct s_redir		t_redir;
 typedef struct s_cmd		t_cmd;
@@ -56,17 +58,35 @@ typedef enum s_type
 	APPEND,			// >> append
 }	t_type;
 
+typedef enum s_exp
+{
+	IS_DOLLAR,
+	IS_EXIT,
+	IS_PID,
+}	t_exp;
+
 typedef struct s_here_dol
 {
 	char	*expanded;	// expanded env-variable
 	char	*env_name;	// env-name
+	char	*copy;
 	int		i;
 	int		start_env;
 	int		end_var;
+	int		str_len;
 	bool	brackets;	// check for brackets
-	bool	quotes;		// check for quotes
-	char	quote_type;	// s_q or d_q
+	bool	no_closing_brackets;
+	t_exp	exp_kind;
+	// bool	quotes;		// check for quotes
+	// char	quote_type;	// s_q or d_q
 }	t_h_dol;
+
+typedef struct s_joined
+{
+	char	*joined;
+	char	*before;
+	char	*remainder;
+}	t_joined;
 
 typedef struct s_expand
 {
@@ -82,6 +102,8 @@ typedef struct s_dollar
 	int		start_env;
 	int		end_var;
 	bool	brackets;
+	bool	no_closing_bracket;
+	t_exp	exp_kind;
 }	t_dollar;
 
 typedef enum s_redir_type
@@ -194,6 +216,10 @@ bool	is_double_dollar(t_token *node, bool heredoc);
 int		set_pid(t_token *node, t_expand *info);
 bool	quote_type_present(t_token *node);
 int		concatenate_quotes(t_token *node);
+bool	check_exit_brackets(char *str, t_dollar *var, char **new_str, \
+		t_joined *join);
+char	*check_joined(char *before, char *fill_in);
+// bool	check_exit_brackets(char *str, t_dollar *var, char **joined_update);
 
 //-------------------------------------------------------------------------//
 //                          Build Commands                                 //
@@ -209,10 +235,18 @@ int		handle_redirect(t_token **token, t_cmd **command);
 
 char	*heredoc_expanding(char *str, char **env);
 bool	is_heredoc_dollar(char *str, int i);
-t_h_dol	*init_heredol(void);
+bool	is_heredoc_double(char *str, int i);
+bool	is_heredoc_exit(char *str, int i);
+t_h_dol	*init_here_dol(char *str);
+t_h_dol	*init_here_pid(char *str);
+t_h_dol	*init_here_exit(char *str);
+bool	is_heredoc_exit(char *str, int i);
 void	check_quote_and_brackets(char *str, int *i, t_h_dol *var);
 bool	update_here_brackets(char *str, t_h_dol *info);
-void	set_env_and_expand(char *str, int *i, t_h_dol *info, char **env);
+void	set_env_and_expand(char *str, t_h_dol *info, char **env, \
+		bool *expanded);
+void	expand_heredoc_string(char *str, t_h_dol *info, bool *expanded);
+void	free_cmds(t_cmd *cmd_list);
 
 //-------------------------------------------------------------------------//
 //                          Signals                                        //
@@ -290,7 +324,7 @@ void	print_commands(t_cmd *cmd);
 void	print_redou(t_redou *redir);
 void	print_redin(t_redin *redir);
 
-// OLD !!!
+char	*update_remainder(char *str, t_dollar *var);
 
 //-------------------------------------------------------------------------//
 //                           Execution                                     //

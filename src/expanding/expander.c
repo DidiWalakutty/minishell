@@ -6,13 +6,12 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:36:22 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/10 15:43:32 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/17 20:24:40 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// info->node_i = 0; // Tracks node position and where to insert expansion
 t_expand	*init_info(t_token *list)
 {
 	t_expand	*info;
@@ -45,10 +44,10 @@ void	expand_input(t_data *data, t_token *node, char **env)
 			skip_heredoc_and_spaces(&node, &heredoc);
 		if (is_dollar(node, heredoc) == true)
 			set_dollar(node, env, info);
-		if (is_exit_status(node, heredoc) == true)
-			set_exit_status(data, node, info);
 		if (is_double_dollar(node, heredoc) == true)
 			set_pid(node, info);
+		if (is_exit_status(node, heredoc) == true)
+			set_exit_status(data, node, info);
 		heredoc = false;
 		node = node->next;
 	}

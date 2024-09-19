@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/08/22 18:14:06 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/13 23:47:19 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/09/17 21:01:12 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,12 +72,18 @@ t_cmd	*merge_commands(t_token *tokens, t_data *data)
 		if (a_redirection(tokens->type) == true)
 		{
 			if (handle_redirect(&tokens, &current_cmd) != 1)
-				printf("check for failure and free");
+			{
+				// free current cmd in while loop, incl redir_in+out
+				// and all previousl allocated t_cmd structs.
+				free_cmds(command_list);
+				return (NULL);
+			}
 		}
 		else
 			set_command_and_args(&tokens, &current_cmd, data);
 		tokens = tokens->next;
 	}
+	//free(command_list) and/or current_cmd.
 	return (command_list);
 }
 

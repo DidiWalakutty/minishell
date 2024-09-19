@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/08/23 15:45:42 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/13 17:09:56 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/13 20:28:07 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ t_cmd	*init_cmds(t_data *data)
 	return (command);
 }
 
-static int	remove_words(t_token *list)
+static int	remove_empty_words(t_token *list)
 {
 	t_token	*head;
 	t_token	*to_delete;
@@ -45,7 +45,7 @@ static int	remove_words(t_token *list)
 
 	head = list;
 	before = list;
-	while (before->type == WORD && strcmp(before->str, "") == 0)
+	while (before->type == WORD && ft_strcmp(before->str, "") == 0)
 	{
 		to_delete = before;
 		before = to_delete->next;
@@ -54,7 +54,7 @@ static int	remove_words(t_token *list)
 	}
 	while (before && before->next)
 	{
-		if (before->next->type == WORD && strcmp(before->next->str, "") == 0)
+		if (before->next->type == WORD && ft_strcmp(before->next->str, "") == 0)
 		{
 			to_delete = before->next;
 			before->next = to_delete->next;
@@ -72,15 +72,21 @@ int	empty_words(t_token *nodes)
 	bool	flag;
 	t_token	*copy;
 
+	count = 0;
+	flag = false;
+	copy = nodes;
+	if (!nodes)
+		return (0);
 	while (nodes)
 	{
-		if (nodes->type == WORD && strcmp(nodes->str, "") == 0)
+		if ((nodes->type == WORD || nodes->type == DOUBLE_QUOTE || \
+			nodes->type == SINGLE_QUOTE) && ft_strcmp(nodes->str, "") == 0)
 			flag = true;
 		count++;
 		nodes = nodes->next;
 	}
 	if (flag && count == 1)
 		return (0);
-	remove_words(copy);
+	remove_empty_words(copy);
 	return (1);
 }
