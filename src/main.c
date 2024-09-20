@@ -22,6 +22,7 @@ static t_data	*init_shell(char **env_copy)
 	data->env = copy_env(env_copy);
 	data->input = NULL;
 	data->list = NULL;
+	data->cmd_process = NULL;
 	data->process = 1;
 	data->exit_status = 0;
 	init_shlvl(data);
@@ -53,7 +54,7 @@ int	main(int argc, char **argv, char **env)
 		tokenize_and_expand(data);
 		// print_linked_list(data->list);
 		// print_commands(data->cmd_process);
-		data->exit_status = make_processes(data);
+		// data->exit_status = make_processes(data);
 		free_all(data);
 	}
 	return (0);

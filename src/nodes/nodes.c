@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/07/04 15:28:16 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/17 20:16:02 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/20 21:24:22 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,11 +64,18 @@ t_token	*create_node(char *str, t_type type)
 {
 	t_token	*new_node;
 
-	new_node = mem_check(malloc(sizeof(t_token)));
+	new_node = malloc(sizeof(t_token));
+	if (!new_node)
+		return (NULL);
 	if (str)
 		new_node->str = ft_strdup(str);
 	else
 		new_node->str = ft_strdup("");
+	if (!new_node->str)
+	{
+		free(new_node);	
+		return (NULL);
+	}
 	new_node->type = type;
 	new_node->next = NULL;
 	new_node->null = false;

@@ -24,7 +24,8 @@ int	tokenize_and_expand(t_data *data)
 		return (1);
 	data->list = tokenize_input(data, data->input);
 	expand_input(data, data->list, data->env);
-	data->cmd_process = build_commands(data->list, data);
+	print_linked_list(data->list);
+	// data->cmd_process = build_commands(data->list, data);
 	return (0);
 }
 
@@ -36,7 +37,7 @@ t_token	*tokenize_input(t_data *data, char *str)
 	t_token	*list;
 
 	i = 0;
-	list = NULL;
+	list = data->list;
 	while (iswhitespace(str[i]))
 		i++;
 	while (str[i])
@@ -51,6 +52,8 @@ t_token	*tokenize_input(t_data *data, char *str)
 			i = add_redir_or_pipe(str, i, data, &list);
 		else
 			i = add_word(str, i, &list);
+		if (i == -1)
+			error_exit("malloc", EXIT_FAILURE);
 	}
 	return (list);
 }

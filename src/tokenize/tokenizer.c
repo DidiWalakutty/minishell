@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:43:34 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/17 20:52:09 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/20 22:12:18 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,16 +33,16 @@ int	add_quote(char *str, int i, char c, t_token **list)
 		null = true;
 	}
 	else
+	{
 		line = ft_substr(str, i + 1, len - 2);
+		if (!line)
+			return (-1);
+	}
 	new = create_node(line, EMPTY);
-	if (c == '\'')
-		new->type = SINGLE_QUOTE;
-	else
-		new->type = DOUBLE_QUOTE;
-	new->null = null;
-	node_to_list(list, new);
-	if (!null)
-		free(line);
+	free(line);
+	if (!new)
+		return (-1);
+	continue_add_to_quote(new, list, c, null);
 	return (len + i);
 }
 
@@ -56,14 +56,18 @@ int	add_redir_or_pipe(char *str, int i, t_data *data, t_token **list)
 	if (str[i + 1] == str[i] && (str[i] == '<' || str[i] == '>'))
 	{
 		line = ft_substr(str, i, 2);
+		if (!line)
+			return (-1);
 		new = create_node(line, EMPTY);
+		free(line);
+		if (!new)
+			return (-1);
 		if (str[i] == '>')
 			new->type = APPEND;
 		else if (str[i] == '<')
 			new->type = HERE_DOC;
 		node_to_list(list, new);
 		i += 2;
-		free(line);
 	}
 	else
 		i = add_one_token(str, i, data, list);
@@ -87,8 +91,6 @@ int	add_pipe(char *str, int i, t_token **list)
 // flag during the while-loop.
 int	add_word(char *str, int i, t_token **list)
 {
-	t_token	*new;
-	char	*line;
 	int		start;
 	int		len;
 	bool	in_quote;
@@ -105,12 +107,9 @@ int	add_word(char *str, int i, t_token **list)
 			len++;
 		len++;
 	}
-	line = ft_substr(str, start, len - start);
-	new = create_node(line, WORD);
-	node_to_list(list, new);
-	free(line);
-	i = len;
-	return (i);
+	if (continue_add_to_word(str, start, len, list) == -1)
+		return (-1);
+	return (len);
 }
 
 int	add_space(char *str, int i, t_token **list)
@@ -119,10 +118,14 @@ int	add_space(char *str, int i, t_token **list)
 	char	*line;
 
 	line = ft_strdup(" ");
+	if (!line)
+		return (-1);
 	new = create_node(line, SEPARATOR);
+	free(line);
+	if (!new)
+		return (-1);
 	node_to_list(list, new);
 	while (iswhitespace(str[i]))
 		i++;
-	free(line);
 	return (i);
 }

@@ -91,6 +91,8 @@ typedef struct s_joined
 typedef struct s_expand
 {
 	t_token	*head;
+	bool	heredoc;
+	bool	mal_fail;
 }	t_expand;
 
 typedef struct s_dollar
@@ -282,6 +284,8 @@ bool	a_redirection(t_type type);
 t_cmd	*init_cmds(t_data *data);
 char	**add_to_double_array(char **arguments, char *str);
 bool	str_is_all_digits(char *str);
+void	continue_add_to_quote(t_token *new, t_token **list, char c, bool null);
+int		continue_add_to_word(char *str, int start, int len, t_token **list);
 
 //-------------------------------------------------------------------------//
 //                             Nodes	                                   //
@@ -307,7 +311,6 @@ void	free_all(t_data	*data);
 void	free_node(t_token *node);
 void	free_heredoc_info(t_h_dol *info);
 void	*mem_check(void *pointer);
-void	error_exit(const char *msg, int status);
 
 //-------------------------------------------------------------------------//
 //                               Testing                                   //
@@ -327,6 +330,7 @@ char	*update_remainder(char *str, t_dollar *var);
 //-------------------------------------------------------------------------//
 
 void	error_exit(const char *msg, int status);
+// void	error_exit(const char *msg, int status, t_data *data);
 int		make_processes(t_data *data);
 
 //-------------------------------------------------------------------------//

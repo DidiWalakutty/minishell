@@ -28,7 +28,9 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 		len = strlen - start;
 	else if (strlen < len)
 		len = strlen;
-	newstr = mem_check(malloc(sizeof(char) * (len + 1)));
+	newstr = malloc(sizeof(char) * (len + 1));
+	if (!newstr)
+		return (0);
 	while (x < len && start <= strlen)
 	{
 		newstr[x] = s[start];
