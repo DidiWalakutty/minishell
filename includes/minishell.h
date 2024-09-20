@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/20 16:38:50 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/10 19:06:26 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/09/18 22:52:26 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@
 # include "../libft/libft.h"
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <termios.h>
+# include <signal.h>
 # include <fcntl.h>
 # include <sys/wait.h>
 
@@ -118,6 +120,7 @@ typedef struct s_redir_in
 	char		*str;
 	bool		heredoc;
 	bool		quotes;
+	int			pipe_hdoc[2];
 	t_redin		*next;
 }	t_redin;
 
@@ -138,7 +141,7 @@ typedef enum s_builtin
 	EXPORT,
 	UNSET,
 	EXIT,
-	ECHO,
+	ECHO_BUILTIN,
 	PWD,
 	ENV,
 }	t_builtin;
@@ -243,6 +246,17 @@ void	expand_heredoc_string(char *str, t_h_dol *info, bool *expanded);
 void	free_cmds(t_cmd *cmd_list);
 
 //-------------------------------------------------------------------------//
+//                          Signals                                        //
+//-------------------------------------------------------------------------//
+
+bool	disable_echoctl(void);
+void	enable_echoctl(void);
+void	set_signals_ia_mode(void);
+void	set_signals_nia_mode(void);
+void	set_signals_hdoc_mode(void);
+void	set_signals_hdoc_parent_mode(void);
+
+//-------------------------------------------------------------------------//
 //                             Utils	                                   //
 //-------------------------------------------------------------------------//
 
@@ -320,8 +334,9 @@ int		make_processes(t_data *data);
 //-------------------------------------------------------------------------//
 
 bool	redirect_fd(int fd, int fd_dst);
-bool	check_heredocs(t_redin *redir_in);
-bool	heredoc(t_redin *redir_in, bool redirect);
+int		check_heredocs(t_data *data);
+bool	check_heredocs_parent(t_redin *redir_in);
+void	heredoc(t_redin *redir_in, bool redirect);
 
 //-------------------------------------------------------------------------//
 //                           Builtins                                  //

@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   utils.c                                            :+:    :+:            */
+/*   utils.c                                           :+:    :+:             */
 /*                                                     +:+                    */
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/07/04 17:06:02 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/12 19:21:59 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/14 19:52:19 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../includes/minishell.h"
 
 int	if_valid_char(char c)
 {
