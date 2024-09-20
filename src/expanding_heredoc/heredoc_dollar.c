@@ -6,7 +6,7 @@
 /*   By: didi <didi@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 16:29:08 by didi          #+#    #+#                 */
-/*   Updated: 2024/09/17 18:16:21 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/20 18:42:06 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,18 +46,6 @@ t_h_dol	*init_here_dol(char *str)
 	new->no_closing_brackets = false;
 	new->exp_kind = IS_DOLLAR;
 	return (new);
-}
-
-bool	update_here_brackets(char *str, t_h_dol *info)
-{
-	if (str[info->end_var + ft_strlen(info->expanded) + 1] != '}')
-	{
-		info->expanded = ft_strdup("");
-		return (false);
-	}
-	info->start_env--;
-	info->end_var--;
-	return (true);
 }
 
 void	set_env_and_expand(char *str, t_h_dol *info, char **env, bool *expanded)

@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/10 18:10:20 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/18 18:09:14 by didi          ########   odam.nl         */
+/*   Updated: 2024/09/20 18:43:59 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,12 +50,7 @@ static void	set_heredoc_pid(char **copy, char **env, bool *expand)
 		if (info->copy[info->i] == '$' && (info->copy[info->i + 1] == '$' || \
 			(info->copy[info->i + 1] == '{' && info->copy[info->i + 2] == '$')))
 		{
-			if (info->copy[info->i + 1] == '{')
-				info->brackets = true;
-			info->expanded = ft_strdup(info->env_name);
-			info->end_var = info->i + 2;
-			if (info->brackets == true)
-				info->end_var += 2;
+			expand_here_pid(info->copy, info, expand);
 			expand_heredoc_string(info->copy, info, expand);
 			info->str_len = ft_strlen(info->copy);
 			continue ;
@@ -79,12 +74,7 @@ static void	set_heredoc_exit(char **copy, t_data *data, bool *expand)
 		if (info->copy[info->i] == '$' && (info->copy[info->i + 1] == '?' || \
 			(info->copy[info->i + 1] == '{' && info->copy[info->i + 2] == '?')))
 		{
-			if (info->copy[info->i + 1] == '{')
-				info->brackets = true;
-			info->expanded = ft_strdup(info->env_name);
-			info->end_var = info->i + 2;
-			if (info->brackets == true)
-				info->end_var += 2;
+			expand_here_exit(info->copy, info, expand);
 			expand_heredoc_string(info->copy, info, expand);
 			info->str_len = ft_strlen(info->copy);
 			continue ;
@@ -98,7 +88,6 @@ static void	set_heredoc_exit(char **copy, t_data *data, bool *expand)
 	free_heredoc_info(info);
 }
 
-// Current problem at pid and exit: $? and ??
 char	*heredoc_expanding(char *str, t_data *data)
 {
 	char	*new_str;
@@ -108,7 +97,6 @@ char	*heredoc_expanding(char *str, t_data *data)
 
 	i = 0;
 	copy = ft_strdup(str);
-	// new_str = ft_strdup("");
 	while (str[i])
 	{
 		expanded = true;
@@ -121,7 +109,6 @@ char	*heredoc_expanding(char *str, t_data *data)
 		if (expanded == true)
 			i++;
 	}
-	// free(new_str);
 	new_str = ft_strdup(copy);
 	free(copy);
 	return (new_str);

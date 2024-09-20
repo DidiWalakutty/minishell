@@ -6,81 +6,11 @@
 /*   By: didi <didi@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/16 14:03:40 by didi          #+#    #+#                 */
-/*   Updated: 2024/09/18 18:23:06 by didi          ########   odam.nl         */
+/*   Updated: 2024/09/20 18:51:57 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static void	reset_here_joined(t_h_dol *info, char **update_join, t_joined *join, char *remain)
-{
-	if ((!remain || remain[0] == '\0') && (!join->before || \
-		join->before[0] == '\0'))
-		*update_join = ft_strdup("");
-	else if (!remain || remain[0] == '\0')
-		*update_join = ft_strdup(join->before);
-	else if (!join->before || join->before[0] == '\0')
-		*update_join = ft_strdup(remain);
-	else
-		*update_join = ft_strconcat(join->before, remain);
-}
-
-static bool	exit_here_brackets(char *str, t_h_dol *info, int max)
-{
-	if (info->exp_kind == IS_EXIT && str[info->i + 1] == '{')
-	{
-		if (str[info->i + 2] == '?' && (info->i + 3 <= max))
-		{
-			if (str[info->i + 3] == '}')
-				return (true);
-			else
-				return (false);
-		}
-		else if (!str[info->i + 3])
-			return (false);
-	}
-	else if (info->exp_kind == IS_PID && str[info->i + 1] == '{')
-	{
-		if (str[info->i + 2] == '$' && (info->i + 3 <= max))
-		{
-			if (str[info->i + 3] == '}')
-				return (true);
-			else
-				return (false);
-		}
-		else if (!str[info->i + 3])
-			return (false);
-	}
-	return (false);
-}
-
-bool	hexit_brack(char *str, t_h_dol *info, t_joined *join, bool *expand)
-{
-	char	*temp;
-
-	if (info->exp_kind == IS_EXIT || info->exp_kind == IS_PID)
-	{
-		if (exit_here_brackets(str, info, info->str_len) == false)
-		{
-			temp = ft_substr(str, info->end_var - 1, info->str_len);
-			reset_here_joined(info, &join->joined, join, temp);
-			*expand = false;
-			free(temp);
-			return (false);
-		}
-	}
-	if (info->exp_kind == IS_DOLLAR)
-	{
-		if (info->no_closing_brackets == true)
-		{
-			// temp = ft_substr(str, info->end_var - 1, info->str_len);
-			reset_here_joined(info, &join->joined, join, join->remainder);
-			*expand = false;
-			return (false);
-		}
-	}
-	return (true);
-}
 
 static t_joined	*init_here_join(char *str, t_h_dol *info)
 {
@@ -93,7 +23,62 @@ static t_joined	*init_here_join(char *str, t_h_dol *info)
 	return (new);
 }
 
-// Also needs to receive exit-status
+static void	heredoc_joined_update(t_h_dol *info, t_joined *join, \
+			char **updated_join, bool *expanded)
+{
+	if ((!join->remainder || join->remainder[0] == '\0') && \
+		(!join->before || join->before[0] == '\0'))
+		*updated_join = ft_strdup("");
+	else if (!join->remainder || join->remainder[0] == '\0')
+		*updated_join = ft_strdup(join->before);
+	else if (!join->before || join->before[0] == '\0')
+		*updated_join = ft_strdup(join->remainder);
+	else
+		*updated_join = ft_strconcat(join->before, join->remainder);
+}
+
+void	expand_here_pid(char *str, t_h_dol *info, bool *expanded)
+{
+	info->start_env = info->i + 1;
+	if (str[info->start_env] == '{')
+	{
+		info->brackets = true;
+		info->start_env++;
+	}
+	info->end_var = info->start_env;
+	if (str[info->end_var] == '$')
+		info->end_var++;
+	if (info->brackets == true && str[info->end_var] != '}')
+		info->no_closing_brackets = true;
+	info->expanded = ft_strdup(info->expanded);
+	if (!info->expanded)
+		info->expanded = ft_strdup("");
+	if (info->brackets == true && info->no_closing_brackets == false && \
+		info->end_var < info->str_len)
+		info->end_var++;
+}
+
+void	expand_here_exit(char *str, t_h_dol *info, bool *expanded)
+{
+	info->start_env = info->i + 1;
+	if (str[info->start_env] == '{')
+	{
+		info->brackets = true;
+		info->start_env++;
+	}
+	info->end_var = info->start_env;
+	if (str[info->end_var] == '?')
+		info->end_var++;
+	if (info->brackets == true && str[info->end_var] != '}')
+		info->no_closing_brackets = true;
+	info->expanded = ft_strdup(info->expanded);
+	if (!info->expanded)
+		info->expanded = ft_strdup("");
+	if (info->brackets == true && info->no_closing_brackets == false && \
+		info->end_var < info->str_len)
+		info->end_var++;
+}
+
 void	expand_heredoc_string(char *str, t_h_dol *info, bool *expanded)
 {
 	t_joined	*var;
@@ -109,9 +94,8 @@ void	expand_heredoc_string(char *str, t_h_dol *info, bool *expanded)
 		var->joined = check_joined(var->joined, var->remainder);
 	if (!var->joined)
 		var->joined = ft_strdup("");
-	if (info->brackets == true || (info->exp_kind == IS_DOLLAR && \
-									info->no_closing_brackets == true))
-		hexit_brack(str, info, var, expanded);
+	if (info->no_closing_brackets == true)
+		heredoc_joined_update(info, var, &var->joined, expanded);
 	info->copy = ft_strdup(var->joined);
 	free(var->before);
 	free(var->remainder);

@@ -6,7 +6,7 @@
 /*   By: didi <didi@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 17:00:49 by didi          #+#    #+#                 */
-/*   Updated: 2024/09/17 18:20:23 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/20 18:58:51 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ t_h_dol	*init_here_pid(char *str)
 	t_h_dol	*new;
 
 	new = mem_check(malloc(sizeof(t_h_dol)));
-	new->expanded = NULL;
-	new->env_name = ft_itoa(getpid());
+	new->expanded = ft_itoa(getpid());
+	new->env_name = NULL;
 	new->copy = ft_strdup(str);
 	new->i = 0;
 	new->str_len = ft_strlen(str);

@@ -59,6 +59,27 @@ t_dollar	*init_exit_variables(t_token *node)
 	return (exit_var);
 }
 
+static void	expand_exit(t_token *node, t_dollar *ex)
+{
+	ex->start_env = ex->i + 1;
+	if (node->str[ex->start_env] == '{')
+	{
+		ex->brackets = true;
+		ex->start_env++;
+	}
+	ex->end_var = ex->start_env;
+	if (node->str[ex->end_var] == '?')
+		ex->end_var++;
+	if (ex->brackets == true && node->str[ex->end_var] != '}')
+		ex->no_closing_bracket = true;
+	ex->expanded = ft_strdup(ex->expanded);
+	if (!ex->expanded)
+		ex->expanded = ft_strdup("");
+	if (ex->brackets == true && ex->no_closing_bracket == false && \
+		(ex->end_var < ex->str_len))
+		ex->end_var++;
+}
+
 int	set_exit_status(t_data *data, t_token *node, t_expand *info)
 {
 	t_dollar	*ex;
@@ -71,12 +92,8 @@ int	set_exit_status(t_data *data, t_token *node, t_expand *info)
 		if (node->str[ex->i] == '$' && (node->str[ex->i + 1] == '?' || \
 			(node->str[ex->i + 1] == '{' && node->str[ex->i + 2] == '?')))
 		{
-			if (node->str[ex->i + 1] == '{')
-				ex->brackets = true;
-			ex->expanded = exit_status;
-			ex->end_var = ex->i + 2;
-			if (ex->brackets == true && node->str[ex->end_var + 1])
-				ex->end_var += 2;
+			ex->expanded = ft_strdup(exit_status);
+			expand_exit(node, ex);
 			expand_node(node, ex);
 			ex->str_len = ft_strlen(node->str);
 			continue ;
