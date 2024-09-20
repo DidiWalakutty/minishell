@@ -51,13 +51,6 @@ static t_joined	*init_join(t_token *node, t_dollar *dol)
 	return (new);
 }
 
-// 	free(dol->expanded); ???
-// Can't free(joined), because it's now owned by ceate_node;
-// It would deallocate the memory while the node still needs to use it.
-//
-// Expand nodes checks and concatenates before expansion, 
-// the expansion and the possible remainder, 
-// creates a node and adds it to the list.
 void	expand_node(t_token *node, t_dollar *dol)
 {
 	t_joined	*var;
@@ -73,16 +66,13 @@ void	expand_node(t_token *node, t_dollar *dol)
 		var->joined = check_joined(var->joined, var->remainder);
 	if (!var->joined)
 		var->joined = ft_strdup("");
-	if (dol->brackets == true || (dol->exp_kind == IS_DOLLAR && \
-								dol->no_closing_bracket == true))
-		check_exit_brackets(node->str, dol, &var->joined, var);
+	if (dol->no_closing_bracket == true)
+		reset_joined(var, &var->joined);
 	free(node->str);
-	node->str = var->joined;
+	node->str = ft_strdup(var->joined);
 	free(var->before);
 	free(var->remainder);
 	free(var->joined);
-	free(dol->expanded);
-	free(dol->env_name);
 	dol->brackets = false;
 	dol->no_closing_bracket = false;
 }

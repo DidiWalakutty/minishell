@@ -49,6 +49,7 @@ t_dollar	*init_exit_variables(t_token *node)
 	exit_var = mem_check(malloc(sizeof(t_dollar)));
 	exit_var->expanded = NULL;
 	exit_var->env_name = NULL;
+	exit_var->start_env = 0;
 	exit_var->end_var = 0;
 	exit_var->str_len = ft_strlen(node->str);
 	exit_var->i = 0;
@@ -58,30 +59,49 @@ t_dollar	*init_exit_variables(t_token *node)
 	return (exit_var);
 }
 
+static void	expand_exit(t_token *node, t_dollar *ex)
+{
+	ex->start_env = ex->i + 1;
+	if (node->str[ex->start_env] == '{')
+	{
+		ex->brackets = true;
+		ex->start_env++;
+	}
+	ex->end_var = ex->start_env;
+	if (node->str[ex->end_var] == '?')
+		ex->end_var++;
+	if (ex->brackets == true && node->str[ex->end_var] != '}')
+		ex->no_closing_bracket = true;
+	ex->expanded = ft_strdup(ex->expanded);
+	if (!ex->expanded)
+		ex->expanded = ft_strdup("");
+	if (ex->brackets == true && ex->no_closing_bracket == false && \
+		(ex->end_var < ex->str_len))
+		ex->end_var++;
+}
+
 int	set_exit_status(t_data *data, t_token *node, t_expand *info)
 {
-	t_dollar	*exit_var;
+	t_dollar	*ex;
 	char		*exit_status;
 
 	exit_status = ft_itoa(data->exit_status);
-	exit_var = init_exit_variables(node);
-	while (exit_var->i < exit_var->str_len)
+	ex = init_exit_variables(node);
+	while (ex->i < ex->str_len)
 	{
-		if (node->str[exit_var->i] == '$' && (node->str[exit_var->i + 1] == \
-			'?' || node->str[exit_var->i + 1] == '{'))
+		if (node->str[ex->i] == '$' && (node->str[ex->i + 1] == '?' || \
+			(node->str[ex->i + 1] == '{' && node->str[ex->i + 2] == '?')))
 		{
-			if (node->str[exit_var->i + 1] == '{')
-				exit_var->brackets = true;
-			exit_var->expanded = exit_status;
-			exit_var->end_var = exit_var->i + 2;
-			if (exit_var->brackets == true)
-				exit_var->end_var += 2;
-			expand_node(node, exit_var);
+			ex->expanded = ft_strdup(exit_status);
+			expand_exit(node, ex);
+			expand_node(node, ex);
+			ex->str_len = ft_strlen(node->str);
+			continue ;
 		}
-		exit_var->i++;
-		while (node->str[exit_var->i] && node->str[exit_var->i] != '$')
-			exit_var->i++;
-		exit_var->str_len = ft_strlen(node->str);
+		ex->i++;
+		while (node->str[ex->i] && node->str[ex->i] != '$')
+			ex->i++;
+		ex->str_len = ft_strlen(node->str);
 	}
 	return (0);
 }

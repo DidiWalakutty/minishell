@@ -42,22 +42,6 @@ static t_dollar	*init_dollar(t_token *node)
 	return (dollar);
 }
 
-static bool	update_dol_brackets(t_token *node, t_dollar *dol)
-{
-	if (node->str[dol->end_var + ft_strlen(dol->expanded) + 1] != '}')
-	{
-		free(dol->expanded);
-		dol->expanded = ft_strdup("");
-		return (false);
-	}
-	dol->start_env--;
-	dol->end_var++;
-	return (true);
-}
-
-// start_env is $ +1, where ENV-name starts.
-// end is where env_name ends.
-// Searches the env-name and its info.
 static void	expand_dollar(t_token *node, t_dollar *dol, char **env)
 {
 	dol->start_env = dol->i + 1;
@@ -87,7 +71,6 @@ static void	expand_dollar(t_token *node, t_dollar *dol, char **env)
 	expand_node(node, dol);
 }
 
-// This function expands a $-env for the whole D-Q node.
 int	set_dollar(t_token *node, char **env, t_expand *info)
 {
 	t_dollar	*dol_var;

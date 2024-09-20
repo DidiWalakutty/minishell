@@ -216,10 +216,8 @@ bool	is_double_dollar(t_token *node, bool heredoc);
 int		set_pid(t_token *node, t_expand *info);
 bool	quote_type_present(t_token *node);
 int		concatenate_quotes(t_token *node);
-bool	check_exit_brackets(char *str, t_dollar *var, char **new_str, \
-		t_joined *join);
+void	reset_joined(t_joined *join, char **updated_joined);
 char	*check_joined(char *before, char *fill_in);
-// bool	check_exit_brackets(char *str, t_dollar *var, char **joined_update);
 
 //-------------------------------------------------------------------------//
 //                          Build Commands                                 //
@@ -233,18 +231,17 @@ int		handle_redirect(t_token **token, t_cmd **command);
 //                          Heredoc Expanding	                           //
 //-------------------------------------------------------------------------//
 
-char	*heredoc_expanding(char *str, char **env);
+char	*heredoc_expanding(char *str, t_data *data);
 bool	is_heredoc_dollar(char *str, int i);
 bool	is_heredoc_double(char *str, int i);
 bool	is_heredoc_exit(char *str, int i);
 t_h_dol	*init_here_dol(char *str);
 t_h_dol	*init_here_pid(char *str);
-t_h_dol	*init_here_exit(char *str);
-bool	is_heredoc_exit(char *str, int i);
-void	check_quote_and_brackets(char *str, int *i, t_h_dol *var);
-bool	update_here_brackets(char *str, t_h_dol *info);
+t_h_dol	*init_here_exit(char *str, int exit);
 void	set_env_and_expand(char *str, t_h_dol *info, char **env, \
 		bool *expanded);
+void	expand_here_pid(char *str, t_h_dol *info, bool *expanded);
+void	expand_here_exit(char *str, t_h_dol *info, bool *expanded);
 void	expand_heredoc_string(char *str, t_h_dol *info, bool *expanded);
 void	free_cmds(t_cmd *cmd_list);
 
@@ -323,7 +320,6 @@ void	print_env(char **env);
 void	print_commands(t_cmd *cmd);
 void	print_redou(t_redou *redir);
 void	print_redin(t_redin *redir);
-
 char	*update_remainder(char *str, t_dollar *var);
 
 //-------------------------------------------------------------------------//

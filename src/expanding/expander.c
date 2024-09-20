@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:36:22 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/17 20:24:40 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/19 19:54:36 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,3 +56,5 @@ void	expand_input(t_data *data, t_token *node, char **env)
 	node = info->head;
 	free(info);
 }
+
+// Currently problems with brackets and end-var

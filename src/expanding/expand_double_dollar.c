@@ -46,30 +46,46 @@ t_dollar	*init_double_dol(t_token *node)
 	return (double_dollar);
 }
 
+static void	expand_pid(t_token *node, t_dollar *dol)
+{
+	dol->start_env = dol->i + 1;
+	if (node->str[dol->start_env] == '{')
+	{
+		dol->brackets = true;
+		dol->start_env++;
+	}
+	dol->end_var = dol->start_env;
+	if (node->str[dol->end_var] == '$')
+		dol->end_var++;
+	if (dol->brackets == true && node->str[dol->end_var] != '}')
+		dol->no_closing_bracket = true;
+	dol->expanded = ft_strdup(dol->expanded);
+	if (!dol->expanded)
+		dol->expanded = ft_strdup("");
+	if (dol->brackets == true && dol->no_closing_bracket == false && \
+		(dol->end_var < dol->str_len))
+		dol->end_var++;
+}
+
 int	set_pid(t_token *node, t_expand *info)
 {
-	t_dollar	*dub_var;
+	t_dollar	*dol;
 
-	dub_var = init_double_dol(node);
-	while (dub_var->i < dub_var->str_len)
+	dol = init_double_dol(node);
+	while (dol->i < dol->str_len)
 	{
-		if (node->str[dub_var->i] == '$' && (node->str[dub_var->i + 1] == \
-			'$' || node->str[dub_var->i + 1] == '{'))
+		if (node->str[dol->i] == '$' && (node->str[dol->i + 1] == '$' || \
+			(node->str[dol->i + 1] == '{' && node->str[dol-> i + 2] == '$')))
 		{
-			if (node->str[dub_var->i + 1] == '{')
-				dub_var->brackets = true;
-			dub_var->expanded = ft_strdup(dub_var->expanded);
-			dub_var->end_var = dub_var->i + 2;
-			if (dub_var->brackets == true)
-				dub_var->end_var += 2;
-			expand_node(node, dub_var);
-			dub_var->str_len = ft_strlen(node->str);
+			expand_pid(node, dol);
+			expand_node(node, dol);
+			dol->str_len = ft_strlen(node->str);
 			continue ;
 		}
-		dub_var->i++;
-		while (node->str[dub_var->i] && node->str[dub_var->i] != '$')
-			dub_var->i++;
-		dub_var->str_len = ft_strlen(node->str);
+		dol->i++;
+		while (node->str[dol->i] && node->str[dol->i] != '$')
+			dol->i++;
+		dol->str_len = ft_strlen(node->str);
 	}
 	return (0);
 }
