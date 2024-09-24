@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/10 18:10:20 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/24 19:20:13 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/24 20:07:21 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,11 +54,16 @@ static void	set_heredoc_dollar(char **copy, char **env, bool *mal_fail)
 	free_heredoc_info(info);
 }
 
-static void	set_heredoc_pid(char **copy, char **env, bool *mal_fail)
+static int	set_heredoc_pid(char **copy, char **env, bool *mal_fail)
 {
 	t_h_dol	*info;
 
 	info = init_here_pid(*copy);
+	if (!info)
+	{
+		*mal_fail = true;
+		return (-1);
+	}
 	while (info->i < info->str_len)
 	{
 		if (info->copy[info->i] == '$' && (info->copy[info->i + 1] == '$' || \

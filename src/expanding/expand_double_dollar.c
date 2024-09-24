@@ -92,7 +92,10 @@ int	set_pid(t_token *node, t_expand *info)
 
 	dol = init_double_dol(node);
 	if (!dol)
+	{
+		info->mal_fail = true;
 		return (-1);
+	}
 	while (dol->i < dol->str_len)
 	{
 		if (node->str[dol->i] == '$' && (node->str[dol->i + 1] == '$' || \

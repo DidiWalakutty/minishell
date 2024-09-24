@@ -94,7 +94,10 @@ int	set_exit_status(t_data *data, t_token *node, t_expand *info)
 
 	ex = init_exit_variables(node, data);
 	if (!ex)
+	{
+		info->mal_fail = true;
 		return (-1);
+	}
 	while (ex->i < ex->str_len)
 	{
 		if (node->str[ex->i] == '$' && (node->str[ex->i + 1] == '?' || \

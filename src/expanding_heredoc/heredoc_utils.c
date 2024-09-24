@@ -6,7 +6,7 @@
 /*   By: didi <didi@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/16 14:03:40 by didi          #+#    #+#                 */
-/*   Updated: 2024/09/24 19:48:03 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/24 20:02:24 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,21 @@ static t_joined	*init_here_join(char *str, t_h_dol *info)
 	t_joined	*new;
 
 	new = malloc(sizeof(t_joined));
-	if(!new)
+	if (!new)
 		return (NULL);
 	new->before = ft_substr(str, 0, info->i);
 	if (!new->before)
-	
+	{
+		free(new);
+		return (NULL);
+	}
 	new->remainder = ft_substr(str, info->end_var, info->str_len);
+	if (!new->remainder)
+	{
+		free(new->before);
+		free(new);
+		return (NULL);
+	}
 	new->joined = NULL;
 	return (new);
 }
@@ -98,13 +107,21 @@ void	expand_heredoc_string(char *str, t_h_dol *info, bool *mal_fail)
 		return ;
 	if (info->no_closing_brackets == true)
 		reset_joined(var, &var->joined, info);
-		// heredoc_joined_update(info, var, &var->joined);
-	if (check_mal_fail(info, var));
+	if (check_mal_fail(info, var))
 		return ;
 	info->copy = ft_strdup(var->joined);
-	free(var->before);
-	free(var->remainder);
-	free(var->joined);
+	if (!info->copy)
+		*mal_fail = true;
+	free_joined_struct(var);
 	info->brackets = false;
 	info->no_closing_brackets = false;
 }
+		// reset_joined was first this:
+		// heredoc_joined_update(info, var, &var->joined);
+
+	// info->copy = ft_strdup(var->joined);
+	// free(var->before);
+	// free(var->remainder);
+	// free(var->joined);
+	// info->brackets = false;
+	// info->no_closing_brackets = false;
