@@ -6,7 +6,7 @@
 /*   By: didi <didi@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/16 14:03:40 by didi          #+#    #+#                 */
-/*   Updated: 2024/09/20 18:51:57 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/24 19:48:03 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,28 +16,32 @@ static t_joined	*init_here_join(char *str, t_h_dol *info)
 {
 	t_joined	*new;
 
-	new = mem_check(malloc(sizeof(t_joined)));
+	new = malloc(sizeof(t_joined));
+	if(!new)
+		return (NULL);
 	new->before = ft_substr(str, 0, info->i);
+	if (!new->before)
+	
 	new->remainder = ft_substr(str, info->end_var, info->str_len);
 	new->joined = NULL;
 	return (new);
 }
 
-static void	heredoc_joined_update(t_h_dol *info, t_joined *join, \
-			char **updated_join, bool *expanded)
-{
-	if ((!join->remainder || join->remainder[0] == '\0') && \
-		(!join->before || join->before[0] == '\0'))
-		*updated_join = ft_strdup("");
-	else if (!join->remainder || join->remainder[0] == '\0')
-		*updated_join = ft_strdup(join->before);
-	else if (!join->before || join->before[0] == '\0')
-		*updated_join = ft_strdup(join->remainder);
-	else
-		*updated_join = ft_strconcat(join->before, join->remainder);
-}
+// static void	heredoc_joined_update(t_h_dol *info, t_joined *join, \
+// 			char **updated_join)
+// {
+// 	if ((!join->remainder || join->remainder[0] == '\0') && \
+// 		(!join->before || join->before[0] == '\0'))
+// 		*updated_join = ft_strdup("");
+// 	else if (!join->remainder || join->remainder[0] == '\0')
+// 		*updated_join = ft_strdup(join->before);
+// 	else if (!join->before || join->before[0] == '\0')
+// 		*updated_join = ft_strdup(join->remainder);
+// 	else
+// 		*updated_join = ft_strconcat(join->before, join->remainder);
+// }
 
-void	expand_here_pid(char *str, t_h_dol *info, bool *expanded)
+void	expand_here_pid(char *str, t_h_dol *info)
 {
 	info->start_env = info->i + 1;
 	if (str[info->start_env] == '{')
@@ -58,7 +62,7 @@ void	expand_here_pid(char *str, t_h_dol *info, bool *expanded)
 		info->end_var++;
 }
 
-void	expand_here_exit(char *str, t_h_dol *info, bool *expanded)
+void	expand_here_exit(char *str, t_h_dol *info)
 {
 	info->start_env = info->i + 1;
 	if (str[info->start_env] == '{')
@@ -79,23 +83,24 @@ void	expand_here_exit(char *str, t_h_dol *info, bool *expanded)
 		info->end_var++;
 }
 
-void	expand_heredoc_string(char *str, t_h_dol *info, bool *expanded)
+void	expand_heredoc_string(char *str, t_h_dol *info, bool *mal_fail)
 {
 	t_joined	*var;
 
 	var = init_here_join(str, info);
 	if (!str || !var)
+	{
+		free_joined_struct(var);
 		return ;
-	if (var->before && var->before[0] != '\0')
-		var->joined = ft_strdup(var->before);
-	if (info->expanded && info->expanded[0] != '\0')
-		var->joined = check_joined(var->joined, info->expanded);
-	if (var->remainder && var->remainder[0] != '\0')
-		var->joined = check_joined(var->joined, var->remainder);
-	if (!var->joined)
-		var->joined = ft_strdup("");
+	}
+	handle_here_joined_string(var, info, mal_fail);
+	if (check_mal_fail(info, var))
+		return ;
 	if (info->no_closing_brackets == true)
-		heredoc_joined_update(info, var, &var->joined, expanded);
+		reset_joined(var, &var->joined, info);
+		// heredoc_joined_update(info, var, &var->joined);
+	if (check_mal_fail(info, var));
+		return ;
 	info->copy = ft_strdup(var->joined);
 	free(var->before);
 	free(var->remainder);

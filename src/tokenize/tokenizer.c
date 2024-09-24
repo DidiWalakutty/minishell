@@ -6,18 +6,12 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:43:34 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/20 22:12:18 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/24 18:48:31 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// Add 2 for the opening and closing quote, remove 2 for line
-//  (we don't want to include the quotes).
-// Returns i - 1, so the i in tokenize_input immediately follows
-// the closing quote's position that we return.
-// Should we consider "" as an empty string and add it to the node-list?
-//  free line?
 int	add_quote(char *str, int i, char c, t_token **list)
 {
 	t_token	*new;
@@ -46,8 +40,6 @@ int	add_quote(char *str, int i, char c, t_token **list)
 	return (len + i);
 }
 
-// We add a token, either >> or <<.
-// It the i + 1 isn't equal, it adds one token.
 int	add_redir_or_pipe(char *str, int i, t_data *data, t_token **list)
 {
 	t_token	*new;

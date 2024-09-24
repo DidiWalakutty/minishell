@@ -6,7 +6,7 @@
 /*   By: didi <didi@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 16:29:08 by didi          #+#    #+#                 */
-/*   Updated: 2024/09/20 18:42:06 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/24 19:26:43 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,14 @@ t_h_dol	*init_here_dol(char *str)
 {
 	t_h_dol	*new;
 
-	new = mem_check(malloc(sizeof(t_h_dol)));
+	new = malloc(sizeof(t_h_dol));
+	if (!new)
+		return (NULL);
+	new->copy = ft_strdup(str);
+	if (!new->copy)
+		return (NULL);
 	new->expanded = NULL;
 	new->env_name = NULL;
-	new->copy = ft_strdup(str);
 	new->i = 0;
 	new->str_len = ft_strlen(str);
 	new->start_env = 0;
@@ -48,7 +52,7 @@ t_h_dol	*init_here_dol(char *str)
 	return (new);
 }
 
-void	set_env_and_expand(char *str, t_h_dol *info, char **env, bool *expanded)
+void	extract_here_env_variable(char *str, t_h_dol *info)
 {
 	info->start_env = info->i + 1;
 	if (str[info->start_env] == '{')
@@ -66,13 +70,53 @@ void	set_env_and_expand(char *str, t_h_dol *info, char **env, bool *expanded)
 	}
 	if (info->brackets == true && str[info->end_var] != '}')
 		info->no_closing_brackets = true;
+}
+
+void	set_env_and_expand(char *str, t_h_dol *info, char **env, bool *mal_fail)
+{
+	extract_here_env_variable(str, info);
 	info->env_name = ft_substr(str, info->start_env, \
 					info->end_var - info->start_env);
+	if (!info->env_name)
+	{
+		*mal_fail = true;
+		return ;
+	}
 	info->expanded = copy_env_input(env, info->env_name);
 	if (!info->expanded)
 		info->expanded = ft_strdup("");
+	if (!info->expanded)
+	{
+		*mal_fail = true;
+		return ;
+	}
 	if (info->brackets == true && info->no_closing_brackets == false && \
 		(info->end_var < info->str_len))
 		info->end_var++;
-	expand_heredoc_string(str, info, expanded);
+	expand_heredoc_string(str, info, mal_fail);
+}
+
+void	process_here_dollar(char **copy, t_h_dol *info, char **env, \
+							bool *mal_fail)
+{
+	while (info->i < info->str_len)
+	{
+		if (info->copy[info->i] == '$' && (if_valid_char(info->copy[info->i \
+			+ 1]) || info->copy[info->i + 1] == '{'))
+		{
+			if (info->copy[info->i + 2] && info->copy[info->i + 2] != '$' && \
+				info->copy[info->i + 2] != '?')
+			{
+				set_env_and_expand(info->copy, info, env, mal_fail);
+				if (mal_fail == true)
+					return ;
+				info->str_len = ft_strlen(info->copy);
+				continue ;
+			}
+		}
+		info->i++;
+		while (info->copy[info->i] && info->copy[info->i] != '$')
+			info->i++;
+		info->str_len = ft_strlen(info->copy);
+	}
 }

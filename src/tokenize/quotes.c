@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:43:00 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/08/16 19:38:51 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/24 18:50:51 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static int	count_quotes(char *str, int i, int *quote_nb, char q)
 }
 
 // Checks if all quotes in the string are properly closed.
-// Keeps track of the number 
+// Keeps track of the number of quotes.
 bool	all_quotes_closed(char *str)
 {
 	int	i;

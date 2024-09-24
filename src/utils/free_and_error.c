@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:41:04 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/12 18:06:14 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/24 18:25:46 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,6 @@ static void	free_list(t_token *list)
 	}
 }
 
-// free(data->process); ??
-// free(&data); ??
-// free(data->list); // still necessary?
-// Free t_cmds??
 void	free_all(t_data	*data)
 {
 	free(data->input);

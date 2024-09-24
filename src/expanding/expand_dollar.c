@@ -29,7 +29,7 @@ static t_dollar	*init_dollar(t_token *node)
 {
 	t_dollar	*dollar;
 
-	dollar = mem_check(malloc(sizeof(t_dollar)));
+	dollar = malloc(sizeof(t_dollar));
 	if (!dollar)
 		return (NULL);
 	dollar->expanded = NULL;
@@ -44,40 +44,34 @@ static t_dollar	*init_dollar(t_token *node)
 	return (dollar);
 }
 
-static void	expand_dollar(t_token *node, t_dollar *dol, char **env)
+static void	expand_dollar(t_token *node, t_dollar *dol, char **env, \
+							t_expand *info)
 {
-	dol->start_env = dol->i + 1;
-	if (node->str[dol->start_env] == '{')
-	{
-		dol->brackets = true;
-		dol->start_env++;
-	}
-	dol->end_var = dol->start_env;
-	while (node->str[dol->end_var] && (is_alph_or_num(node->str[dol->end_var]) \
-		|| node->str[dol->end_var] == '_'))
-	{
-		dol->end_var++;
-		if (node->str[dol->end_var] == '$')
-			break ;
-	}
-	if (dol->brackets == true && node->str[dol->end_var] != '}')
-		dol->no_closing_bracket = true;
+	extract_env_variable(node, dol);
 	dol->env_name = ft_substr(node->str, dol->start_env, \
 					dol->end_var - dol->start_env);
+	if (!dol->env_name)
+	{
+		info->mal_fail = true;
+		return ;
+	}
 	dol->expanded = copy_env_input(env, dol->env_name);
 	if (!dol->expanded)
 		dol->expanded = ft_strdup("");
+	if (!dol->expanded)
+	{
+		info->mal_fail = true;
+		return ;
+	}
 	if (dol->brackets == true && dol->no_closing_bracket == false && \
 		(dol->end_var < dol->str_len))
 		dol->end_var++;
-	expand_node(node, dol);
+	expand_node(node, dol, info);
 }
 
-int	set_dollar(t_token *node, char **env, t_expand *info)
+static void	process_dollar(t_token *node, t_dollar *dol_var, char **env, \
+							t_expand *info)
 {
-	t_dollar	*dol_var;
-
-	dol_var = init_dollar(node);
 	while (dol_var->i < dol_var->str_len)
 	{
 		if (node->str[dol_var->i] == '$' && \
@@ -87,7 +81,9 @@ int	set_dollar(t_token *node, char **env, t_expand *info)
 			if (node->str[dol_var->i + 2] && (node->str[dol_var->i + 2] \
 							!= '?' && node->str[dol_var->i + 2] != '$'))
 			{
-				expand_dollar(node, dol_var, env);
+				expand_dollar(node, dol_var, env, info);
+				if (info->mal_fail == true)
+					return ;
 				dol_var->str_len = ft_strlen(node->str);
 				continue ;
 			}
@@ -97,6 +93,19 @@ int	set_dollar(t_token *node, char **env, t_expand *info)
 			dol_var->i++;
 		dol_var->str_len = ft_strlen(node->str);
 	}
+}
+
+int	set_dollar(t_token *node, char **env, t_expand *info)
+{
+	t_dollar	*dol_var;
+
+	dol_var = init_dollar(node);
+	if (!dol_var)
+	{
+		info->mal_fail = true;
+		return (-1);
+	}
+	process_dollar(node, dol_var, env, info);
 	free(dol_var);
 	return (0);
 }

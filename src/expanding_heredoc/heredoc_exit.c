@@ -6,7 +6,7 @@
 /*   By: didi <didi@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/16 20:16:15 by didi          #+#    #+#                 */
-/*   Updated: 2024/09/20 18:57:55 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/24 15:24:52 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,8 @@ t_h_dol	*init_here_exit(char *str, int exit)
 {
 	t_h_dol	*new;
 
-	new = mem_check(malloc(sizeof(t_h_dol)));
+	new = malloc(sizeof(t_h_dol));
+	// if (!new)
 	new->expanded = ft_itoa(exit);
 	new->env_name = NULL;
 	new->copy = ft_strdup(str);

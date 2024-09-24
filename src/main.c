@@ -51,9 +51,15 @@ int	main(int argc, char **argv, char **env)
 		data->input = input;
 		if (input[0] != '\0')
 			add_history(data->input);
-		tokenize_and_expand(data);
-		// print_linked_list(data->list);
-		// print_commands(data->cmd_process);
+		char *temp = heredoc_expanding(input, data);
+		printf("%s\n", temp);
+		// if (expand_and_build(data) == 1)
+		// {
+		// 	free(data->input);
+		// 	error_exit("malloc", EXIT_FAILURE);
+		// }
+		// // print_linked_list(data->list);
+		// // print_commands(data->cmd_process);
 		// data->exit_status = make_processes(data);
 		free_all(data);
 	}

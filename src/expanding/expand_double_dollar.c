@@ -35,8 +35,12 @@ t_dollar	*init_double_dol(t_token *node)
 {
 	t_dollar	*double_dollar;
 
-	double_dollar = mem_check(malloc(sizeof(t_dollar)));
+	double_dollar = malloc(sizeof(t_dollar));
+	if (!double_dollar)
+		return (NULL);
 	double_dollar->expanded = ft_itoa(getpid());
+	if (!double_dollar->expanded)
+		return (NULL);
 	double_dollar->end_var = 0;
 	double_dollar->i = 0;
 	double_dollar->str_len = ft_strlen(node->str);
@@ -46,7 +50,7 @@ t_dollar	*init_double_dol(t_token *node)
 	return (double_dollar);
 }
 
-static void	expand_pid(t_token *node, t_dollar *dol)
+static void	expand_pid(t_token *node, t_dollar *dol, t_expand *info)
 {
 	dol->start_env = dol->i + 1;
 	if (node->str[dol->start_env] == '{')
@@ -59,12 +63,27 @@ static void	expand_pid(t_token *node, t_dollar *dol)
 		dol->end_var++;
 	if (dol->brackets == true && node->str[dol->end_var] != '}')
 		dol->no_closing_bracket = true;
-	dol->expanded = ft_strdup(dol->expanded);
 	if (!dol->expanded)
 		dol->expanded = ft_strdup("");
+	if (!dol->expanded)
+	{
+		info->mal_fail = true;
+		return ;
+	}
 	if (dol->brackets == true && dol->no_closing_bracket == false && \
 		(dol->end_var < dol->str_len))
 		dol->end_var++;
+}
+
+static int	expand_pid_and_node(t_token *node, t_dollar *dol, t_expand *info)
+{
+	expand_pid(node, dol, info);
+	if (info->mal_fail)
+		return (-1);
+	expand_node(node, dol, info);
+	if (info->mal_fail)
+		return (-1);
+	return (0);
 }
 
 int	set_pid(t_token *node, t_expand *info)
@@ -72,13 +91,15 @@ int	set_pid(t_token *node, t_expand *info)
 	t_dollar	*dol;
 
 	dol = init_double_dol(node);
+	if (!dol)
+		return (-1);
 	while (dol->i < dol->str_len)
 	{
 		if (node->str[dol->i] == '$' && (node->str[dol->i + 1] == '$' || \
 			(node->str[dol->i + 1] == '{' && node->str[dol-> i + 2] == '$')))
 		{
-			expand_pid(node, dol);
-			expand_node(node, dol);
+			if (expand_pid_and_node(node, dol, info) == -1)
+				break ;
 			dol->str_len = ft_strlen(node->str);
 			continue ;
 		}
@@ -87,5 +108,9 @@ int	set_pid(t_token *node, t_expand *info)
 			dol->i++;
 		dol->str_len = ft_strlen(node->str);
 	}
+	free(dol->expanded);
+	free(dol);
+	if (info->mal_fail)
+		return (-1);
 	return (0);
 }

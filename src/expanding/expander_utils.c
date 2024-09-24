@@ -12,22 +12,6 @@
 
 #include "minishell.h"
 
-bool	is_heredoc(t_token *node)
-{
-	int	i;
-
-	i = 0;
-	if (node->type != HERE_DOC)
-		return (false);
-	while (node->str[i])
-	{
-		if (node->str[i] == '<' && node->str[i + 1] == '<')
-			return (true);
-		i++;
-	}
-	return (false);
-}
-
 char	*check_joined(char *before, char *fill_in)
 {
 	char	*replacement;
@@ -44,35 +28,58 @@ static t_joined	*init_join(t_token *node, t_dollar *dol)
 {
 	t_joined	*new;
 
-	new = mem_check(malloc(sizeof(t_joined)));
+	new = malloc(sizeof(t_joined));
+	if (!new)
+		return (NULL);
 	new->before = ft_substr(node->str, 0, dol->i);
+	if (!new->before)
+	{
+		free(new);
+		return (NULL);
+	}
 	new->remainder = ft_substr(node->str, dol->end_var, dol->str_len);
+	if (!new->remainder)
+	{
+		free(new->before);
+		free(new);
+		return (NULL);
+	}
 	new->joined = NULL;
 	return (new);
 }
 
-void	expand_node(t_token *node, t_dollar *dol)
+bool	check_mal_fail(t_expand *info, t_joined *var)
+{
+	if (info->mal_fail)
+	{
+		free_joined_struct(var);
+		return (true);
+	}
+	return (false);
+}
+
+void	expand_node(t_token *node, t_dollar *dol, t_expand *info)
 {
 	t_joined	*var;
 
 	var = init_join(node, dol);
-	if (!node->str)
+	if (!node->str || !var)
+	{
+		free_joined_struct(var);
 		return ;
-	if (var->before && var->before[0] != '\0')
-		var->joined = ft_strdup(var->before);
-	if (dol->expanded && dol->expanded[0] != '\0')
-		var->joined = check_joined(var->joined, dol->expanded);
-	if (var->remainder && var->remainder[0] != '\0')
-		var->joined = check_joined(var->joined, var->remainder);
-	if (!var->joined)
-		var->joined = ft_strdup("");
-	if (dol->no_closing_bracket == true)
-		reset_joined(var, &var->joined);
+	}
+	handle_joined_strings(var, dol, info);
+	if (check_mal_fail(info, var))
+		return ;
+	if (dol->no_closing_bracket)
+		reset_joined(var, &var->joined, info);
+	if (check_mal_fail(info, var))
+		return ;
 	free(node->str);
 	node->str = ft_strdup(var->joined);
-	free(var->before);
-	free(var->remainder);
-	free(var->joined);
+	if (!node->str)
+		info->mal_fail = true;
+	free_joined_struct(var);
 	dol->brackets = false;
 	dol->no_closing_bracket = false;
 }
@@ -91,6 +98,8 @@ char	*copy_env_input(char **env, char *to_find)
 			ft_strncmp(env[i], to_find, find_len) == 0)
 		{
 			result = ft_strdup(env[i] + find_len + 1);
+			if (!result)
+				return (NULL);
 			return (result);
 		}
 		i++;
