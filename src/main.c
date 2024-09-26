@@ -56,6 +56,7 @@ int	main(int argc, char **argv, char **env)
 			free(data->input);
 			error_exit("malloc", EXIT_FAILURE);
 		}
+		print_commands(data->cmd_process);
 		data->exit_status = make_processes(data);
 		free_all(data);
 	}

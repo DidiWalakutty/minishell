@@ -104,6 +104,7 @@ typedef struct s_dollar
 	int		start_env;
 	int		end_var;
 	bool	brackets;
+	bool	env_expansion;
 	bool	no_closing_bracket;
 	t_exp	exp_kind;
 }	t_dollar;

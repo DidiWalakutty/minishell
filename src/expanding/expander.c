@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:36:22 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/24 18:49:24 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/26 22:23:37 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,9 @@ static void	skip_heredoc_and_spaces(t_token **node, bool *heredoc)
 		*node = (*node)->next;
 }
 
+// Currently won't expand ${?} and ${$} properly!!!
+// Remainder in set_dollar will skip the ${ and not expand at all
+// and just save $} or ?}
 static int	node_expansion(t_token *node, t_expand *info, t_data *data)
 {
 	bool		heredoc;

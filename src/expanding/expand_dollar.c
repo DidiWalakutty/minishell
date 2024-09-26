@@ -39,6 +39,7 @@ static t_dollar	*init_dollar(t_token *node)
 	dollar->start_env = 0;
 	dollar->end_var = 0;
 	dollar->brackets = false;
+	dollar->env_expansion = false;
 	dollar->no_closing_bracket = false;
 	dollar->exp_kind = IS_DOLLAR;
 	return (dollar);
@@ -74,16 +75,20 @@ static void	process_dollar(t_token *node, t_dollar *dol_var, char **env, \
 {
 	while (dol_var->i < dol_var->str_len)
 	{
-		if (node->str[dol_var->i] == '$' && \
-			(if_valid_char(node->str[dol_var->i + 1]) || \
-			(node->str[dol_var->i + 1] == '{')))
+		if (node->str[dol_var->i] == '$' && (if_valid_char(\
+			node->str[dol_var->i + 1]) || (node->str[dol_var->i + 1] == '{')))
 		{
-			if (node->str[dol_var->i + 2] && (node->str[dol_var->i + 2] \
+			if (node->str[dol_var->i + 2] || (node->str[dol_var->i + 2] \
 							!= '?' && node->str[dol_var->i + 2] != '$'))
 			{
 				expand_dollar(node, dol_var, env, info);
 				if (info->mal_fail == true)
 					return ;
+				if (dol_var->env_expansion == true)
+				{
+					dol_var->i++;
+					dol_var->env_expansion = false;
+				}
 				dol_var->str_len = ft_strlen(node->str);
 				continue ;
 			}

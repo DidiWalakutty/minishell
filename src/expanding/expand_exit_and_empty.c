@@ -48,6 +48,7 @@ t_dollar	*init_exit_variables(t_token *node, t_data *data)
 	exit_var->i = 0;
 	exit_var->brackets = false;
 	exit_var->no_closing_bracket = false;
+	exit_var->env_expansion = false;
 	exit_var->exp_kind = IS_EXIT;
 	return (exit_var);
 }
