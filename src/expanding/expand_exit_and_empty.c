@@ -79,12 +79,25 @@ static void	expand_exit(t_token *node, t_dollar *ex, t_expand *info)
 
 static int	expand_exit_and_node(t_token *node, t_dollar *ex, t_expand *info)
 {
-	expand_exit(node, ex, info);
-	if (info->mal_fail)
-		return (-1);
-	expand_node(node, ex, info);
-	if (info->mal_fail)
-		return (-1);
+	while (ex->i < ex->str_len)
+	{
+		if (node->str[ex->i] == '$' && (node->str[ex->i + 1] == '?' || \
+			(node->str[ex->i + 1] == '{' && node->str[ex->i + 2] == '?')))
+		{
+			expand_exit(node, ex, info);
+			if (info->mal_fail)
+				return (-1);
+			expand_node(node, ex, info);
+			if (info->mal_fail)
+				return (-1);
+			ex->str_len = ft_strlen(node->str);
+			continue ;
+		}
+		ex->i++;
+		while (node->str[ex->i] && node->str[ex->i] != '$')
+			ex->i++;
+		ex->str_len = ft_strlen(node->str);
+	}
 	return (0);
 }
 
@@ -98,21 +111,9 @@ int	set_exit_status(t_data *data, t_token *node, t_expand *info)
 		info->mal_fail = true;
 		return (-1);
 	}
-	while (ex->i < ex->str_len)
-	{
-		if (node->str[ex->i] == '$' && (node->str[ex->i + 1] == '?' || \
-			(node->str[ex->i + 1] == '{' && node->str[ex->i + 2] == '?')))
-		{
-			if (expand_exit_and_node(node, ex, info) == -1)
-				break ;
-			ex->str_len = ft_strlen(node->str);
-			continue ;
-		}
-		ex->i++;
-		while (node->str[ex->i] && node->str[ex->i] != '$')
-			ex->i++;
-		ex->str_len = ft_strlen(node->str);
-	}
+	expand_exit_and_node(node, ex, info);
+	if (info->mal_fail)
+		return (-1);
 	free(ex->expanded);
 	free(ex);
 	if (info->mal_fail)

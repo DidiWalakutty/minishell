@@ -48,9 +48,9 @@ static t_joined	*init_join(t_token *node, t_dollar *dol)
 	return (new);
 }
 
-bool	check_mal_fail(t_expand *info, t_joined *var)
+bool	check_mal_fail(bool *mal_fail, t_joined *var)
 {
-	if (info->mal_fail)
+	if (*mal_fail)
 	{
 		free_joined_struct(var);
 		return (true);
@@ -69,11 +69,11 @@ void	expand_node(t_token *node, t_dollar *dol, t_expand *info)
 		return ;
 	}
 	handle_joined_strings(var, dol, info);
-	if (check_mal_fail(info, var))
+	if (check_mal_fail(&info->mal_fail, var))
 		return ;
 	if (dol->no_closing_bracket)
 		reset_joined(var, &var->joined, info);
-	if (check_mal_fail(info, var))
+	if (check_mal_fail(&info->mal_fail, var))
 		return ;
 	free(node->str);
 	node->str = ft_strdup(var->joined);

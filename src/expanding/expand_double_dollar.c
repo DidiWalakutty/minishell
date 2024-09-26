@@ -75,14 +75,27 @@ static void	expand_pid(t_token *node, t_dollar *dol, t_expand *info)
 		dol->end_var++;
 }
 
-static int	expand_pid_and_node(t_token *node, t_dollar *dol, t_expand *info)
+int	expand_pid_and_node(t_token *node, t_dollar *dol, t_expand *info)
 {
-	expand_pid(node, dol, info);
-	if (info->mal_fail)
-		return (-1);
-	expand_node(node, dol, info);
-	if (info->mal_fail)
-		return (-1);
+	while (dol->i < dol->str_len)
+	{
+		if (node->str[dol->i] == '$' && (node->str[dol->i + 1] == '$' || \
+			(node->str[dol->i + 1] == '{' && node->str[dol-> i + 2] == '$')))
+		{
+			expand_pid(node, dol, info);
+			if (info->mal_fail)
+				return (-1);
+			expand_node(node, dol, info);
+			if (info->mal_fail)
+				return (-1);
+			dol->str_len = ft_strlen(node->str);
+			continue ;
+		}
+		dol->i++;
+		while (node->str[dol->i] && node->str[dol->i] != '$')
+			dol->i++;
+		dol->str_len = ft_strlen(node->str);
+	}
 	return (0);
 }
 
@@ -96,21 +109,7 @@ int	set_pid(t_token *node, t_expand *info)
 		info->mal_fail = true;
 		return (-1);
 	}
-	while (dol->i < dol->str_len)
-	{
-		if (node->str[dol->i] == '$' && (node->str[dol->i + 1] == '$' || \
-			(node->str[dol->i + 1] == '{' && node->str[dol-> i + 2] == '$')))
-		{
-			if (expand_pid_and_node(node, dol, info) == -1)
-				break ;
-			dol->str_len = ft_strlen(node->str);
-			continue ;
-		}
-		dol->i++;
-		while (node->str[dol->i] && node->str[dol->i] != '$')
-			dol->i++;
-		dol->str_len = ft_strlen(node->str);
-	}
+	expand_pid_and_node(node, dol, info);
 	free(dol->expanded);
 	free(dol);
 	if (info->mal_fail)

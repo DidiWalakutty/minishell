@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/24 19:30:27 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/24 19:43:54 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/26 19:29:55 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,11 +63,11 @@ static bool	handle_here_remainder(t_joined *var, t_h_dol *info, bool *mal_fail)
 void	handle_here_joined_string(t_joined *var, t_h_dol *info, bool *mal_fail)
 {
 	handle_here_before(var, info, mal_fail);
-	if (mal_fail == true)
+	if (*mal_fail)
 		return ;
-	if (!handle_here_expanded(var, info, mal_fail || mal_fail))
+	if (!handle_here_expanded(var, info, mal_fail) || *mal_fail)
 		return ;
-	if (!handle_here_remainder(var, info, mal_fail) || mal_fail)
+	if (!handle_here_remainder(var, info, mal_fail) || *mal_fail)
 		return ;
 	if (!var->joined)
 	{

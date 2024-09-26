@@ -6,7 +6,7 @@
 /*   By: didi <didi@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 16:29:08 by didi          #+#    #+#                 */
-/*   Updated: 2024/09/24 19:26:43 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/26 19:33:09 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ void	process_here_dollar(char **copy, t_h_dol *info, char **env, \
 				info->copy[info->i + 2] != '?')
 			{
 				set_env_and_expand(info->copy, info, env, mal_fail);
-				if (mal_fail == true)
+				if (*mal_fail)
 					return ;
 				info->str_len = ft_strlen(info->copy);
 				continue ;

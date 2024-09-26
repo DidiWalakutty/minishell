@@ -6,14 +6,14 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/07/04 15:28:16 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/24 18:51:04 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/26 20:19:01 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 t_redin	*create_in_node(t_cmd *cmd, char *str, t_redir_type redir_type, \
-							t_type token_type)
+						t_type token_type)
 {
 	t_redin	*new_node;
 
@@ -33,15 +33,6 @@ t_redin	*create_in_node(t_cmd *cmd, char *str, t_redir_type redir_type, \
 	new_node->quotes = (token_type == SINGLE_QUOTE || \
 						token_type == DOUBLE_QUOTE);
 	new_node->next = NULL;
-	// if (redir_type == HEREDOC)
-	// 	new_node->heredoc = true;
-	// else
-	// 	new_node->heredoc = false;
-	// if (token_type == SINGLE_QUOTE || token_type == DOUBLE_QUOTE)
-	// 	new_node->quotes = true;
-	// else
-	// 	new_node->quotes = false;
-	// new_node->next = NULL;
 	return (new_node);
 }
 
@@ -60,8 +51,6 @@ t_redou	*create_out_node(t_cmd *cmd, char *str, t_redir_type redir_type)
 			free(new_node);
 			return (NULL);
 		}
-
-
 	}
 	new_node->append = (redir_type == APPENDING);
 	new_node->next = NULL;
