@@ -91,6 +91,8 @@ typedef struct s_joined
 typedef struct s_expand
 {
 	t_token	*head;
+	bool	heredoc;
+	bool	mal_fail;
 }	t_expand;
 
 typedef struct s_dollar
@@ -195,7 +197,7 @@ bool	init_shlvl(t_data *data);
 //                               Tokenizer                                 //
 //-------------------------------------------------------------------------//
 
-int		tokenize_and_expand(t_data *data);
+int		expand_and_build(t_data *data);
 t_token	*tokenize_input(t_data *data, char *str);
 int		add_quote(char *str, int i, char c, t_token **list);
 int		add_space(char *str, int i, t_token **list);
@@ -207,8 +209,10 @@ int		add_word(char *str, int i, t_token **list);
 //                               Expander                                  //
 //-------------------------------------------------------------------------//
 
-void	expand_input(t_data *data, t_token *node, char **env);
+int		expand_input(t_data *data, t_token *node, char **env);
 bool	is_dollar(t_token *node, bool heredoc);
+void	extract_env_variable(t_token *node, t_dollar *dol);
+void	handle_joined_strings(t_joined *var, t_dollar *dol, t_expand *info);
 int		set_dollar(t_token *node, char **env, t_expand *info);
 bool	is_exit_status(t_token *node, bool heredoc);
 int		set_exit_status(t_data *data, t_token *node, t_expand *info);
@@ -216,7 +220,7 @@ bool	is_double_dollar(t_token *node, bool heredoc);
 int		set_pid(t_token *node, t_expand *info);
 bool	quote_type_present(t_token *node);
 int		concatenate_quotes(t_token *node);
-void	reset_joined(t_joined *join, char **updated_joined);
+void	reset_joined(t_joined *join, char **updated_joined, t_expand *info);
 char	*check_joined(char *before, char *fill_in);
 
 //-------------------------------------------------------------------------//
@@ -226,6 +230,8 @@ char	*check_joined(char *before, char *fill_in);
 t_cmd	*build_commands(t_token *nodes, t_data *data);
 t_cmd	*merge_commands(t_token *tokens, t_data *data);
 int		handle_redirect(t_token **token, t_cmd **command);
+void	set_command_and_args(t_token **token, t_cmd **curr_cmd, \
+			t_data *data);
 
 //-------------------------------------------------------------------------//
 //                          Heredoc Expanding	                           //
@@ -238,12 +244,17 @@ bool	is_heredoc_exit(char *str, int i);
 t_h_dol	*init_here_dol(char *str);
 t_h_dol	*init_here_pid(char *str);
 t_h_dol	*init_here_exit(char *str, int exit);
-void	set_env_and_expand(char *str, t_h_dol *info, char **env, \
-		bool *expanded);
-void	expand_here_pid(char *str, t_h_dol *info, bool *expanded);
-void	expand_here_exit(char *str, t_h_dol *info, bool *expanded);
-void	expand_heredoc_string(char *str, t_h_dol *info, bool *expanded);
+void	set_env_and_expand(char *str, t_h_dol *info, char **env, bool *mal_fail);
+void	process_here_dollar(char **copy, t_h_dol *info, char **env, \
+							bool *mal_fail);
+void	process_here_pid(char **copy, t_h_dol *info, bool *mal_fail);
+void	process_here_exit(char **copy, t_h_dol *info, bool *mal_fail);
+bool	check_mal_fail(bool *mal_fail, t_joined *var);
+void	expand_here_pid(char *str, t_h_dol *info, bool *mal_fail);
+void	expand_here_exit(char *str, t_h_dol *info, bool *mal_fail);
+void	expand_heredoc_string(char *str, t_h_dol *info, bool *mal_fail);
 void	free_cmds(t_cmd *cmd_list);
+void	handle_here_joined_string(t_joined *var, t_h_dol *info, bool *mal_fail);
 
 //-------------------------------------------------------------------------//
 //                          Signals                                        //
@@ -271,7 +282,7 @@ bool	one_of_tokens(char c);
 bool	check_null(t_token **node);
 char	*copy_env_input(char **env, char *to_find);
 int		if_valid_char(char c);
-void	expand_node(t_token *node, t_dollar *var);
+void	expand_node(t_token *node, t_dollar *var, t_expand *info);
 bool	quote_type_present(t_token *node);
 int		concatenate_quotes(t_token *list);
 int		not_just_spaces(t_token *nodes);
@@ -282,6 +293,8 @@ bool	a_redirection(t_type type);
 t_cmd	*init_cmds(t_data *data);
 char	**add_to_double_array(char **arguments, char *str);
 bool	str_is_all_digits(char *str);
+void	continue_add_to_quote(t_token *new, t_token **list, char c, bool null);
+int		continue_add_to_word(char *str, int start, int len, t_token **list);
 
 //-------------------------------------------------------------------------//
 //                             Nodes	                                   //
@@ -306,8 +319,7 @@ bool	error_msg(char *message, char c, char c2);
 void	free_all(t_data	*data);
 void	free_node(t_token *node);
 void	free_heredoc_info(t_h_dol *info);
-void	*mem_check(void *pointer);
-void	error_exit(const char *msg, int status);
+void	free_joined_struct(t_joined *var);
 
 //-------------------------------------------------------------------------//
 //                               Testing                                   //
@@ -320,13 +332,13 @@ void	print_env(char **env);
 void	print_commands(t_cmd *cmd);
 void	print_redou(t_redou *redir);
 void	print_redin(t_redin *redir);
-char	*update_remainder(char *str, t_dollar *var);
 
 //-------------------------------------------------------------------------//
 //                           Execution                                     //
 //-------------------------------------------------------------------------//
 
 void	error_exit(const char *msg, int status);
+// void	error_exit(const char *msg, int status, t_data *data);
 int		make_processes(t_data *data);
 
 //-------------------------------------------------------------------------//

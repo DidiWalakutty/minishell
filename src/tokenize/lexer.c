@@ -12,9 +12,7 @@
 
 #include "minishell.h"
 
-// Checks for syntax errors.
-// Expands input and builds commands.
-int	tokenize_and_expand(t_data *data)
+int	expand_and_build(t_data *data)
 {
 	if (!data)
 		return (1);
@@ -23,20 +21,23 @@ int	tokenize_and_expand(t_data *data)
 	if ((all_quotes_closed(data->input) == false))
 		return (1);
 	data->list = tokenize_input(data, data->input);
-	expand_input(data, data->list, data->env);
+	if (!data->list)
+		return (1);
+	if (expand_input(data, data->list, data->env) == -1)
+		return (1);
 	data->cmd_process = build_commands(data->list, data);
+	if (!data->cmd_process)
+		return (1);
 	return (0);
 }
 
-// Tokenizes input into nodes.
-// currently iterates beyond the \0.
 t_token	*tokenize_input(t_data *data, char *str)
 {
 	int		i;
 	t_token	*list;
 
 	i = 0;
-	list = NULL;
+	list = data->list;
 	while (iswhitespace(str[i]))
 		i++;
 	while (str[i])
@@ -51,6 +52,8 @@ t_token	*tokenize_input(t_data *data, char *str)
 			i = add_redir_or_pipe(str, i, data, &list);
 		else
 			i = add_word(str, i, &list);
+		if (i == -1)
+			error_exit("malloc", EXIT_FAILURE);
 	}
 	return (list);
 }

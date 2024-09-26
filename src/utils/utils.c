@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   utils.c                                           :+:    :+:             */
+/*   utils.c                                            :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/07/04 17:06:02 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/14 19:52:19 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/09/24 13:49:48 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,18 @@ int	if_valid_char(char c)
 	return (0);
 }
 
-void	*mem_check(void *pointer)
+void	free_joined_struct(t_joined *var)
 {
-	if (pointer != NULL)
-		return (pointer);
-	else
-		error_exit("Error", EXIT_FAILURE);
-	return (NULL);
+	if (var)
+	{
+		if (var->before)
+			free(var->before);
+		if (var->joined)
+			free(var->joined);
+		if (var->remainder)
+			free(var->remainder);
+		free(var);
+	}
 }
 
 void	error_exit(const char *msg, int status)

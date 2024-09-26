@@ -22,7 +22,9 @@ t_cmd	*init_cmds(t_data *data)
 {
 	t_cmd	*command;
 
-	command = mem_check(malloc(sizeof(t_cmd)));
+	command = malloc(sizeof(t_cmd));
+	if (!command)
+		return (NULL);
 	command->cmd = NULL;
 	command->pid = 0;
 	command->path = NULL;

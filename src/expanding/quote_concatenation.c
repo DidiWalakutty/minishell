@@ -35,13 +35,26 @@ bool	quote_type_present(t_token *node)
 	return (false);
 }
 
+static char	*concat_and_check(char *s1, char *s2)
+{
+	char	*joined;
+
+	joined = ft_strconcat(s1, s2);
+	if (!joined)
+	{
+		free(s1);
+		return (NULL);
+	}
+	free(s1);
+	return (joined);
+}
+
 // This function makes sure that things like 4 seperate nodes: 'e'c"h"'o'
 // become one node.
 int	concatenate_quotes(t_token *list)
 {
 	t_token	*node;
 	t_token	*next_token;
-	char	*joined;
 
 	node = list;
 	while (node)
@@ -53,9 +66,9 @@ int	concatenate_quotes(t_token *list)
 				node->next->type == DOUBLE_QUOTE || node->next->type == WORD))
 			{
 				next_token = node->next;
-				joined = ft_strconcat(node->str, next_token->str);
-				free(node->str);
-				node->str = joined;
+				node->str = concat_and_check(node->str, next_token->str);
+				if (!node->str)
+					return (-1);
 				node->next = next_token->next;
 				free(next_token->str);
 				free(next_token);
@@ -93,23 +106,4 @@ int	remove_spaces(t_token *list)
 			before = before->next;
 	}
 	return (0);
-}
-
-char	*update_remainder(char *str, t_dollar *var)
-{
-	char	*result;
-	int		len;
-	int		i;
-
-	len = 0;
-	i = var->end_var;
-	while (str[len])
-		len++;
-	if (str[i] == '?' && str[i + 1] == '}')
-	{
-		result = mem_check(malloc(sizeof(char) * (len - 1)));
-		if (str[i + 2] != '\0')
-			result = ft_substr(str, var->end_var + 2, len);
-	}
-	return (result);
 }

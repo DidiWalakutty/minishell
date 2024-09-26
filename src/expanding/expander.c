@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:36:22 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/19 19:54:36 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/24 18:49:24 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,11 @@ t_expand	*init_info(t_token *list)
 {
 	t_expand	*info;
 
-	info = mem_check(malloc(sizeof(t_expand)));
+	info = malloc(sizeof(t_expand));
+	if (!info)
+		return (NULL);
 	info->head = list;
+	info->mal_fail = false;
 	return (info);
 }
 
@@ -29,12 +32,10 @@ static void	skip_heredoc_and_spaces(t_token **node, bool *heredoc)
 		*node = (*node)->next;
 }
 
-void	expand_input(t_data *data, t_token *node, char **env)
+static int	node_expansion(t_token *node, t_expand *info, t_data *data)
 {
-	t_expand	*info;
 	bool		heredoc;
 
-	info = init_info(node);
 	heredoc = false;
 	while (node)
 	{
@@ -43,18 +44,40 @@ void	expand_input(t_data *data, t_token *node, char **env)
 		if (node->type == HERE_DOC)
 			skip_heredoc_and_spaces(&node, &heredoc);
 		if (is_dollar(node, heredoc) == true)
-			set_dollar(node, env, info);
+			set_dollar(node, data->env, info);
 		if (is_double_dollar(node, heredoc) == true)
 			set_pid(node, info);
 		if (is_exit_status(node, heredoc) == true)
 			set_exit_status(data, node, info);
 		heredoc = false;
+		if (info->mal_fail == true)
+			return (-1);
 		node = node->next;
 	}
-	if (quote_type_present(info->head) == true)
-		concatenate_quotes(info->head);
-	node = info->head;
-	free(info);
+	return (0);
 }
 
-// Currently problems with brackets and end-var
+int	expand_input(t_data *data, t_token *node, char **env)
+{
+	t_expand	*info;
+
+	info = init_info(node);
+	if (!info)
+		return (-1);
+	if (node_expansion(node, info, data) == -1)
+	{
+		free(info);
+		return (-1);
+	}
+	if (quote_type_present(info->head) == true)
+	{
+		if (concatenate_quotes(info->head) == -1)
+		{
+			free(info);
+			return (-1);
+		}
+	}
+	node = info->head;
+	free(info);
+	return (0);
+}

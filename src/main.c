@@ -22,6 +22,7 @@ static t_data	*init_shell(char **env_copy)
 	data->env = copy_env(env_copy);
 	data->input = NULL;
 	data->list = NULL;
+	data->cmd_process = NULL;
 	data->process = 1;
 	data->exit_status = 0;
 	init_shlvl(data);
@@ -50,9 +51,11 @@ int	main(int argc, char **argv, char **env)
 		data->input = input;
 		if (input[0] != '\0')
 			add_history(data->input);
-		tokenize_and_expand(data);
-		// print_linked_list(data->list);
-		// print_commands(data->cmd_process);
+		if (expand_and_build(data) == 1)
+		{
+			free(data->input);
+			error_exit("malloc", EXIT_FAILURE);
+		}
 		data->exit_status = make_processes(data);
 		free_all(data);
 	}

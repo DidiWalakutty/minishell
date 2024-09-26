@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/07/04 15:38:34 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/17 20:51:17 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/24 18:50:37 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,15 +33,18 @@ void	skip_whitespace(char *str, int *i)
 		(*i)++;
 }
 
-// Add one token to the list: either |, < or >.
-// Return i + 1, so we get the i immediately after the token.
 int	add_one_token(char *str, int i, t_data *data, t_token **list)
 {
 	t_token	*new;
 	char	*line;
 
 	line = ft_substr(str, i, 1);
+	if (!line)
+		return (-1);
 	new = create_node(line, EMPTY);
+	free(line);
+	if (!new)
+		return (-1);
 	if (str[i] == '|')
 	{
 		new->type = PIPE;
@@ -52,7 +55,6 @@ int	add_one_token(char *str, int i, t_data *data, t_token **list)
 	else if (str[i] == '>')
 		new->type = REDIR_OUT;
 	node_to_list(list, new);
-	free(line);
 	return (i + 1);
 }
 

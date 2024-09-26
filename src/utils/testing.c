@@ -48,15 +48,16 @@ void	print_commands(t_cmd *cmd)
 				printf("- %i - %s\n", i, cmd->args[i]);
 		}
 		printf("____________________\n");
-		// printf("- Redirect In: -\n");
-		// print_redin(cmd->redir_in);
-		// printf("\n");
-		// printf("____________________\n");
-		// printf("- Redirect Out: -\n");
-		// print_redou(cmd->redir_out);
-		// printf("____________________\n");
-		// printf("Pipe_out = %i\nPipe_in = %i\n", cmd->pipe_out, cmd->pipe_in);
+		printf("- Redirect In: -\n");
+		print_redin(cmd->redir_in);
+		printf("\n");
+		printf("____________________\n");
+		printf("- Redirect Out: -\n");
+		print_redou(cmd->redir_out);
+		printf("____________________\n");
+		printf("Pipe_out = %i\nPipe_in = %i\n", cmd->pipe_out, cmd->pipe_in);
 		printf("\n---Next Command---\n\n");
+		i++;
 		cmd = cmd->next;
 	}
 }
