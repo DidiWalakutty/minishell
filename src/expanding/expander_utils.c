@@ -18,9 +18,17 @@ char	*check_joined(char *before, char *fill_in)
 
 	replacement = NULL;
 	if (before && before[0] != '\0')
+	{
 		replacement = ft_strconcat(before, fill_in);
+		if (!replacement)
+			return (NULL);
+	}
 	else
+	{
 		replacement = ft_strdup(fill_in);
+		if (!replacement)
+			return (NULL);
+	}
 	return (replacement);
 }
 
@@ -72,7 +80,10 @@ void	expand_node(t_token *node, t_dollar *dol, t_expand *info)
 	if (check_mal_fail(&info->mal_fail, var))
 		return ;
 	if (dol->no_closing_bracket)
+	{
+		free(var->joined);
 		reset_joined(var, &var->joined, info);
+	}
 	if (check_mal_fail(&info->mal_fail, var))
 		return ;
 	free(node->str);

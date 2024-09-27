@@ -12,23 +12,18 @@
 
 #include "minishell.h"
 
-int	expand_and_build(t_data *data)
+void	expand_and_build(t_data *data)
 {
-	if (!data)
-		return (1);
 	if (check_syntax_errors(data->input) == true)
-		return (1);
+		return ;
 	if ((all_quotes_closed(data->input) == false))
-		return (1);
+		return ;
 	data->list = tokenize_input(data, data->input);
 	if (!data->list)
-		return (1);
+		return ;
 	if (expand_input(data, data->list, data->env) == -1)
-		return (1);
+		error_exit("Malloc", EXIT_FAILURE, data);
 	data->cmd_process = build_commands(data->list, data);
-	if (!data->cmd_process)
-		return (1);
-	return (0);
 }
 
 t_token	*tokenize_input(t_data *data, char *str)

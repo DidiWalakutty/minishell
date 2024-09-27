@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   free_and_error.c                                  :+:    :+:             */
+/*   free_and_error.c                                   :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:41:04 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/21 01:44:39 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/09/27 21:47:18 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,6 @@ void	free_list(t_token *list)
 	{
 		temp = list;
 		list = list->next;
-		if (temp->null == true)
-		{
-			free(temp);
-			return ;
-		}
 		if (temp->str)
 			free(temp->str);
 		free(temp);
