@@ -245,7 +245,8 @@ bool	is_heredoc_exit(char *str, int i);
 t_h_dol	*init_here_dol(char *str);
 t_h_dol	*init_here_pid(char *str);
 t_h_dol	*init_here_exit(char *str, int exit);
-void	set_env_and_expand(char *str, t_h_dol *info, char **env, bool *mal_fail);
+void	set_env_and_expand(char *str, t_h_dol *info, char **env, \
+							bool *mal_fail);
 void	process_here_dollar(char **copy, t_h_dol *info, char **env, \
 							bool *mal_fail);
 void	process_here_pid(char **copy, t_h_dol *info, bool *mal_fail);

@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/07/04 17:06:02 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/27 16:57:05 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/27 17:30:27 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,20 @@ void	free_joined_struct(t_joined *var)
 	if (var)
 	{
 		if (var->before)
+		{
 			free(var->before);
+			var->before = NULL;
+		}
 		if (var->joined)
+		{
 			free(var->joined);
+			var->joined = NULL;
+		}
 		if (var->remainder)
+		{
 			free(var->remainder);
+			var->remainder = NULL;
+		}
 		free(var);
 	}
 }

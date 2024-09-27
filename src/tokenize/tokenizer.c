@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:43:34 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/24 18:48:31 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/27 18:03:17 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	add_quote(char *str, int i, char c, t_token **list)
 	len = quote_length(&str[i + 1], c) + 2;
 	if (len == 2)
 	{
-		line = "\0";
+		line = NULL;
 		null = true;
 	}
 	else
@@ -33,9 +33,10 @@ int	add_quote(char *str, int i, char c, t_token **list)
 			return (-1);
 	}
 	new = create_node(line, EMPTY);
-	free(line);
 	if (!new)
-		return (-1);
+		return (free(line), -1);
+	if (!null)
+		free(line);
 	continue_add_to_quote(new, list, c, null);
 	return (len + i);
 }
