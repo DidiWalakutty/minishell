@@ -6,85 +6,69 @@
 /*   By: diwalaku <diwalaku@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/10 18:10:20 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/20 18:43:59 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/26 20:34:38 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	set_heredoc_dollar(char **copy, char **env, \
-								bool *expanded)
+static void	set_heredoc_dollar(char **copy, char **env, bool *mal_fail)
 {
 	t_h_dol	*info;
 
 	info = init_here_dol(*copy);
-	while (info->i < info->str_len)
+	if (!info)
 	{
-		if (info->copy[info->i] == '$' && (if_valid_char(info->copy[info->i \
-			+ 1]) || info->copy[info->i + 1] == '{'))
-		{
-			if (info->copy[info->i + 2] && info->copy[info->i + 2] != '$' && \
-				info->copy[info->i + 2] != '?')
-			{
-				set_env_and_expand(info->copy, info, env, expanded);
-				info->str_len = ft_strlen(info->copy);
-				continue ;
-			}
-		}
-		info->i++;
-		while (info->copy[info->i] && info->copy[info->i] != '$')
-			info->i++;
-		info->str_len = ft_strlen(info->copy);
+		*mal_fail = true;
+		return ;
 	}
+	process_here_dollar(copy, info, env, mal_fail);
 	*copy = ft_strdup(info->copy);
+	if (!copy)
+	{
+		*mal_fail = true;
+		return ;
+	}
 	free_heredoc_info(info);
 }
 
-static void	set_heredoc_pid(char **copy, char **env, bool *expand)
+static void	set_heredoc_pid(char **copy, char **env, bool *mal_fail)
 {
 	t_h_dol	*info;
 
 	info = init_here_pid(*copy);
-	while (info->i < info->str_len)
+	if (!info)
 	{
-		if (info->copy[info->i] == '$' && (info->copy[info->i + 1] == '$' || \
-			(info->copy[info->i + 1] == '{' && info->copy[info->i + 2] == '$')))
-		{
-			expand_here_pid(info->copy, info, expand);
-			expand_heredoc_string(info->copy, info, expand);
-			info->str_len = ft_strlen(info->copy);
-			continue ;
-		}
-		info->i++;
-		while (info->copy[info->i] && info->copy[info->i] != '$')
-			info->i++;
-		info->str_len = ft_strlen(info->copy);
+		*mal_fail = true;
+		return ;
 	}
+	process_here_pid(copy, info, mal_fail);
 	*copy = ft_strdup(info->copy);
+	if (!copy)
+	{
+		*mal_fail = true;
+		return ;
+	}
 	free_heredoc_info(info);
 }
 
-static void	set_heredoc_exit(char **copy, t_data *data, bool *expand)
+static void	set_heredoc_exit(char **copy, t_data *data, bool *mal_fail)
 {
 	t_h_dol	*info;
 
 	info = init_here_exit(*copy, data->exit_status);
-	while (info->i < info->str_len)
+	if (!info)
 	{
-		if (info->copy[info->i] == '$' && (info->copy[info->i + 1] == '?' || \
-			(info->copy[info->i + 1] == '{' && info->copy[info->i + 2] == '?')))
-		{
-			expand_here_exit(info->copy, info, expand);
-			expand_heredoc_string(info->copy, info, expand);
-			info->str_len = ft_strlen(info->copy);
-			continue ;
-		}
-		info->i++;
-		while (info->copy[info->i] && info->copy[info->i] != '$')
-			info->i++;
-		info->str_len = ft_strlen(info->copy);
+		*mal_fail = true;
+		return ;
 	}
+	process_here_exit(copy, info, mal_fail);
 	*copy = ft_strdup(info->copy);
+	if (!copy)
+	{
+		*mal_fail = true;
+		return ;
+	}
 	free_heredoc_info(info);
 }
 
@@ -92,22 +76,25 @@ char	*heredoc_expanding(char *str, t_data *data)
 {
 	char	*new_str;
 	char	*copy;
+	bool	mal_fail;
 	int		i;
-	bool	expanded;
 
 	i = 0;
+	mal_fail = false;
 	copy = ft_strdup(str);
-	while (str[i])
+	if (!copy)
+		return (NULL);
+	while (copy[i])
 	{
-		expanded = true;
 		if (is_heredoc_dollar(copy, i))
-			set_heredoc_dollar(&copy, data->env, &expanded);
+			set_heredoc_dollar(&copy, data->env, &mal_fail);
 		if (is_heredoc_double(copy, i))
-			set_heredoc_pid(&copy, data->env, &expanded);
+			set_heredoc_pid(&copy, data->env, &mal_fail);
 		if (is_heredoc_exit(copy, i))
-			set_heredoc_exit(&copy, data, &expanded);
-		if (expanded == true)
-			i++;
+			set_heredoc_exit(&copy, data, &mal_fail);
+		if (mal_fail == true)
+			return (free(copy), NULL);
+		i++;
 	}
 	new_str = ft_strdup(copy);
 	free(copy);

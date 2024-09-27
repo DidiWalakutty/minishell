@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/08/22 18:14:21 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/10 20:10:46 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/24 16:38:39 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,9 @@ char	**add_to_double_array(char **arguments, char *str)
 		while (arguments[size])
 			size++;
 	}
-	new_array = mem_check(malloc(sizeof(char *) * (size + 2)));
+	new_array = malloc(sizeof(char *) * (size + 2));
+	if (!new_array)
+		return (NULL);
 	if (add_to_array(new_array, arguments, str) == 0)
 	{
 		free_array(new_array);
@@ -95,6 +97,8 @@ int	create_redir_in(t_cmd *cmd, char *result, t_redir_type redir_type, \
 	t_redin	*current;
 
 	new_node = create_in_node(cmd, result, redir_type, token_type);
+	if (!new_node)
+		return (1);
 	if (!cmd->redir_in)
 		cmd->redir_in = new_node;
 	else
@@ -113,6 +117,8 @@ int	create_redir_out(t_cmd *cmd, char *result, t_redir_type redir_type)
 	t_redou	*current;
 
 	new_node = create_out_node(cmd, result, redir_type);
+	if (!new_node)
+		return (1);
 	if (!cmd->redir_out)
 		cmd->redir_out = new_node;
 	else

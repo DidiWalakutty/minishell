@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/06 15:56:32 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/10 15:49:15 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/24 18:50:13 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,9 +66,6 @@ bool	check_start(char *str, int *j, bool *error_found)
 	return (false);
 }
 
-// Nothing behind | makes it a heredoc, TODO???
-// When < or >, it checks if +1 is the same.
-// Its next token can't be <, > or a |.
 static bool	token_syntax_error(char *str, int *i)
 {
 	if (str[*i] == '|')
@@ -93,7 +90,6 @@ static bool	token_syntax_error(char *str, int *i)
 	return (false);
 }
 
-// Checks the string for syntax errors.
 bool	check_syntax_errors(char *str)
 {
 	int		i;

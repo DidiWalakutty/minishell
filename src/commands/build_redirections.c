@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/08/23 13:07:59 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/10 15:42:32 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/24 17:08:32 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,21 +36,32 @@ static t_redir_type	set_type(t_type type, t_cmd *command)
 	return (redir_type);
 }
 
-static void	get_filename(t_token *token, t_cmd *cmd, t_redir_type type)
+static int	get_filename(t_token *token, t_cmd *cmd, t_redir_type type)
 {
-	char		*result;
+	char	*result;
+	int		create_status;
 
 	result = NULL;
+	create_status = 0;
 	if (token->type == WORD || token->type == SINGLE_QUOTE || \
 		token->type == DOUBLE_QUOTE)
 	{
 		result = ft_strdup(token->str);
+		if (!result)
+			return (1);
 		if (type == RED_IN || type == HEREDOC)
-			create_redir_in(cmd, result, type, token->type);
+			create_status = create_redir_in(cmd, result, type, token->type);
 		else if (type == RED_OUT || type == APPENDING)
-			create_redir_out(cmd, result, type);
+			create_status = create_redir_out(cmd, result, type);
+		if (create_status == 1)
+		{
+			free(result);
+			return (1);
+		}
 		free(result);
+		return (0);
 	}
+	return (1);
 }
 
 int	handle_redirect(t_token **token, t_cmd **command)
@@ -65,13 +76,17 @@ int	handle_redirect(t_token **token, t_cmd **command)
 		{
 			type = set_type((*token)->type, cmd);
 			(*token) = (*token)->next;
-			get_filename(*token, cmd, type);
+			if (get_filename(*token, cmd, type) == 1)
+			{
+				printf("Error: Memory allocation failed\n");
+				return (1);
+			}
 		}
 		else
 		{
 			printf("Error: expected a filename after redirection\n");
-			return (0);
+			return (1);
 		}
 	}
-	return (1);
+	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/11/21 18:48:18 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/10 14:49:30 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/24 13:50:16 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,9 @@ char	*ft_itoa(int i)
 	if (i == -2147483648)
 		return (ft_strdup("-2147483648"));
 	len = get_len(i);
-	str = mem_check(malloc(sizeof(char) * (len + 1)));
+	str = malloc(sizeof(char) * (len + 1));
+	if (!str)
+		return (NULL);
 	str[len] = '\0';
 	len--;
 	if (i < 0)

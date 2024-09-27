@@ -23,24 +23,28 @@ SRC =	./src/main.c \
 				./src/tokenize/lexer.c \
 				./src/tokenize/quotes.c \
 				./src/tokenize/tokenize_utils.c \
+				./src/tokenize/tokenize_utils2.c \
 				./src/tokenize/tokenizer.c \
 				./src/expanding/expander.c \
 				./src/expanding/expand_dollar.c \
 				./src/expanding/expand_double_dollar.c \
-				./src/expanding/expander_utils.c \
 				./src/expanding/expand_exit_and_empty.c \
 				./src/expanding/quote_concatenation.c \
-				./src/expanding/expand_brackets.c \
+				./src/expanding/expand_brackets_and_utils.c \
+				./src/expanding/expander_utils.c \
+				./src/expanding/expander_utils2.c \
 				./src/expanding_heredoc/heredoc_dollar.c \
 				./src/expanding_heredoc/heredoc_expanding.c \
 				./src/expanding_heredoc/heredoc_pid.c \
 				./src/expanding_heredoc/heredoc_utils.c \
+				./src/expanding_heredoc/heredoc_utils2.c \
 				./src/expanding_heredoc/heredoc_exit.c \
 				./src/expanding_heredoc/free_heredocs.c \
 				./src/commands/build_commands.c \
 				./src/commands/build_inits_and_nodes.c \
 				./src/commands/build_redirections.c \
 				./src/commands/build_utils.c \
+				./src/commands/build_utils2.c \
 				./src/execute/pipes.c \
 				./src/execute/find_path.c \
 				./src/redirecting/check_heredocs.c \
