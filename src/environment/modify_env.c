@@ -6,7 +6,7 @@
 /*   By: sreerink <sreerink@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2024/08/17 00:13:39 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/08/29 21:31:48 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/09/21 01:48:32 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ char	**make_env_var(char *new_var, char *value, char **env)
 	{
 		new_env[i] = ft_strdup(env[i]);
 		if (!new_env[i])
-			return (NULL); // return (free_array(new_env));
+			return (free_array(new_env), NULL);
 		i++;
 	}
 	if (value)
@@ -36,8 +36,8 @@ char	**make_env_var(char *new_var, char *value, char **env)
 	else
 		new_env[i] = ft_strdup(new_var);
 	if (!new_env[i])
-		return (NULL); // return (free_array(new_env));
-	// free_array(env); (Oude data->env wordt misschien niet corrrect ge-freed)
+		return (free_array(new_env), NULL);
+	free_array(env); // Oude data->env wordt misschien niet corrrect ge-freed
 	return (new_env);
 }
 
@@ -50,7 +50,6 @@ char	**delete_env_var(char *del_var, char **env)
 	i = 0;
 	while (env[i])
 		i++;
-//	printf("Alloc of %zu\n", i + 1);
 	new_env = ft_calloc(i + 1, sizeof(char *));
 	if (!new_env)
 		return (NULL);
@@ -58,17 +57,16 @@ char	**delete_env_var(char *del_var, char **env)
 	j = 0;
 	while (env[i])
 	{
-//		printf("i = %zu, j = %zu\n", i , j);
 		if (strncmp(env[i], del_var, ft_strlen(del_var)))
 		{
 			new_env[j] = ft_strdup(env[i]);
 			if (!new_env[j])
-				return (NULL); // return (free_array(new_env));
+				return (free_array(new_env), NULL);
 			j++;
 		}
 		i++;
 	}
-	// free_array(env); (Oude data->env wordt misschien niet corrrect ge-freed)
+	free_array(env); // Oude data->env wordt misschien niet corrrect ge-freed
 	return (new_env);
 }
 

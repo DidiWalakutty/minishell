@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:40:07 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/18 22:30:33 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/09/27 16:10:25 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ int	main(int argc, char **argv, char **env)
 	(void)argc;
 	(void)argv;
 	data = init_shell(env);
+	if (!data)
+		error_exit("malloc", EXIT_FAILURE, NULL);
 	while (1)
 	{
 		set_signals_ia_mode();
@@ -46,19 +48,17 @@ int	main(int argc, char **argv, char **env)
 			// Will be changed to a proper exit function (Purpose: Ctrl-D)
 			write(STDERR_FILENO, "exit\n", 5);
 			enable_echoctl();
-			exit(data->exit_status);
+			error_exit(NULL, data->exit_status, data);
 		}
 		data->input = input;
-		if (input[0] != '\0')
+		if (*input)
 			add_history(data->input);
-		if (expand_and_build(data) == 1)
-		{
-			free(data->input);
+    if (expand_and_build(data) == 1)
 			error_exit("malloc", EXIT_FAILURE, data);
-		}
-		print_commands(data->cmd_process);
-		data->exit_status = make_processes(data);
-		free_all(data);
+		// print_linked_list(data->list);
+		// print_commands(data->cmd_process);
+		execute(data);
+		reset_data(data);
 	}
 	return (0);
 }

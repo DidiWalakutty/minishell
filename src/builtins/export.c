@@ -6,7 +6,7 @@
 /*   By: sreerink <sreerink@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2024/08/27 19:22:55 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/09/02 18:59:04 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/09/21 02:00:32 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ static char	**parse_export_arg(char *arg)
 				write(STDERR_FILENO, "minishell: export: `", 20);
 				write(STDERR_FILENO, arg, ft_strlen(arg));
 				write(STDERR_FILENO, "': not a valid identifier\n", 26);
+				free(result);
 				return (NULL);
 			}
 			if (arg[i - 1] == '+')
@@ -56,12 +57,19 @@ static char	**parse_export_arg(char *arg)
 			}
 			result[1] = ft_strndup(arg, len);
 			if (!result[1])
+			{
+				free(result);
 				return (NULL);
+			}
 			if (arg[i + 1])
 			{
 				result[2] = ft_strdup(arg + i + 1);
 				if (!result[2])
+				{
+					free(result[1]);
+					free(result);
 					return (NULL);
+				}
 			}
 			return (result);
 		}
@@ -87,6 +95,7 @@ static void	update_env_export(char **export_args, t_cmd *cmd, t_data *data)
 				add_var_value(export_args[2], variable, cmd->env);
 			else
 				replace_var_value(export_args[2], variable, cmd->env);
+			free(variable);
 			return ;
 		}
 		i++;
@@ -95,6 +104,7 @@ static void	update_env_export(char **export_args, t_cmd *cmd, t_data *data)
 		data->env = make_env_var(variable, export_args[2], data->env);
 	else
 		cmd->env = make_env_var(variable, export_args[2], cmd->env);
+	free(variable);
 }
 
 int	export_builtin(t_cmd *cmd, t_data *data)
@@ -111,15 +121,15 @@ int	export_builtin(t_cmd *cmd, t_data *data)
 		if (!export_args)
 			return (EXIT_FAILURE);
 		update_env_export(export_args, cmd, data);
+		export_args[0] = NULL;
+		free(export_args[1]);
+		free(export_args[2]);
+		free(export_args);
 		if ((data && !data->env) || !cmd->env)
 		{
 			perror("minishell: export_builtin");
 			return (EXIT_FAILURE);
 		}
-		export_args[0] = NULL;
-		free(export_args[1]);
-		free(export_args[2]);
-		free(export_args);
 		i++;
 	}
 	return (EXIT_SUCCESS);

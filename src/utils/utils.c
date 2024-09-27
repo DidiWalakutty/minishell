@@ -33,9 +33,19 @@ void	free_joined_struct(t_joined *var)
 	}
 }
 
+void	free_all(t_data *data)
+{
+	free(data->input);
+	free_array(data->env);
+	free_list(data->list);
+	free_cmds(data->cmd_process);
+	free(data);
+	rl_clear_history();
+}
+
 void	error_exit(const char *msg, int status, t_data *data)
 {
-	if (status == 127)
+	if (status == 127 && msg)
 	{
 		write(STDERR_FILENO, msg, ft_strlen(msg));
 		write(STDERR_FILENO, ": command not found\n", 20);
@@ -44,6 +54,8 @@ void	error_exit(const char *msg, int status, t_data *data)
 		perror(msg);
 	if (status == 1127)
 		status = 127;
+	if (data)
+		free_all(data);
 	exit(status);
 }
 
