@@ -6,13 +6,13 @@
 /*   By: sreerink <sreerink@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/02 21:44:34 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/09/18 23:13:07 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/09/21 01:17:19 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	heredoc(t_redin *redir_in, bool redirect)
+void	heredoc(t_redin *redir_in, bool redirect, t_data *data)
 {
 	char	*input;
 
@@ -41,5 +41,7 @@ void	heredoc(t_redin *redir_in, bool redirect)
 		close(redir_in->pipe_hdoc[1]);
 	}
 	free(input);
+	if (data)
+		free_all(data);
 	exit(0);
 }

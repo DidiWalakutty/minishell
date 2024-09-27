@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   free_and_error.c                                   :+:    :+:            */
+/*   free_and_error.c                                  :+:    :+:             */
 /*                                                     +:+                    */
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:41:04 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/12 18:06:14 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/21 01:44:39 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ bool	error_msg(char *message, char c, char c2)
 	return (true);
 }
 
-static void	free_list(t_token *list)
+void	free_list(t_token *list)
 {
 	t_token	*temp;
 
@@ -40,17 +40,15 @@ static void	free_list(t_token *list)
 	}
 }
 
-// free(data->process); ??
-// free(&data); ??
-// free(data->list); // still necessary?
-// Free t_cmds??
-void	free_all(t_data	*data)
+void	reset_data(t_data *data)
 {
 	free(data->input);
 	free_list(data->list);
+	free_cmds(data->cmd_process);
 	data->process = 1;
 	data->input = NULL;
 	data->list = NULL;
+	data->cmd_process = NULL;
 }
 
 void	free_array(char **str)

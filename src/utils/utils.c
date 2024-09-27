@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/07/04 17:06:02 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/14 19:52:19 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/09/21 01:23:16 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,23 @@ void	*mem_check(void *pointer)
 	if (pointer != NULL)
 		return (pointer);
 	else
-		error_exit("Error", EXIT_FAILURE);
+		error_exit("Error", EXIT_FAILURE, NULL);
 	return (NULL);
 }
 
-void	error_exit(const char *msg, int status)
+void	free_all(t_data *data)
 {
-	if (status == 127)
+	free(data->input);
+	free_array(data->env);
+	free_list(data->list);
+	free_cmds(data->cmd_process);
+	free(data);
+	rl_clear_history();
+}
+
+void	error_exit(const char *msg, int status, t_data *data)
+{
+	if (status == 127 && msg)
 	{
 		write(STDERR_FILENO, msg, ft_strlen(msg));
 		write(STDERR_FILENO, ": command not found\n", 20);
@@ -39,6 +49,8 @@ void	error_exit(const char *msg, int status)
 		perror(msg);
 	if (status == 1127)
 		status = 127;
+	if (data)
+		free_all(data);
 	exit(status);
 }
 

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   ft_strdup.c                                        :+:    :+:            */
+/*   ft_strdup.c                                       :+:    :+:             */
 /*                                                     +:+                    */
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/11/13 20:24:00 by diwalaku      #+#    #+#                 */
-/*   Updated: 2023/09/28 18:22:17 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/21 01:35:45 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,9 @@ char	*ft_strdup(const char *s1)
 		return (NULL);
 	i = 0;
 	len = ft_strlen(s1);
-	str = mem_check(malloc(sizeof(char) * (len + 1)));
+	str = malloc(sizeof(char) * (len + 1));
+	if (!str)
+		return (NULL);
 	while (*s1)
 	{
 		str[i++] = *s1++;
