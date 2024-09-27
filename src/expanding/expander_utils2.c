@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/24 12:50:46 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/24 15:25:50 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/26 21:45:57 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,8 @@ static bool	handle_expanded(t_joined *var, t_dollar *dol, t_expand *info)
 		}
 		free(var->joined);
 		var->joined = temp;
+		if (dol->exp_kind == IS_DOLLAR)
+			dol->env_expansion = true;
 	}
 	return (true);
 }

@@ -53,7 +53,7 @@ t_token	*tokenize_input(t_data *data, char *str)
 		else
 			i = add_word(str, i, &list);
 		if (i == -1)
-			error_exit("malloc", EXIT_FAILURE);
+			error_exit("malloc", EXIT_FAILURE, data);
 	}
 	return (list);
 }

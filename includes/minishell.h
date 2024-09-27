@@ -104,6 +104,7 @@ typedef struct s_dollar
 	int		start_env;
 	int		end_var;
 	bool	brackets;
+	bool	env_expansion;
 	bool	no_closing_bracket;
 	t_exp	exp_kind;
 }	t_dollar;
@@ -281,7 +282,7 @@ int		quote_length(char *str, char c);
 bool	one_of_tokens(char c);
 bool	check_null(t_token **node);
 char	*copy_env_input(char **env, char *to_find);
-int		if_valid_char(char c);
+int		is_valid(char c);
 void	expand_node(t_token *node, t_dollar *var, t_expand *info);
 bool	quote_type_present(t_token *node);
 int		concatenate_quotes(t_token *list);

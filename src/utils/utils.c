@@ -6,13 +6,13 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/07/04 17:06:02 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/24 13:49:48 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/27 16:57:05 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	if_valid_char(char c)
+int	is_valid(char c)
 {
 	if (is_alph_or_num(c) || c == '_')
 		return (1);
