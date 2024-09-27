@@ -64,13 +64,6 @@ static void	expand_pid(t_token *node, t_dollar *dol, t_expand *info)
 		dol->end_var++;
 	if (dol->brackets == true && node->str[dol->end_var] != '}')
 		dol->no_closing_bracket = true;
-	if (!dol->expanded)
-		dol->expanded = ft_strdup("");
-	if (!dol->expanded)
-	{
-		info->mal_fail = true;
-		return ;
-	}
 	if (dol->brackets == true && dol->no_closing_bracket == false && \
 		(dol->end_var < dol->str_len))
 		dol->end_var++;

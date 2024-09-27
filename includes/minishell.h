@@ -198,7 +198,7 @@ bool	init_shlvl(t_data *data);
 //                               Tokenizer                                 //
 //-------------------------------------------------------------------------//
 
-int		expand_and_build(t_data *data);
+void	expand_and_build(t_data *data);
 t_token	*tokenize_input(t_data *data, char *str);
 int		add_quote(char *str, int i, char c, t_token **list);
 int		add_space(char *str, int i, t_token **list);

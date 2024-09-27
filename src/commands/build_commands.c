@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/08/22 18:14:06 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/24 18:29:55 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/27 21:41:56 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ t_cmd	*build_commands(t_token *tokens, t_data *data)
 		commands = merge_commands(tokens, data);
 		if (commands)
 			commands->env = data->env;
+		else
+			error_exit("malloc", EXIT_FAILURE, data);
 	}
 	return (commands);
 }

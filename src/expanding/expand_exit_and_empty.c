@@ -116,6 +116,7 @@ int	set_exit_status(t_data *data, t_token *node, t_expand *info)
 	if (info->mal_fail)
 		return (-1);
 	free(ex->expanded);
+	free(ex->env_name);
 	free(ex);
 	if (info->mal_fail)
 		return (-1);
