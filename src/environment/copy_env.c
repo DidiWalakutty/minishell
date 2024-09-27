@@ -1,19 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   copy_env.c                                        :+:    :+:             */
+/*   copy_env.c                                         :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/07/04 15:37:19 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/21 01:32:40 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/09/27 17:16:32 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-// split on '=' and name + value?
-// Copies current env. Should eventually also update ShellLevel
 char	**copy_env(char **env)
 {
 	char	**copy;

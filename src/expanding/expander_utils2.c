@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/24 12:50:46 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/26 21:45:57 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/27 17:23:36 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ static void	handle_before(t_joined *var, t_expand *info)
 {
 	if (var->before && var->before[0] != '\0')
 	{
+		if (var->joined)
+			free(var->joined);
 		var->joined = ft_strdup(var->before);
 		if (!var->joined)
 			info->mal_fail = true;

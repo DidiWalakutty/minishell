@@ -37,9 +37,6 @@ static t_joined	*init_join(t_token *node, t_dollar *dol)
 		free(new);
 		return (NULL);
 	}
-	// if (!dol->expanded || dol->expanded[0] == '\0')
-	// 	new->remainder = ft_substr(node->str, dol->i, dol->str_len);
-	// else
 	new->remainder = ft_substr(node->str, dol->end_var, dol->str_len);
 	if (!new->remainder)
 	{
