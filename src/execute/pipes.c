@@ -6,7 +6,7 @@
 /*   By: sreerink <sreerink@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/12 20:30:41 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/09/18 22:57:21 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/09/27 16:28:22 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,49 +19,6 @@ int		errno_to_exit_status(int err)
 	else if (err == EACCES)
 		return (126);
 	return (EXIT_FAILURE);
-}
-
-char	*find_cmd_path(t_cmd *cmd)
-{
-	size_t	i;
-	char	**path_arr;
-	char	*slash_cmd;
-	char	*path_temp;
-	int		access_check;
-
-	i = 0;
-	access_check = 1;
-	if (!strncmp(cmd->cmd, "./", 2) || !strncmp(cmd->cmd, "/", 1))
-		return (cmd->cmd);
-	while (cmd->env[i] && strncmp(cmd->env[i], "PATH=", 5))
-		i++;
-	if (!cmd->env[i] || !cmd->env[i][5])
-	{
-		if (access(cmd->cmd, F_OK) != 0)
-		{
-			write(STDERR_FILENO, "minishell: ", 11);
-			error_exit(cmd->cmd, 1127);
-		}
-		return (cmd->cmd);
-	}
-	path_arr = ft_split(cmd->env[i] + 5, ':');
-	if (!path_arr)
-		error_exit("ft_split", EXIT_FAILURE);
-	slash_cmd = ft_strjoin("/", cmd->cmd);
-	if (!slash_cmd)
-		error_exit("ft_strjoin", EXIT_FAILURE);
-	i = 0;
-	while (access_check != 0 && path_arr[i])
-	{
-		path_temp = ft_strjoin(path_arr[i], slash_cmd);
-		access_check = access(path_temp, F_OK);
-		i++;
-	}
-	free(slash_cmd);
-	// free_array(path_arr);
-	if (access_check != 0)
-		error_exit(cmd->cmd, 127);
-	return (path_temp);
 }
 
 bool	redirect_fd(int fd, int fd_dst)
@@ -164,21 +121,21 @@ bool	redirect_output(t_cmd *cmd, int fd_out[])
 	return (true);
 }
 
-void	child_process(t_cmd *cmd, int fd_in[], int fd_out[])
+void	child_process(t_cmd *cmd, int fd_in[], int fd_out[], t_data *data)
 {
 	if (!redirect_input(cmd, fd_in))
 	{
 		close(fd_out[0]);
 		close(fd_out[1]);
-		error_exit(NULL, EXIT_FAILURE);
+		error_exit(NULL, EXIT_FAILURE, data);
 	}
 	if (!redirect_output(cmd, fd_out))
-		error_exit(NULL, EXIT_FAILURE);
+		error_exit(NULL, EXIT_FAILURE, data);
 	if (cmd->builtin)
-		error_exit(NULL, execute_builtin(cmd, NULL));
-	cmd->path = find_cmd_path(cmd);
+		error_exit(NULL, execute_builtin(cmd, data), data);
+	cmd->path = find_cmd_path(cmd, data);
 	execve(cmd->path, cmd->args, cmd->env);
-	error_exit(cmd->cmd, errno_to_exit_status(errno));
+	error_exit(cmd->cmd, errno_to_exit_status(errno), NULL);
 }
 
 void	close_unused_pipes(int pipefd[][2], size_t cur_pipe, size_t total_pipes)
@@ -275,29 +232,36 @@ int	builtin_in_parent(t_cmd *cmd, t_data *data)
 	if (cmd->redir_in && !redirect_fd(stdin_fd, STDIN_FILENO))
 	{
 		close(stdout_fd);
-		error_exit(NULL, EXIT_FAILURE);
+		error_exit(NULL, EXIT_FAILURE, data);
 	}
 	if (cmd->redir_out && !redirect_fd(stdout_fd, STDOUT_FILENO))
-		error_exit(NULL, EXIT_FAILURE);
+		error_exit(NULL, EXIT_FAILURE, data);
 	close(stdin_fd);
 	close(stdout_fd);
 	return (exit_status);
 }
 
+bool	check_parent_builtin(t_data *data)
+{
+	if (data->cmd_process->builtin && data->process == 1)
+	{
+		data->exit_status = builtin_in_parent(data->cmd_process, data);
+		return (true);
+	}
+	return (false);
+}
+
 void	close_pipes_heredoc(t_cmd *cmd, ssize_t cur_cmd)
 {
 	ssize_t	i;
-	t_cmd	*temp;
 	t_redin	*redir_in;
 
 	i = 0;
 	if (i == cur_cmd)
-		temp = cmd->next;
-	else
-		temp = cmd;
-	while (temp)
+		cmd = cmd->next;
+	while (cmd)
 	{
-		redir_in = temp->redir_in;
+		redir_in = cmd->redir_in;
 		while (redir_in)
 		{
 			if (redir_in->heredoc && !redir_in->next)
@@ -309,63 +273,92 @@ void	close_pipes_heredoc(t_cmd *cmd, ssize_t cur_cmd)
 		}
 		i++;
 		if (i == cur_cmd)
-			temp = temp->next->next;
+			cmd = cmd->next->next;
 		else
-			temp = temp->next;
+			cmd = cmd->next;
 	}
 }
 
-int	make_processes(t_data *data)
+static void	make_pipes(int pipefd[][2], t_data *data)
 {
 	size_t	i;
-	t_cmd	*cmds;
-	t_cmd	*temp;
-	int		status;
-	int		pipefd[data->process + 1][2];
 
 	i = 0;
-	if (!data->cmd_process)
-		return (data->exit_status);
-	cmds = data->cmd_process;
-	temp = cmds;
-	if (temp->builtin && data->process == 1)
-		return (builtin_in_parent(temp, data));
-	set_signals_hdoc_parent_mode();
-	status = check_heredocs(data);
-	if (status != 0)
-		return (status);
-	set_signals_nia_mode();
 	while (i < data->process + 1)
 	{
 		if (pipe(pipefd[i]) == -1)
-			error_exit("pipe", EXIT_FAILURE);
+			error_exit("minishell: pipe", EXIT_FAILURE, data);
 		i++;
 	}
+}
+
+static void	fork_and_execute(int pipefd[][2], t_data *data)
+{
+	size_t	i;
+	t_cmd	*cmd;
+
 	i = 0;
-	while (temp)
+	cmd = data->cmd_process;
+	while (cmd)
 	{
-		temp->pid = fork();
-		if (temp->pid == -1)
-			error_exit("fork", EXIT_FAILURE);
-		if (temp->pid == 0)
+		cmd->pid = fork();
+		if (cmd->pid == -1)
+			error_exit("minishell: fork", EXIT_FAILURE, data);
+		if (cmd->pid == 0)
 		{
-			close_pipes_heredoc(cmds, i);
+			close_pipes_heredoc(data->cmd_process, i);
 			close_unused_pipes(pipefd, i, data->process + 1);
-			child_process(temp, pipefd[i], pipefd[i + 1]);
+			child_process(cmd, pipefd[i], pipefd[i + 1], data);
 		}
 		close(pipefd[i][0]);
 		close(pipefd[i][1]);
-		temp = temp->next;
+		cmd = cmd->next;
 		i++;
 	}
 	close(pipefd[i][0]);
 	close(pipefd[i][1]);
-	temp = cmds;
-	close_pipes_heredoc(cmds, -1);
-	while (temp)
+	close_pipes_heredoc(data->cmd_process, -1);
+}
+
+static int	wait_childs(t_cmd *cmds)
+{
+	int	status;
+	int	exit_status;
+
+	while (cmds)
 	{
-		waitpid(temp->pid, &status, 0);
-		temp = temp->next;
+		waitpid(cmds->pid, &status, 0);
+		cmds = cmds->next;
 	}
-	return (WEXITSTATUS(status));
+	if (WIFEXITED(status))
+		exit_status = WEXITSTATUS(status);
+	if (WIFSIGNALED(status))
+	{
+		if (WTERMSIG(status) == SIGINT)
+			exit_status = 130;
+		if (WTERMSIG(status) == SIGQUIT)
+			exit_status = 131;
+	}
+	return (exit_status);
+}
+
+void	execute(t_data *data)
+{
+	int		status;
+	int		pipefd[data->process + 1][2];
+
+	if (!data->cmd_process)
+		return ;
+	if (check_parent_builtin(data))
+		return ;
+	status = check_heredocs(data);
+	if (status != 0)
+	{
+		data->exit_status = status;
+		return ;
+	}
+	set_signals_nia_mode();
+	make_pipes(pipefd, data);
+	fork_and_execute(pipefd, data);
+	data->exit_status = wait_childs(data->cmd_process);
 }

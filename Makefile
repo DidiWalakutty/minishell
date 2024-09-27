@@ -46,6 +46,7 @@ SRC =	./src/main.c \
 				./src/commands/build_utils.c \
 				./src/commands/build_utils2.c \
 				./src/execute/pipes.c \
+				./src/execute/find_path.c \
 				./src/redirecting/check_heredocs.c \
 				./src/redirecting/heredoc.c \
 				./src/signals/echoctl.c \

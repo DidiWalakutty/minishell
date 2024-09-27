@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/20 16:38:50 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/18 22:52:26 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/09/27 16:10:17 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -316,9 +316,12 @@ int		create_redir_in(t_cmd *cmd, char *result, t_redir_type redir_type, \
 
 void	free_array(char **str);
 bool	error_msg(char *message, char c, char c2);
+void	free_list(t_token *list);
+void	reset_data(t_data *data);
 void	free_all(t_data	*data);
 void	free_node(t_token *node);
 void	free_heredoc_info(t_h_dol *info);
+void	error_exit(const char *msg, int status, t_data *data);
 void	free_joined_struct(t_joined *var);
 
 //-------------------------------------------------------------------------//
@@ -337,9 +340,8 @@ void	print_redin(t_redin *redir);
 //                           Execution                                     //
 //-------------------------------------------------------------------------//
 
-void	error_exit(const char *msg, int status);
-// void	error_exit(const char *msg, int status, t_data *data);
-int		make_processes(t_data *data);
+void	execute(t_data *data);
+char	*find_cmd_path(t_cmd *cmd, t_data *data);
 
 //-------------------------------------------------------------------------//
 //                           Redirecting                                   //
@@ -348,7 +350,7 @@ int		make_processes(t_data *data);
 bool	redirect_fd(int fd, int fd_dst);
 int		check_heredocs(t_data *data);
 bool	check_heredocs_parent(t_redin *redir_in);
-void	heredoc(t_redin *redir_in, bool redirect);
+void	heredoc(t_redin *redir_in, bool redirect, t_data *data);
 
 //-------------------------------------------------------------------------//
 //                           Builtins                                  //

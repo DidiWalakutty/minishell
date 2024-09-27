@@ -6,7 +6,7 @@
 /*   By: sreerink <sreerink@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2024/08/24 22:08:43 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/09/14 19:52:19 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/09/27 16:16:51 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ int	exit_builtin(t_cmd *cmd, t_data *data)
 		write(STDERR_FILENO, ": numeric argument required\n", 28);
 		exit_status = 2;
 	}
-	// if (data)
-	// 	free all data;
+	free_all(data);
 	exit(exit_status);
 }

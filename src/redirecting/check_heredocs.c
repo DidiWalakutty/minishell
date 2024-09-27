@@ -6,7 +6,7 @@
 /*   By: sreerink <sreerink@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/08 19:46:52 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/09/19 22:01:08 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/09/26 19:18:35 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,10 @@ bool	check_heredocs_parent(t_redin *redir_in)
 		{
 			if (pipe(redir_in->pipe_hdoc) == -1)
 				return (false);
-			heredoc(redir_in, true);
+			heredoc(redir_in, true, NULL);
 		}
 		else if (redir_in->heredoc)
-			heredoc(redir_in, false);
+			heredoc(redir_in, false, NULL);
 		redir_in = redir_in->next;
 	}
 	return (true);
@@ -36,6 +36,7 @@ int	check_heredocs(t_data *data)
 	t_cmd	*temp;
 	t_redin	*redir_in;
 
+	set_signals_hdoc_parent_mode();
 	temp = data->cmd_process;
 	while (temp)
 	{
@@ -48,7 +49,7 @@ int	check_heredocs(t_data *data)
 					return (1);
 				pid = fork();
 				if (pid == 0)
-					heredoc(redir_in, true);
+					heredoc(redir_in, true, data);
 				waitpid(pid, &status, 0);
 				if (status != 0)
 					return (WEXITSTATUS(status));
@@ -57,7 +58,7 @@ int	check_heredocs(t_data *data)
 			{
 				pid = fork();
 				if (pid == 0)
-					heredoc(redir_in, false);
+					heredoc(redir_in, false, data);
 				waitpid(pid, &status, 0);
 				if (status != 0)
 					return (WEXITSTATUS(status));
