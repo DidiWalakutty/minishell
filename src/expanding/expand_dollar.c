@@ -70,33 +70,33 @@ static void	expand_dollar(t_token *node, t_dollar *dol, char **env, \
 	expand_node(node, dol, info);
 }
 
-static void	process_dollar(t_token *node, t_dollar *dol_var, char **env, \
+static void	process_dollar(t_token *node, t_dollar *dol, char **env, \
 							t_expand *info)
 {
-	while (dol_var->i < dol_var->str_len)
+	while (dol->i < dol->str_len)
 	{
-		if (node->str[dol_var->i] == '$' && (if_valid_char(\
-			node->str[dol_var->i + 1]) || (node->str[dol_var->i + 1] == '{')))
+		if (node->str[dol->i] == '$' && (is_valid(\
+			node->str[dol->i + 1]) || (node->str[dol->i + 1] == '{')))
 		{
-			if (node->str[dol_var->i + 2] || (node->str[dol_var->i + 2] \
-							!= '?' && node->str[dol_var->i + 2] != '$'))
+			if ((node->str[dol->i + 1] == '{' && node->str[dol->i + 2] != '$' \
+			&& node->str[dol->i + 2] != '?') || is_valid(node->str[dol->i + 1]))
 			{
-				expand_dollar(node, dol_var, env, info);
+				expand_dollar(node, dol, env, info);
 				if (info->mal_fail == true)
 					return ;
-				if (dol_var->env_expansion == true)
+				if (dol->env_expansion == true)
 				{
-					dol_var->i++;
-					dol_var->env_expansion = false;
+					dol->i++;
+					dol->env_expansion = false;
 				}
-				dol_var->str_len = ft_strlen(node->str);
+				dol->str_len = ft_strlen(node->str);
 				continue ;
 			}
 		}
-		dol_var->i++;
-		while (node->str[dol_var->i] && node->str[dol_var->i] != '$')
-			dol_var->i++;
-		dol_var->str_len = ft_strlen(node->str);
+		dol->i++;
+		while (node->str[dol->i] && node->str[dol->i] != '$')
+			dol->i++;
+		dol->str_len = ft_strlen(node->str);
 	}
 }
 

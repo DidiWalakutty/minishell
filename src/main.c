@@ -54,7 +54,7 @@ int	main(int argc, char **argv, char **env)
 		if (expand_and_build(data) == 1)
 		{
 			free(data->input);
-			error_exit("malloc", EXIT_FAILURE);
+			error_exit("malloc", EXIT_FAILURE, data);
 		}
 		print_commands(data->cmd_process);
 		data->exit_status = make_processes(data);

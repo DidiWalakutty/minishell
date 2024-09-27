@@ -282,7 +282,7 @@ int		quote_length(char *str, char c);
 bool	one_of_tokens(char c);
 bool	check_null(t_token **node);
 char	*copy_env_input(char **env, char *to_find);
-int		if_valid_char(char c);
+int		is_valid(char c);
 void	expand_node(t_token *node, t_dollar *var, t_expand *info);
 bool	quote_type_present(t_token *node);
 int		concatenate_quotes(t_token *list);
@@ -338,8 +338,7 @@ void	print_redin(t_redin *redir);
 //                           Execution                                     //
 //-------------------------------------------------------------------------//
 
-void	error_exit(const char *msg, int status);
-// void	error_exit(const char *msg, int status, t_data *data);
+void	error_exit(const char *msg, int status, t_data *data);
 int		make_processes(t_data *data);
 
 //-------------------------------------------------------------------------//

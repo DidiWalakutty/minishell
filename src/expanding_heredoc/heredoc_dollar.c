@@ -6,7 +6,7 @@
 /*   By: didi <didi@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 16:29:08 by didi          #+#    #+#                 */
-/*   Updated: 2024/09/26 19:33:09 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/27 16:46:18 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ void	process_here_dollar(char **copy, t_h_dol *info, char **env, \
 {
 	while (info->i < info->str_len)
 	{
-		if (info->copy[info->i] == '$' && (if_valid_char(info->copy[info->i \
+		if (info->copy[info->i] == '$' && (is_valid(info->copy[info->i \
 			+ 1]) || info->copy[info->i + 1] == '{'))
 		{
 			if (info->copy[info->i + 2] && info->copy[info->i + 2] != '$' && \
