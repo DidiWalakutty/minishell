@@ -54,8 +54,6 @@ int	main(int argc, char **argv, char **env)
 		if (*input)
 			add_history(data->input);
 		expand_and_build(data);
-		// print_linked_list(data->list);
-		// print_commands(data->cmd_process);
 		execute(data);
 		reset_data(data);
 	}

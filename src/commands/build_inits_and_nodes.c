@@ -39,7 +39,14 @@ t_cmd	*init_cmds(t_data *data)
 	return (command);
 }
 
-static int	remove_empty_words(t_token *list)
+static int	of_typ(t_type type)
+{
+	if (type == WORD || type == DOUBLE_QUOTE || type == SINGLE_QUOTE)
+		return (1);
+	return (0);
+}
+
+static t_token	*remove_empty_words(t_token *list)
 {
 	t_token	*head;
 	t_token	*to_delete;
@@ -47,7 +54,7 @@ static int	remove_empty_words(t_token *list)
 
 	head = list;
 	before = list;
-	while (before->type == WORD && ft_strcmp(before->str, "") == 0)
+	while (before && of_typ(before->type) && ft_strcmp(before->str, "") == 0)
 	{
 		to_delete = before;
 		before = to_delete->next;
@@ -56,7 +63,7 @@ static int	remove_empty_words(t_token *list)
 	}
 	while (before && before->next)
 	{
-		if (before->next->type == WORD && ft_strcmp(before->next->str, "") == 0)
+		if (of_typ(before->next->type) && ft_strcmp(before->next->str, "") == 0)
 		{
 			to_delete = before->next;
 			before->next = to_delete->next;
@@ -65,10 +72,10 @@ static int	remove_empty_words(t_token *list)
 		else
 			before = before->next;
 	}
-	return (0);
+	return (head);
 }
 
-int	empty_words(t_token *nodes)
+int	empty_words(t_token **nodes)
 {
 	int		count;
 	bool	flag;
@@ -76,19 +83,17 @@ int	empty_words(t_token *nodes)
 
 	count = 0;
 	flag = false;
-	copy = nodes;
-	if (!nodes)
-		return (0);
-	while (nodes)
+	copy = *nodes;
+	while (copy)
 	{
-		if ((nodes->type == WORD || nodes->type == DOUBLE_QUOTE || \
-			nodes->type == SINGLE_QUOTE) && ft_strcmp(nodes->str, "") == 0)
+		if ((copy->type == WORD || copy->type == DOUBLE_QUOTE || \
+			copy->type == SINGLE_QUOTE) && ft_strcmp(copy->str, "") == 0)
 			flag = true;
 		count++;
-		nodes = nodes->next;
+		copy = copy->next;
 	}
 	if (flag && count == 1)
 		return (0);
-	remove_empty_words(copy);
+	*nodes = remove_empty_words(*nodes);
 	return (1);
 }

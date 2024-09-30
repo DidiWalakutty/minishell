@@ -67,18 +67,16 @@ typedef enum s_exp
 
 typedef struct s_here_dol
 {
-	char	*expanded;	// expanded env-variable
-	char	*env_name;	// env-name
+	char	*expanded;
+	char	*env_name;
 	char	*copy;
 	int		i;
 	int		start_env;
 	int		end_var;
 	int		str_len;
-	bool	brackets;	// check for brackets
+	bool	brackets;
 	bool	no_closing_brackets;
 	t_exp	exp_kind;
-	// bool	quotes;		// check for quotes
-	// char	quote_type;	// s_q or d_q
 }	t_h_dol;
 
 typedef struct s_joined
@@ -134,9 +132,6 @@ typedef struct s_redir_out
 	t_redou		*next;
 }	t_redou;
 
-// word: 	a pointer to the string stored in a node
-// len: 	the content length
-// type: 	the content token
 typedef enum s_builtin
 {
 	NO_BUILTIN,
@@ -228,7 +223,7 @@ char	*check_joined(char *before, char *fill_in);
 //                          Build Commands                                 //
 //-------------------------------------------------------------------------//
 
-t_cmd	*build_commands(t_token *nodes, t_data *data);
+t_cmd	*build_commands(t_token **tokens, t_data *data);
 t_cmd	*merge_commands(t_token *tokens, t_data *data);
 int		handle_redirect(t_token **token, t_cmd **command);
 void	set_command_and_args(t_token **token, t_cmd **curr_cmd, \
@@ -288,7 +283,7 @@ void	expand_node(t_token *node, t_dollar *var, t_expand *info);
 bool	quote_type_present(t_token *node);
 int		concatenate_quotes(t_token *list);
 int		not_just_spaces(t_token *nodes);
-int		empty_words(t_token *nodes);
+int		empty_words(t_token **nodes);
 int		remove_spaces(t_token *list);
 void	init_redirects(t_cmd *cmd);
 bool	a_redirection(t_type type);
