@@ -6,7 +6,7 @@
 /*   By: sreerink <sreerink@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2024/09/27 19:30:17 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/09/30 00:32:03 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/09/30 23:16:50 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,10 +69,13 @@ static int	builtin_in_parent(t_cmd *cmd, t_data *data)
 	int	std_fd[2];
 	int	exit_status;
 
-	if (dup_stdin_stdout(std_fd) == -1)
-		return (EXIT_FAILURE);
-	if (redirect_parent(cmd, std_fd) == -1)
-		return (EXIT_FAILURE);
+	if (cmd->builtin != EXIT)
+	{
+		if (dup_stdin_stdout(std_fd) == -1)
+			return (EXIT_FAILURE);
+		if (redirect_parent(cmd, std_fd) == -1)
+			return (EXIT_FAILURE);
+	}
 	exit_status = execute_builtin(cmd, data);
 	redirect_std_back(cmd, std_fd, data);
 	close(std_fd[0]);
