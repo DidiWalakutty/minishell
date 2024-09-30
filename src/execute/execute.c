@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   execute.c                                          :+:    :+:            */
+/*   execute.c                                         :+:    :+:             */
 /*                                                     +:+                    */
 /*   By: sreerink <sreerink@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/27 18:06:24 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/09/30 20:47:41 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/10/01 00:07:13 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static void	fork_and_execute(int **pipefd, t_data *data)
 			error_exit("minishell: fork", EXIT_FAILURE, data);
 		if (cmd->pid == 0)
 		{
-			close_pipes_heredoc(data->cmd_process, i);
+			close_pipes_heredoc(data->cmd_process, i + 1);
 			close_unused_pipes(pipefd, i, data->process + 1);
 			child_process(cmd, pipefd[i], pipefd[i + 1], data);
 		}
@@ -63,7 +63,7 @@ static void	fork_and_execute(int **pipefd, t_data *data)
 	}
 	close(pipefd[i][0]);
 	close(pipefd[i][1]);
-	close_pipes_heredoc(data->cmd_process, -1);
+	close_pipes_heredoc(data->cmd_process, 0);
 }
 
 static int	wait_childs(t_cmd *cmds)

@@ -6,7 +6,7 @@
 /*   By: sreerink <sreerink@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/12 20:30:41 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/09/30 00:06:39 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/10/01 00:56:10 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,12 @@ void	close_unused_pipes(int **pipefd, size_t cur_pipe, size_t total_pipes)
 	}
 }
 
-void	close_pipes_heredoc(t_cmd *cmd, ssize_t cur_cmd)
+void	close_pipes_heredoc(t_cmd *cmd, size_t cur_cmd)
 {
-	ssize_t	i;
+	size_t	i;
 	t_redin	*redir_in;
 
-	i = 0;
+	i = 1;
 	if (i == cur_cmd)
 		cmd = cmd->next;
 	while (cmd)
@@ -49,7 +49,7 @@ void	close_pipes_heredoc(t_cmd *cmd, ssize_t cur_cmd)
 			redir_in = redir_in->next;
 		}
 		i++;
-		if (i == cur_cmd)
+		if (i == cur_cmd && cmd->next)
 			cmd = cmd->next->next;
 		else
 			cmd = cmd->next;
