@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   free_and_error.c                                  :+:    :+:             */
+/*   free_and_error.c                                   :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
@@ -29,11 +29,6 @@ void	free_list(t_token *list)
 	{
 		temp = list;
 		list = list->next;
-		if (temp->null == true)
-		{
-			free(temp);
-			return ;
-		}
 		if (temp->str)
 			free(temp->str);
 		free(temp);

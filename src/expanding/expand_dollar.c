@@ -111,6 +111,8 @@ int	set_dollar(t_token *node, char **env, t_expand *info)
 		return (-1);
 	}
 	process_dollar(node, dol_var, env, info);
+	free(dol_var->expanded);
+	free(dol_var->env_name);
 	free(dol_var);
 	return (0);
 }

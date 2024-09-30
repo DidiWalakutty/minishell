@@ -24,11 +24,20 @@ void	free_joined_struct(t_joined *var)
 	if (var)
 	{
 		if (var->before)
+		{
 			free(var->before);
+			var->before = NULL;
+		}
 		if (var->joined)
+		{
 			free(var->joined);
+			var->joined = NULL;
+		}
 		if (var->remainder)
+		{
 			free(var->remainder);
+			var->remainder = NULL;
+		}
 		free(var);
 	}
 }

@@ -52,8 +52,7 @@ int	main(int argc, char **argv, char **env)
 		}
 		if (*data->input)
 			add_history(data->input);
-		if (expand_and_build(data) == 1)
-			error_exit("malloc", EXIT_FAILURE, data);
+		expand_and_build(data);
 		// print_linked_list(data->list);
 		// print_commands(data->cmd_process);
 		execute(data);

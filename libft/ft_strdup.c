@@ -17,8 +17,12 @@ char	*ft_strndup(const char *s1, int len)
 	char	*copy;
 	int		i;
 
+	if (!s1)
+		return (NULL);
+	if (len > (int)ft_strlen(s1))
+		len = (int)ft_strlen(s1);
 	i = 0;
-	copy = (char *)malloc(sizeof(char) * ft_strlen((s1) + 1));
+	copy = (char *)malloc(sizeof(char) * (len + 1));
 	if (!copy)
 		return (NULL);
 	while (s1[i] && i < len)
