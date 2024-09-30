@@ -6,7 +6,7 @@
 /*   By: sreerink <sreerink@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/02 21:44:34 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/09/30 23:49:51 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/10/01 01:22:12 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,17 +22,20 @@ static void	hdoc_error_msg(t_redin *redir_in)
 
 static void	write_hdoc_pipe(char *input, t_redin *redir_in, t_data *data)
 {
-/*	char	*expanded;
+	char	*expanded;
 
 	if (!redir_in->quotes)
 	{
-		expanded = expand_hdoc(input);
+		expanded = heredoc_expanding(input, data);
 		write(redir_in->pipe_hdoc[1], expanded, ft_strlen(expanded));
 		write(redir_in->pipe_hdoc[1], "\n", 1);
 		free(expanded);
-	}*/
-	write(redir_in->pipe_hdoc[1], input, ft_strlen(input));
-	write(redir_in->pipe_hdoc[1], "\n", 1);
+	}
+	else
+	{
+		write(redir_in->pipe_hdoc[1], input, ft_strlen(input));
+		write(redir_in->pipe_hdoc[1], "\n", 1);
+	}
 }
 
 void	heredoc(t_redin *redir_in, bool redirect, t_data *data)
