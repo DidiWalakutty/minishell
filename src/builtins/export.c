@@ -6,70 +6,59 @@
 /*   By: sreerink <sreerink@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2024/08/27 19:22:55 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/09/21 02:00:32 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/09/30 02:17:37 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static int	export_print_env(char **env)
+static char	**parse_export_arg(char *arg, size_t i)
 {
-	size_t	i;
-
-	i = 0;
-	while (env && env[i])
-	{
-		printf("declare -x %s\n", env[i]);
-		i++;
-	}
-	return (EXIT_SUCCESS);
-}
-
-static char	**parse_export_arg(char *arg)
-{
-	size_t	i;
 	size_t	len;
 	char	**result;
 
-	i = 0;
 	result = ft_calloc(3, sizeof(char *));
 	if (!result)
 		return (NULL);
+	len = i;
+	if (arg[i - 1] == '+')
+	{
+		if (!arg[i + 1])
+			result[2] = NULL;
+		result[0] = "+";
+		len = i - 1;
+	}
+	result[1] = ft_strndup(arg, len);
+	if (!result[1])
+		return (NULL);
+	if (arg[i + 1])
+	{
+		result[2] = ft_strdup(arg + i + 1);
+		if (!result[2])
+			return (NULL);
+	}
+	return (result);
+}
+
+static char	**check_export_arg(char *arg)
+{
+	size_t	i;
+	char	**result;
+
+	i = 0;
 	while (arg[i])
 	{
 		if (arg[i] == '=')
 		{
-			len = i;
 			if (i == 0 || (!is_alph_or_num(arg[i - 1]) && arg[i - 1] != '+'))
+				return (export_error_msg(arg));
+			result = parse_export_arg(arg, i);
+			if (!result)
 			{
-				write(STDERR_FILENO, "minishell: export: `", 20);
-				write(STDERR_FILENO, arg, ft_strlen(arg));
-				write(STDERR_FILENO, "': not a valid identifier\n", 26);
+				free(result[1]);
+				free(result[2]);
 				free(result);
 				return (NULL);
-			}
-			if (arg[i - 1] == '+')
-			{
-				if (!arg[i + 1])
-					result[2] = NULL;
-				result[0] = "+";
-				len = i - 1;
-			}
-			result[1] = ft_strndup(arg, len);
-			if (!result[1])
-			{
-				free(result);
-				return (NULL);
-			}
-			if (arg[i + 1])
-			{
-				result[2] = ft_strdup(arg + i + 1);
-				if (!result[2])
-				{
-					free(result[1]);
-					free(result);
-					return (NULL);
-				}
 			}
 			return (result);
 		}
@@ -89,7 +78,7 @@ static void	update_env_export(char **export_args, t_cmd *cmd, t_data *data)
 		return ;
 	while (data->env[i])
 	{
-		while (!strncmp(variable, data->env[i], ft_strlen(variable)))
+		while (!ft_strncmp(variable, data->env[i], ft_strlen(variable)))
 		{
 			if (export_args[0])
 				add_var_value(export_args[2], variable, cmd->env);
@@ -117,7 +106,7 @@ int	export_builtin(t_cmd *cmd, t_data *data)
 		return (export_print_env(cmd->env));
 	while (cmd->args[i])
 	{
-		export_args = parse_export_arg(cmd->args[i]);
+		export_args = check_export_arg(cmd->args[i]);
 		if (!export_args)
 			return (EXIT_FAILURE);
 		update_env_export(export_args, cmd, data);

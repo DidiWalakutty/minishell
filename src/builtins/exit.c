@@ -6,27 +6,45 @@
 /*   By: sreerink <sreerink@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2024/08/24 22:08:43 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/09/27 16:16:51 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/09/30 02:49:42 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
+static bool	exit_valid_arg(char *arg)
+{
+	size_t	i;
+
+	i = 0;
+	if (arg[0] == '-' || arg[0] == '+')
+		i++;
+	if (!arg[i])
+		return (false);
+	while (arg[i])
+	{
+		if (!ft_isdigit(arg[i]))
+			return (false);
+		i++;
+	}
+	return (true);
+}
+
 int	exit_builtin(t_cmd *cmd, t_data *data)
 {
 	int	exit_status;
 
-	exit_status = 0;
+	exit_status = data->exit_status;
 	if (data && data->process == 1)
 		write(STDERR_FILENO, "exit\n", 5);
-	if (cmd->args[1] && str_is_all_digits(cmd->args[1]))
+	if (cmd->args[1] && exit_valid_arg(cmd->args[1]))
 	{
 		if (cmd->args[2])
 		{
 			write(STDERR_FILENO, "minishell: exit: too many arguments\n", 36);
 			return (1);
 		}
-		exit_status = atoi(cmd->args[1]) % 256; // Replace with Libft function
+		exit_status = ft_atoi(cmd->args[1]) % 256;
 	}
 	else if (cmd->args[1])
 	{

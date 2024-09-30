@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/20 16:38:50 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/27 16:10:17 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/09/30 02:31:48 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,6 +179,7 @@ typedef struct s_data
 	t_token	*list;
 	t_type	*token;
 	t_cmd	*cmd_process;
+	int		**pipefd;
 	size_t	process;
 	int		exit_status;
 }	t_data;
@@ -293,7 +294,6 @@ void	init_redirects(t_cmd *cmd);
 bool	a_redirection(t_type type);
 t_cmd	*init_cmds(t_data *data);
 char	**add_to_double_array(char **arguments, char *str);
-bool	str_is_all_digits(char *str);
 void	continue_add_to_quote(t_token *new, t_token **list, char c, bool null);
 int		continue_add_to_word(char *str, int start, int len, t_token **list);
 
@@ -342,16 +342,32 @@ void	print_redin(t_redin *redir);
 //-------------------------------------------------------------------------//
 
 void	execute(t_data *data);
+int		**alloc_pipefd(t_data *data);
+void	free_pipefd_allocs(t_data *data);
+void	make_pipes(int **pipefd, t_data *data);
+void	close_pipes_heredoc(t_cmd *cmd, ssize_t cur_cmd);
+void	close_unused_pipes(int **pipefd, size_t cur_pipe, size_t total_pipes);
+bool	check_parent_builtin(t_data *data);
 char	*find_cmd_path(t_cmd *cmd, t_data *data);
+
+//-------------------------------------------------------------------------//
+//                           Heredoc                                       //
+//-------------------------------------------------------------------------//
+
+int		check_heredocs(t_data *data);
+void	heredoc(t_redin *redir_in, bool redirect, t_data *data);
 
 //-------------------------------------------------------------------------//
 //                           Redirecting                                   //
 //-------------------------------------------------------------------------//
 
 bool	redirect_fd(int fd, int fd_dst);
-int		check_heredocs(t_data *data);
-bool	check_heredocs_parent(t_redin *redir_in);
-void	heredoc(t_redin *redir_in, bool redirect, t_data *data);
+int		redirect_redir_in(t_redin *redir_in);
+int		redirect_redir_out(t_redou *redir_out);
+bool	redirect_input(t_cmd *cmd, int fd_in[]);
+bool	redirect_output(t_cmd *cmd, int fd_out[]);
+int		redirect_input_parent(t_redin *redir_in);
+int		redirect_output_parent(t_redou *redir_out);
 
 //-------------------------------------------------------------------------//
 //                           Builtins                                  //
@@ -362,6 +378,8 @@ int		cd_builtin(t_cmd *cmd, t_data *data);
 int		echo_builtin(t_cmd *cmd);
 int		pwd_builtin(void);
 int		export_builtin(t_cmd *cmd, t_data *data);
+int		export_print_env(char **env);
+char	**export_error_msg(char *arg);
 int		unset_builtin(t_cmd *cmd, t_data *data);
 int		env_builtin(char **env);
 int		exit_builtin(t_cmd *cmd, t_data *data);

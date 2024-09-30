@@ -1,36 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                       ::::::::             */
-/*   env.c                                             :+:    :+:             */
+/*   ft_atoi.c                                         :+:    :+:             */
 /*                                                    +:+                     */
 /*   By: sreerink <sreerink@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
-/*   Created: 2024/08/25 22:24:08 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/09/28 00:27:30 by sreerink      ########   odam.nl         */
+/*   Created: 2024/05/24 17:09:40 by sreerink      #+#    #+#                 */
+/*   Updated: 2024/09/30 02:48:30 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "libft.h"
 
-int	env_builtin(char **env)
+int	ft_atoi(const char *str)
 {
-	size_t	i;
+	int	i;
+	int	nb;
+	int	multi;
 
 	i = 0;
-	if (!env)
-		return (EXIT_SUCCESS);
-	while (env[i] && ft_strncmp(env[i], "PATH=", 5))
+	nb = 0;
+	multi = 1;
+	while ((str[i] >= 9 && str[i] <= 13) || (str[i] == 32))
 		i++;
-	if (!env[i] || !env[i][5])
+	if (str[i] == '-' || str[i] == '+')
 	{
-		write(STDERR_FILENO, "minishell: env: No such file or directory\n", 42);
-		return (127);
-	}
-	i = 0;
-	while (env[i])
-	{
-		printf("%s\n", env[i]);
+		if (str[i] == '-')
+			multi *= -1;
 		i++;
 	}
-	return (EXIT_SUCCESS);
+	while (str[i] >= '0' && str[i] <= '9')
+	{
+		nb = (nb * 10) + (str[i] - '0');
+		i++;
+	}
+	nb *= multi;
+	return (nb);
 }

@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:41:04 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/21 01:44:39 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/09/30 00:00:27 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ void	reset_data(t_data *data)
 	free(data->input);
 	free_list(data->list);
 	free_cmds(data->cmd_process);
+	free_pipefd_allocs(data);
 	data->process = 1;
 	data->input = NULL;
 	data->list = NULL;

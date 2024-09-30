@@ -6,7 +6,7 @@
 /*   By: sreerink <sreerink@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2024/08/17 00:13:39 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/09/21 01:48:32 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/09/28 00:18:57 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ char	**make_env_var(char *new_var, char *value, char **env)
 		new_env[i] = ft_strdup(new_var);
 	if (!new_env[i])
 		return (free_array(new_env), NULL);
-	free_array(env); // Oude data->env wordt misschien niet corrrect ge-freed
+	free_array(env);
 	return (new_env);
 }
 
@@ -57,7 +57,7 @@ char	**delete_env_var(char *del_var, char **env)
 	j = 0;
 	while (env[i])
 	{
-		if (strncmp(env[i], del_var, ft_strlen(del_var)))
+		if (ft_strncmp(env[i], del_var, ft_strlen(del_var)))
 		{
 			new_env[j] = ft_strdup(env[i]);
 			if (!new_env[j])
@@ -66,7 +66,7 @@ char	**delete_env_var(char *del_var, char **env)
 		}
 		i++;
 	}
-	free_array(env); // Oude data->env wordt misschien niet corrrect ge-freed
+	free_array(env);
 	return (new_env);
 }
 
@@ -78,7 +78,7 @@ bool	add_var_value(char *new_value, char *var_dst, char **env)
 
 	i = 0;
 	var_len = ft_strlen(var_dst);
-	while (env[i] && strncmp(env[i], var_dst, var_len))
+	while (env[i] && ft_strncmp(env[i], var_dst, var_len))
 		i++;
 	if (!env[i])
 		return (false);
@@ -99,7 +99,7 @@ bool	replace_var_value(char *new_value, char *var_dst, char **env)
 
 	i = 0;
 	var_len = ft_strlen(var_dst);
-	while (env[i] && strncmp(env[i], var_dst, var_len))
+	while (env[i] && ft_strncmp(env[i], var_dst, var_len))
 		i++;
 	if (!env[i])
 		return (false);

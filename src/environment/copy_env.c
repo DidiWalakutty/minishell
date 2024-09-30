@@ -6,14 +6,12 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/07/04 15:37:19 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/21 01:32:40 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/09/28 00:03:35 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-// split on '=' and name + value?
-// Copies current env. Should eventually also update ShellLevel
 char	**copy_env(char **env)
 {
 	char	**copy;

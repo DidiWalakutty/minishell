@@ -40,15 +40,20 @@ SRC =	./src/main.c \
 				./src/expanding_heredoc/heredoc_utils2.c \
 				./src/expanding_heredoc/heredoc_exit.c \
 				./src/expanding_heredoc/free_heredocs.c \
+				./src/heredoc/check_heredocs.c \
+				./src/heredoc/heredoc.c \
 				./src/commands/build_commands.c \
 				./src/commands/build_inits_and_nodes.c \
 				./src/commands/build_redirections.c \
 				./src/commands/build_utils.c \
 				./src/commands/build_utils2.c \
+				./src/execute/execute.c \
+				./src/execute/parent_execute.c \
 				./src/execute/pipes.c \
 				./src/execute/find_path.c \
-				./src/redirecting/check_heredocs.c \
-				./src/redirecting/heredoc.c \
+				./src/redirecting/redirect.c \
+				./src/redirecting/child_redirect.c \
+				./src/redirecting/parent_redirect.c \
 				./src/signals/echoctl.c \
 				./src/signals/ia_signals.c \
 				./src/signals/nia_signals.c \
@@ -59,13 +64,13 @@ SRC =	./src/main.c \
 				./src/builtins/echo.c \
 				./src/builtins/pwd.c \
 				./src/builtins/export.c \
+				./src/builtins/export_utils.c \
 				./src/builtins/unset.c \
 				./src/builtins/env.c \
 				./src/builtins/exit.c \
 				./src/utils/free_and_error.c\
 				./src/utils/utils.c \
 				./src/utils/syntax_check.c \
-				./src/utils/str_utils.c \
 				./src/utils/testing.c
 
 
@@ -108,6 +113,9 @@ $(OBJDIR)/%.o: ./src/expanding/%.c
 	@$(CC) $(CFLAGS) $(HEADERS) -c -o $@ $<
 
 $(OBJDIR)/%.o: ./src/commands/%.c
+	@$(CC) $(CFLAGS) $(HEADERS) -c -o $@ $<
+
+$(OBJDIR)/%.o: ./src/heredoc/%.c
 	@$(CC) $(CFLAGS) $(HEADERS) -c -o $@ $<
 
 $(OBJDIR)/%.o: ./src/execute/%.c
