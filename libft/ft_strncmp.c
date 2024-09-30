@@ -21,7 +21,7 @@ int	ft_strncmp(const char *s1, const char *s2, size_t d)
 	{
 		return (0);
 	}
-	while ((s1[x] == s2[x]) && (x < d - 1) && s1[x])
+	while ((s1[x] && s2[x] && (x < d - 1)) && s1[x] == s2[x])
 	{
 		x++;
 	}
