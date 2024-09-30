@@ -33,6 +33,7 @@
 
 typedef enum s_type			t_type;
 typedef enum s_exp			t_exp;
+typedef struct s_add_word	t_ad_wr;
 typedef struct s_here_dol	t_h_dol;
 typedef struct s_joined		t_joined;
 typedef struct s_list		t_list;
@@ -64,6 +65,16 @@ typedef enum s_exp
 	IS_EXIT,
 	IS_PID,
 }	t_exp;
+
+typedef struct s_add_word
+{
+	char	*str;
+	int		start;
+	int		len;
+	int		j;
+	bool	in_quote;
+	char	*new_str;
+}	t_ad_wr;
 
 typedef struct s_here_dol
 {
@@ -201,6 +212,7 @@ int		add_space(char *str, int i, t_token **list);
 int		add_redir_or_pipe(char *str, int i, t_data *data, t_token **list);
 int		add_one_token(char *str, int i, t_data *data, t_token **list);
 int		add_word(char *str, int i, t_token **list);
+t_ad_wr	*set_process(char *str, int i);
 
 //-------------------------------------------------------------------------//
 //                               Expander                                  //

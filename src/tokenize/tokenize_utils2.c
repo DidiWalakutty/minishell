@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/20 21:12:35 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/27 21:49:43 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/30 19:31:29 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,4 +36,25 @@ int	continue_add_to_word(char *str, int start, int len, t_token **list)
 		return (-1);
 	node_to_list(list, new);
 	return (len);
+}
+
+t_ad_wr	*set_process(char *str, int i)
+{
+	t_ad_wr	*copy;
+
+	copy = malloc(sizeof(t_ad_wr));
+	if (!copy)
+		return (NULL);
+	copy->str = str;
+	copy->start = i;
+	copy->len = i;
+	copy->j = 0;
+	copy->in_quote = false;
+	copy->new_str = malloc(sizeof(char) * (ft_strlen(str) + 1));
+	if (!copy->new_str)
+	{
+		free(copy);
+		return (NULL);
+	}
+	return (copy);
 }

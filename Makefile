@@ -25,6 +25,7 @@ SRC =	./src/main.c \
 				./src/tokenize/tokenize_utils.c \
 				./src/tokenize/tokenize_utils2.c \
 				./src/tokenize/tokenizer.c \
+				./src/tokenize/tokenize_word.c \
 				./src/expanding/expander.c \
 				./src/expanding/expand_dollar.c \
 				./src/expanding/expand_double_dollar.c \
