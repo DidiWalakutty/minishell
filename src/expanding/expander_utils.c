@@ -107,8 +107,8 @@ char	*copy_env_input(char **env, char *to_find)
 	while (env[i])
 	{
 		env_len = ft_strlen(env[i]);
-		if (env_len >= find_len && env[i][find_len] == '=' \
-		&& ft_strncmp(env[i], to_find, find_len))
+		if (env_len >= find_len && env[i][find_len] == '=' && \
+			ft_strncmp(env[i], to_find, find_len) == 0)
 		{
 			result = ft_strdup(env[i] + find_len + 1);
 			if (!result)
