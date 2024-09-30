@@ -87,7 +87,7 @@ int	remove_spaces(t_token *list)
 
 	head = list;
 	before = list;
-	while (before->type == SEPARATOR)
+	while (before && before->type == SEPARATOR)
 	{
 		to_delete = before;
 		before = to_delete->next;

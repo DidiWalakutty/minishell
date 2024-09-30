@@ -23,7 +23,7 @@ void	expand_and_build(t_data *data)
 		return ;
 	if (expand_input(data, data->list, data->env) == -1)
 		error_exit("Malloc", EXIT_FAILURE, data);
-	data->cmd_process = build_commands(data->list, data);
+	data->cmd_process = build_commands(&data->list, data);
 }
 
 t_token	*tokenize_input(t_data *data, char *str)
