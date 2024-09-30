@@ -6,7 +6,7 @@
 /*   By: sreerink <sreerink@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2024/08/04 22:34:30 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/09/28 00:07:21 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/09/30 04:55:50 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,7 @@
 static bool	get_cur_pwd(char buffer[PATH_MAX + 1])
 {
 	if (!getcwd(buffer, PATH_MAX + 1))
-	{
-		perror("minishell: cd_builtin: pwd");
 		return (false);
-	}
 	return (true);
 }
 
@@ -56,36 +53,18 @@ static bool	update_cd_vars(char *old_pwd, t_data *data)
 
 	if (!data)
 		return (true);
-	if (!replace_var_value(old_pwd, "OLDPWD=", data->env))
-	{
-		data->env = make_env_var("OLDPWD=", old_pwd, data->env);
-		if (!data->env)
-		{
-			perror("minishell: cd_builtin: make_env_var");
-			return (false);
-		}
-	}
+	replace_var_value(old_pwd, "OLDPWD=", data->env);
 	if (!get_cur_pwd(cur_pwd))
 		return (false);
-	if (!replace_var_value(cur_pwd, "PWD=", data->env))
-	{
-		data->env = make_env_var("PWD=", cur_pwd, data->env);
-		if (!data->env)
-		{
-			perror("minishell: cd_builtin: make_env_var");
-			return (false);
-		}
-	}
+	replace_var_value(cur_pwd, "PWD=", data->env);
 	return (true);
 }
 
 int	cd_builtin(t_cmd *cmd, t_data *data)
 {
 	char	*path;
-	char	old_pwd[PATH_MAX + 1];
+	char	*old_pwd;
 
-	if (!get_cur_pwd(old_pwd))
-		return (EXIT_FAILURE);
 	path = check_cd_args(cmd);
 	if (!path)
 		return (EXIT_FAILURE);
@@ -99,7 +78,8 @@ int	cd_builtin(t_cmd *cmd, t_data *data)
 	}
 	if (path != cmd->args[1])
 		free(path);
-	if (!update_cd_vars(old_pwd, data))
-		return (EXIT_FAILURE);
+	old_pwd = copy_env_input(cmd->env, "PWD");
+	update_cd_vars(old_pwd, data);
+	free(old_pwd);
 	return (EXIT_SUCCESS);
 }
