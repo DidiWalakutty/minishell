@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   libft.h                                            :+:    :+:            */
+/*   libft.h                                           :+:    :+:             */
 /*                                                     +:+                    */
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/12 18:27:25 by diwalaku      #+#    #+#                 */
-/*   Updated: 2023/12/08 15:33:50 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/30 02:49:06 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ int		ft_isdigit(int c);
 int		ft_isalpha(int c);
 int		is_alph_or_num(char c);
 char	*ft_strconcat(char *s1, char *s2);
+int		ft_atoi(const char *str);
 char	*ft_itoa(int i);
 void	*ft_memcpy(void *dst, const void *src, size_t n);
 

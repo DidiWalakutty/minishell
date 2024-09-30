@@ -6,65 +6,64 @@
 /*   By: sreerink <sreerink@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/08 19:46:52 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/09/26 19:18:35 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/09/30 01:21:44 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-bool	check_heredocs_parent(t_redin *redir_in)
+static int	run_heredoc(t_redin *redir_in, bool redirect, t_data *data)
 {
+	pid_t	pid;
+	int		status;
+
+	if (redirect)
+	{
+		if (pipe(redir_in->pipe_hdoc) == -1)
+			return (1);
+	}
+	pid = fork();
+	if (pid == 0)
+		heredoc(redir_in, redirect, data);
+	waitpid(pid, &status, 0);
+	return (WEXITSTATUS(status));
+}
+
+static int	check_hdoc_redir(t_redin *redir_in, t_data *data)
+{
+	int		status;
+
 	while (redir_in)
 	{
 		if (redir_in->heredoc && !redir_in->next)
 		{
-			if (pipe(redir_in->pipe_hdoc) == -1)
-				return (false);
-			heredoc(redir_in, true, NULL);
+			status = run_heredoc(redir_in, true, data);
+			if (status != 0)
+				return (status);
 		}
 		else if (redir_in->heredoc)
-			heredoc(redir_in, false, NULL);
+		{
+			status = run_heredoc(redir_in, false, data);
+			if (status != 0)
+				return (status);
+		}
 		redir_in = redir_in->next;
 	}
-	return (true);
+	return (0);
 }
 
 int	check_heredocs(t_data *data)
 {
-	pid_t	pid;
 	int		status;
 	t_cmd	*temp;
-	t_redin	*redir_in;
 
 	set_signals_hdoc_parent_mode();
 	temp = data->cmd_process;
 	while (temp)
 	{
-		redir_in = temp->redir_in;
-		while (redir_in)
-		{
-			if (redir_in->heredoc && !redir_in->next)
-			{
-				if (pipe(redir_in->pipe_hdoc) == -1)
-					return (1);
-				pid = fork();
-				if (pid == 0)
-					heredoc(redir_in, true, data);
-				waitpid(pid, &status, 0);
-				if (status != 0)
-					return (WEXITSTATUS(status));
-			}
-			else if (redir_in->heredoc)
-			{
-				pid = fork();
-				if (pid == 0)
-					heredoc(redir_in, false, data);
-				waitpid(pid, &status, 0);
-				if (status != 0)
-					return (WEXITSTATUS(status));
-			}
-			redir_in = redir_in->next;
-		}
+		status = check_hdoc_redir(temp->redir_in, data);
+		if (status != 0)
+			return (status);
 		temp = temp->next;
 	}
 	return (0);

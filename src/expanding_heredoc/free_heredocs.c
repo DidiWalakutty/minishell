@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/17 21:01:44 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/20 23:58:30 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/09/27 23:19:15 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	free_cmds(t_cmd *cmd_list)
 	{
 		temp = cmd_list;
 		cmd_list = cmd_list->next;
-		if (temp->cmd)
+		if (temp->cmd && temp->cmd != temp->path)
 			free(temp->cmd);
 		if (temp->path)
 			free(temp->path);

@@ -1,27 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                       ::::::::             */
-/*   str_utils.c                                       :+:    :+:             */
+/*   export_utils.c                                    :+:    :+:             */
 /*                                                    +:+                     */
 /*   By: sreerink <sreerink@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
-/*   Created: 2024/08/24 22:58:09 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/08/24 23:01:02 by sreerink      ########   odam.nl         */
+/*   Created: 2024/09/30 02:10:35 by sreerink      #+#    #+#                 */
+/*   Updated: 2024/09/30 02:16:46 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-bool	str_is_all_digits(char *str)
+int	export_print_env(char **env)
 {
 	size_t	i;
 
 	i = 0;
-	while (str && str[i])
+	while (env && env[i])
 	{
-		if (!ft_isdigit(str[i]))
-			return (false);
+		printf("declare -x %s\n", env[i]);
 		i++;
 	}
-	return (true);
+	return (EXIT_SUCCESS);
+}
+
+char	**export_error_msg(char *arg)
+{
+	write(STDERR_FILENO, "minishell: export: `", 20);
+	write(STDERR_FILENO, arg, ft_strlen(arg));
+	write(STDERR_FILENO, "': not a valid identifier\n", 26);
+	return (NULL);
 }

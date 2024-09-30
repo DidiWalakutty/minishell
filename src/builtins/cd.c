@@ -6,7 +6,7 @@
 /*   By: sreerink <sreerink@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2024/08/04 22:34:30 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/08/24 21:37:16 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/09/28 00:07:21 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ static bool	get_cur_pwd(char buffer[PATH_MAX + 1])
 	return (true);
 }
 
-// Vraag aan Didi of "" wordt aangeleverd als NULL of "\0" voor cd ""
 static char	*check_cd_args(t_cmd *cmd)
 {
 	char	*temp;

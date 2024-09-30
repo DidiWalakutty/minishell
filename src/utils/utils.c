@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   utils.c                                            :+:    :+:            */
+/*   utils.c                                           :+:    :+:             */
 /*                                                     +:+                    */
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/07/04 17:06:02 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/27 19:26:00 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/30 00:01:29 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ void	free_all(t_data *data)
 	free_array(data->env);
 	free_list(data->list);
 	free_cmds(data->cmd_process);
+	free_pipefd_allocs(data);
 	free(data);
 	rl_clear_history();
 }
