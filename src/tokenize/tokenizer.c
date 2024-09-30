@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:43:34 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/27 21:49:21 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/09/30 18:36:31 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,28 +82,31 @@ int	add_pipe(char *str, int i, t_token **list)
 
 // !in_quote toggles the value of the current in_quote 
 // flag during the while-loop.
-int	add_word(char *str, int i, t_token **list)
-{
-	int		start;
-	int		len;
-	bool	in_quote;
+// int	add_word(char *str, int i, t_token **list)
+// {
+// 	int		start;
+// 	int		len;
+// 	bool	in_quote;
 
-	start = i;
-	len = i;
-	in_quote = false;
-	while (str[len] && !one_of_tokens(str[len]) && \
-			!iswhitespace(str[len]))
-	{
-		if (str[len] == '\'' || str[len] == '\"')
-			in_quote = !in_quote;
-		while (str[len] && in_quote && str[len] != str[start])
-			len++;
-		len++;
-	}
-	if (continue_add_to_word(str, start, len, list) == -1)
-		return (-1);
-	return (len);
-}
+// 	start = i;
+// 	len = i;
+// 	in_quote = false;
+// 	while (str[len] && !one_of_tokens(str[len]) && \
+// 			!iswhitespace(str[len]))
+// 	{
+// 		if (str[len] == '\'' || str[len] == '\"')
+// 			in_quote = !in_quote;
+// 		while (str[len] && in_quote && str[len] != str[start])
+// 			len++;
+// 		len++;
+// 	}
+// 	if (continue_add_to_word(str, start, len, list) == -1)
+// 		return (-1);
+// 	return (len);
+// }
+
+
+
 
 int	add_space(char *str, int i, t_token **list)
 {
