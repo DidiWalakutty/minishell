@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:40:07 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/29 23:48:59 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/10/01 02:12:33 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,7 @@ int	main(int argc, char **argv, char **env)
 		set_signals_ia_mode();
 		data->input = readline(SHELL_NAME);
 		if (!data->input)
-		{
-			// Will be changed to a proper exit function (Purpose: Ctrl-D)
-			write(STDERR_FILENO, "exit\n", 5);
-			enable_echoctl();
-			error_exit(NULL, data->exit_status, data);
-		}
+			exit_end_of_file(data);
 		if (*data->input)
 			add_history(data->input);
 		expand_and_build(data);

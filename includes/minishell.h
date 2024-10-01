@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/20 16:38:50 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/30 02:31:48 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/10/01 02:11:48 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -330,6 +330,7 @@ void	reset_data(t_data *data);
 void	free_all(t_data	*data);
 void	free_node(t_token *node);
 void	free_heredoc_info(t_h_dol *info);
+void	exit_end_of_file(t_data *data);
 void	error_exit(const char *msg, int status, t_data *data);
 void	free_joined_struct(t_joined *var);
 
@@ -353,7 +354,7 @@ void	execute(t_data *data);
 int		**alloc_pipefd(t_data *data);
 void	free_pipefd_allocs(t_data *data);
 void	make_pipes(int **pipefd, t_data *data);
-void	close_pipes_heredoc(t_cmd *cmd, ssize_t cur_cmd);
+void	close_pipes_heredoc(t_cmd *cmd, size_t cur_cmd);
 void	close_unused_pipes(int **pipefd, size_t cur_pipe, size_t total_pipes);
 bool	check_parent_builtin(t_data *data);
 char	*find_cmd_path(t_cmd *cmd, t_data *data);
