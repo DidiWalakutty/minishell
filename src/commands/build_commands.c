@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/08/22 18:14:06 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/30 17:54:02 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/10/01 17:25:39 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ t_cmd	*build_commands(t_token **tokens, t_data *data)
 	t_cmd		*commands;
 
 	commands = NULL;
-	if (*tokens && not_just_spaces(*tokens) && empty_words(tokens))
+	if (*tokens && not_just_spaces(*tokens))
 	{
 		commands = merge_commands(*tokens, data);
 		if (commands)

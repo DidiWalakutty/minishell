@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   heredoc_dollar.c                                  :+:    :+:             */
+/*   heredoc_dollar.c                                   :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: didi <didi@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 16:29:08 by didi          #+#    #+#                 */
-/*   Updated: 2024/10/01 01:51:23 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/10/01 16:48:34 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ t_h_dol	*init_here_dol(char *str)
 	new->start_env = 0;
 	new->end_var = 0;
 	new->brackets = false;
+	new->env_expansion = false;
 	new->no_closing_brackets = false;
 	new->exp_kind = IS_DOLLAR;
 	return (new);
@@ -70,11 +71,21 @@ void	extract_here_env_variable(char *str, t_h_dol *info)
 	}
 	if (info->brackets == true && str[info->end_var] != '}')
 		info->no_closing_brackets = true;
+	if (info->expanded)
+	{
+		free(info->expanded);
+		info->expanded = NULL;
+	}
 }
 
 void	set_env_and_expand(char *str, t_h_dol *info, char **env, bool *mal_fail)
 {
 	extract_here_env_variable(str, info);
+	if (info->env_name)
+	{
+		free(info->env_name);
+		info->env_name = NULL;
+	}
 	info->env_name = ft_substr(str, info->start_env, \
 					info->end_var - info->start_env);
 	if (!info->env_name)
@@ -110,6 +121,11 @@ void	process_here_dollar(char **copy, t_h_dol *info, char **env, \
 				set_env_and_expand(info->copy, info, env, mal_fail);
 				if (*mal_fail)
 					return ;
+				if (info->env_expansion == true)
+				{
+					info->i++;
+					info->env_expansion = false;
+				}
 				info->str_len = ft_strlen(info->copy);
 				continue ;
 			}

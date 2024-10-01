@@ -1,10 +1,10 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                       ::::::::             */
-/*   find_path.c                                       :+:    :+:             */
-/*                                                    +:+                     */
-/*   By: sreerink <sreerink@student.codam.nl>        +#+                      */
-/*                                                  +#+                       */
+/*                                                        ::::::::            */
+/*   find_path.c                                        :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: sreerink <sreerink@student.codam.nl>         +#+                     */
+/*                                                   +#+                      */
 /*   Created: 2024/09/26 20:54:26 by sreerink      #+#    #+#                 */
 /*   Updated: 2024/10/01 17:40:44 by sreerink      ########   odam.nl         */
 /*                                                                            */

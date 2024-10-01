@@ -74,26 +74,3 @@ static t_token	*remove_empty_words(t_token *list)
 	}
 	return (head);
 }
-
-int	empty_words(t_token **nodes)
-{
-	int		count;
-	bool	flag;
-	t_token	*copy;
-
-	count = 0;
-	flag = false;
-	copy = *nodes;
-	while (copy)
-	{
-		if ((copy->type == WORD || copy->type == DOUBLE_QUOTE || \
-			copy->type == SINGLE_QUOTE) && ft_strcmp(copy->str, "") == 0)
-			flag = true;
-		count++;
-		copy = copy->next;
-	}
-	if (flag && count == 1)
-		return (0);
-	*nodes = remove_empty_words(*nodes);
-	return (1);
-}

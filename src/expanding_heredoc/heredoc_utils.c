@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   heredoc_utils.c                                   :+:    :+:             */
+/*   heredoc_utils.c                                    :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: didi <didi@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/16 14:03:40 by didi          #+#    #+#                 */
-/*   Updated: 2024/10/01 01:51:31 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/10/01 17:57:15 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,9 +79,6 @@ void	expand_here_pid(char *str, t_h_dol *info, bool *mal_fail)
 		info->end_var++;
 	if (info->brackets == true && str[info->end_var] != '}')
 		info->no_closing_brackets = true;
-	info->expanded = ft_strdup(info->expanded);
-	if (!info->expanded)
-		info->expanded = ft_strdup("");
 	if (!info->expanded)
 	{
 		*mal_fail = true;
@@ -105,9 +102,6 @@ void	expand_here_exit(char *str, t_h_dol *info, bool *mal_fail)
 		info->end_var++;
 	if (info->brackets == true && str[info->end_var] != '}')
 		info->no_closing_brackets = true;
-	info->expanded = ft_strdup(info->expanded);
-	if (!info->expanded)
-		info->expanded = ft_strdup("");
 	if (!info->expanded)
 	{
 		*mal_fail = true;
@@ -132,9 +126,13 @@ void	expand_heredoc_string(char *str, t_h_dol *info, bool *mal_fail)
 	if (check_mal_fail(mal_fail, var))
 		return ;
 	if (info->no_closing_brackets == true)
+	{
+		free(var->joined);
 		reset_here_joined(var, &var->joined, mal_fail);
+	}
 	if (check_mal_fail(mal_fail, var))
 		return ;
+	free(info->copy);
 	info->copy = ft_strdup(var->joined);
 	if (!info->copy)
 		*mal_fail = true;

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   utils.c                                           :+:    :+:             */
+/*   utils.c                                            :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/07/04 17:06:02 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/30 00:01:29 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/10/01 17:53:19 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,9 +74,20 @@ void	free_heredoc_info(t_h_dol *info)
 	if (info)
 	{
 		if (info->expanded)
+		{
 			free(info->expanded);
+			info->expanded = NULL;
+		}
 		if (info->env_name)
+		{
 			free(info->env_name);
+			info->env_name = NULL;
+		}
+		if (info->copy)
+		{
+			free(info->copy);
+			info->copy = NULL;
+		}
 		free(info);
 	}
 }
