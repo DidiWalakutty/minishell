@@ -6,7 +6,7 @@
 /*   By: sreerink <sreerink@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2024/09/26 20:54:26 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/09/26 22:57:36 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/10/01 17:40:44 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,8 @@ char	*find_cmd_path(t_cmd *cmd, t_data *data)
 
 	if (!ft_strncmp(cmd->cmd, "./", 2) || !ft_strncmp(cmd->cmd, "/", 1))
 		return (cmd->cmd);
+	if (!*cmd->cmd)
+		error_exit(cmd->cmd, 127, data);
 	path_arr = split_path_env(cmd, data);
 	if (!path_arr)
 		return (check_cmd_is_path(cmd, data));
