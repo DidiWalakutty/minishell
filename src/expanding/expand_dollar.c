@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   expand_dollar.c                                    :+:    :+:            */
+/*   expand_dollar.c                                   :+:    :+:             */
 /*                                                     +:+                    */
 /*   By: diwalaku <diwalaku@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/07/04 15:24:51 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/07/04 15:24:51 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/10/01 22:14:47 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ bool	is_dollar(t_token *node, bool heredoc)
 {
 	char	*copy;
 
-	if (node->type != WORD && node->type != DOUBLE_QUOTE || \
+	if ((node->type != WORD && node->type != DOUBLE_QUOTE) || \
 		heredoc == true)
 		return (false);
 	copy = ft_strchr(node->str, '$');

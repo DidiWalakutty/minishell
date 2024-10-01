@@ -6,8 +6,7 @@ HEADERS	= -I includes -I libft/HEADERS
 
 # Configuration
 CC		= 	cc
-CFLAGS	=	-g3
-# CFLAGS	+= -fsanitize=address -g
+CFLAGS	=	-Wall -Werror -Wextra
 RM 		= rm -rf
 
 # Readline files
@@ -76,11 +75,8 @@ SRC =	./src/main.c \
 
 
 # Object files and directories
-# obj folder in src?: src/obj 
 OBJ 	= $(addprefix $(OBJDIR)/, $(notdir $(SRC:.c=.o)))
 OBJDIR	= obj
-
-# ANSI escape colors for messages
 
 
 # Objectives

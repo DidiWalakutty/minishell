@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   nodes.c                                            :+:    :+:            */
+/*   nodes.c                                           :+:    :+:             */
 /*                                                     +:+                    */
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/07/04 15:28:16 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/27 21:41:21 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/10/01 22:10:47 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_redin	*create_in_node(t_cmd *cmd, char *str, t_redir_type redir_type, \
+t_redin	*create_in_node(char *str, t_redir_type redir_type, \
 						t_type token_type)
 {
 	t_redin	*new_node;
@@ -36,7 +36,7 @@ t_redin	*create_in_node(t_cmd *cmd, char *str, t_redir_type redir_type, \
 	return (new_node);
 }
 
-t_redou	*create_out_node(t_cmd *cmd, char *str, t_redir_type redir_type)
+t_redou	*create_out_node(char *str, t_redir_type redir_type)
 {
 	t_redou	*new_node;
 

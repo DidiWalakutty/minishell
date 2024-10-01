@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   build_utils.c                                      :+:    :+:            */
+/*   build_utils.c                                     :+:    :+:             */
 /*                                                     +:+                    */
 /*   By: diwalaku <diwalaku@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/08/22 18:14:21 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/10/01 21:15:51 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/10/01 22:11:22 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ int	create_redir_in(t_cmd *cmd, char *result, t_redir_type redir_type, \
 	t_redin	*new_node;
 	t_redin	*current;
 
-	new_node = create_in_node(cmd, result, redir_type, token_type);
+	new_node = create_in_node(result, redir_type, token_type);
 	if (!new_node)
 		return (1);
 	if (!cmd->redir_in)
@@ -116,7 +116,7 @@ int	create_redir_out(t_cmd *cmd, char *result, t_redir_type redir_type)
 	t_redou	*new_node;
 	t_redou	*current;
 
-	new_node = create_out_node(cmd, result, redir_type);
+	new_node = create_out_node(result, redir_type);
 	if (!new_node)
 		return (1);
 	if (!cmd->redir_out)

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   lexer.c                                            :+:    :+:            */
+/*   lexer.c                                           :+:    :+:             */
 /*                                                     +:+                    */
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:42:29 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/13 19:59:17 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/10/01 22:13:17 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	expand_and_build(t_data *data)
 	data->list = tokenize_input(data, data->input);
 	if (!data->list)
 		return ;
-	if (expand_input(data, &data->list, data->env) == -1)
+	if (expand_input(data, &data->list) == -1)
 		error_exit("Malloc", EXIT_FAILURE, data);
 	data->cmd_process = build_commands(&data->list, data);
 }

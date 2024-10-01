@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   expander.c                                         :+:    :+:            */
+/*   expander.c                                        :+:    :+:             */
 /*                                                     +:+                    */
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:36:22 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/10/01 21:07:18 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/10/01 22:12:41 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ static int	node_expansion(t_token *node, t_expand *info, t_data *data)
 	return (0);
 }
 
-int	expand_input(t_data *data, t_token **node, char **env)
+int	expand_input(t_data *data, t_token **node)
 {
 	t_expand	*info;
 

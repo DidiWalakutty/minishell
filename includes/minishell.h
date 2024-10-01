@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/20 16:38:50 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/10/01 02:11:48 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/10/01 22:12:41 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -219,8 +219,7 @@ t_ad_wr	*set_process(char *str, int i);
 //                               Expander                                  //
 //-------------------------------------------------------------------------//
 
-// int		expand_input(t_data *data, t_token *node, char **env);
-int		expand_input(t_data *data, t_token **node, char **env);
+int		expand_input(t_data *data, t_token **node);
 bool	is_dollar(t_token *node, bool heredoc);
 void	extract_env_variable(t_token *node, t_dollar *dol);
 void	handle_joined_strings(t_joined *var, t_dollar *dol, t_expand *info);
@@ -316,10 +315,9 @@ void	reset_expansions(t_h_dol *info);
 void	node_to_list(t_token **list, t_token *new);
 int		create_redir_out(t_cmd *cmd, char *result, t_redir_type redir_type);
 t_token	*create_node(char *str, t_type type);
-t_redou	*create_out_node(t_cmd *cmd, char *str, t_redir_type redir_type);
+t_redou	*create_out_node(char *str, t_redir_type redir_type);
 t_token	*last_token(t_token *list);
-t_redin	*create_in_node(t_cmd *cmd, char *str, t_redir_type redir_type, \
-			t_type token_type);
+t_redin	*create_in_node(char *str, t_redir_type redir_type, t_type token_type);
 int		create_redir_in(t_cmd *cmd, char *result, t_redir_type redir_type, \
 						t_type token_type);
 
