@@ -70,6 +70,7 @@ SRC =	./src/main.c \
 				./src/builtins/env.c \
 				./src/builtins/exit.c \
 				./src/utils/free_and_error.c\
+				./src/utils/exit_end_of_file.c \
 				./src/utils/utils.c \
 				./src/utils/syntax_check.c \
 				./src/utils/testing.c
