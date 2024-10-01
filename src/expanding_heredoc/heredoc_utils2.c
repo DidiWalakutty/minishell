@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/24 19:30:27 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/26 19:29:55 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/10/01 17:46:51 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ static void	handle_here_before(t_joined *var, t_h_dol *info, bool *mal_fail)
 {
 	if (var->before && var->before[0] != '\0')
 	{
+		if (var->joined)
+			free(var->joined);
 		var->joined = ft_strdup(var->before);
 		if (!var->joined)
 			*mal_fail = true;
@@ -37,6 +39,8 @@ static bool	handle_here_expanded(t_joined *var, t_h_dol *info, bool *mal_fail)
 		}
 		free(var->joined);
 		var->joined = temp;
+		if (info->exp_kind == IS_DOLLAR)
+			info->env_expansion = true;
 	}
 	return (true);
 }
@@ -77,5 +81,19 @@ void	handle_here_joined_string(t_joined *var, t_h_dol *info, bool *mal_fail)
 			*mal_fail = true;
 			return ;
 		}
+	}
+}
+
+void reset_expansions(t_h_dol *info)
+{
+	if (info->env_name)
+	{
+		free(info->env_name);
+		info->env_name = NULL;
+	}
+	if (info->expanded)
+	{
+		free(info->expanded);
+		info->expanded = NULL;
 	}
 }

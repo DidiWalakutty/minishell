@@ -86,6 +86,7 @@ typedef struct s_here_dol
 	int		end_var;
 	int		str_len;
 	bool	brackets;
+	bool	env_expansion;
 	bool	no_closing_brackets;
 	t_exp	exp_kind;
 }	t_h_dol;
@@ -304,6 +305,7 @@ t_cmd	*init_cmds(t_data *data);
 char	**add_to_double_array(char **arguments, char *str);
 void	continue_add_to_quote(t_token *new, t_token **list, char c, bool null);
 int		continue_add_to_word(char *str, int start, int len, t_token **list);
+void	reset_expansions(t_h_dol *info);
 
 //-------------------------------------------------------------------------//
 //                             Nodes	                                   //
