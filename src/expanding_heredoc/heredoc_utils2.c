@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/24 19:30:27 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/10/01 17:46:51 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/10/01 21:56:44 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ void	handle_here_joined_string(t_joined *var, t_h_dol *info, bool *mal_fail)
 	}
 }
 
-void reset_expansions(t_h_dol *info)
+void	reset_expansions(t_h_dol *info)
 {
 	if (info->env_name)
 	{
