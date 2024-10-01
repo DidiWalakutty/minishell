@@ -79,7 +79,7 @@ int	concatenate_quotes(t_token *list)
 	return (0);
 }
 
-int	remove_spaces(t_token *list)
+t_token	*remove_spaces(t_token *list)
 {
 	t_token	*head;
 	t_token	*to_delete;
@@ -105,5 +105,5 @@ int	remove_spaces(t_token *list)
 		else
 			before = before->next;
 	}
-	return (0);
+	return (head);
 }

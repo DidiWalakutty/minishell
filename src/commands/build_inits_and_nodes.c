@@ -45,32 +45,3 @@ static int	of_typ(t_type type)
 		return (1);
 	return (0);
 }
-
-static t_token	*remove_empty_words(t_token *list)
-{
-	t_token	*head;
-	t_token	*to_delete;
-	t_token	*before;
-
-	head = list;
-	before = list;
-	while (before && of_typ(before->type) && ft_strcmp(before->str, "") == 0)
-	{
-		to_delete = before;
-		before = to_delete->next;
-		head = before;
-		free_node(to_delete);
-	}
-	while (before && before->next)
-	{
-		if (of_typ(before->next->type) && ft_strcmp(before->next->str, "") == 0)
-		{
-			to_delete = before->next;
-			before->next = to_delete->next;
-			free_node(to_delete);
-		}
-		else
-			before = before->next;
-	}
-	return (head);
-}

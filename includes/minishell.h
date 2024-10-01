@@ -219,7 +219,8 @@ t_ad_wr	*set_process(char *str, int i);
 //                               Expander                                  //
 //-------------------------------------------------------------------------//
 
-int		expand_input(t_data *data, t_token *node, char **env);
+// int		expand_input(t_data *data, t_token *node, char **env);
+int		expand_input(t_data *data, t_token **node, char **env);
 bool	is_dollar(t_token *node, bool heredoc);
 void	extract_env_variable(t_token *node, t_dollar *dol);
 void	handle_joined_strings(t_joined *var, t_dollar *dol, t_expand *info);
@@ -296,9 +297,10 @@ int		is_valid(char c);
 void	expand_node(t_token *node, t_dollar *var, t_expand *info);
 bool	quote_type_present(t_token *node);
 int		concatenate_quotes(t_token *list);
-int		not_just_spaces(t_token *nodes);
-int		empty_words(t_token **nodes);
-int		remove_spaces(t_token *list);
+int		not_just_spaces(t_token **nodes);
+void	remove_empty_words(t_token **head);
+bool	empty_words(t_token *list);
+t_token	*remove_spaces(t_token *list);
 void	init_redirects(t_cmd *cmd);
 bool	a_redirection(t_type type);
 t_cmd	*init_cmds(t_data *data);
@@ -335,18 +337,6 @@ void	free_heredoc_info(t_h_dol *info);
 void	exit_end_of_file(t_data *data);
 void	error_exit(const char *msg, int status, t_data *data);
 void	free_joined_struct(t_joined *var);
-
-//-------------------------------------------------------------------------//
-//                               Testing                                   //
-//                       not norminette friendly                          //
-//-------------------------------------------------------------------------//
-
-const char	*type_to_string(t_type type);
-void	print_linked_list(t_token *head);
-void	print_env(char **env);
-void	print_commands(t_cmd *cmd);
-void	print_redou(t_redou *redir);
-void	print_redin(t_redin *redir);
 
 //-------------------------------------------------------------------------//
 //                           Execution                                     //

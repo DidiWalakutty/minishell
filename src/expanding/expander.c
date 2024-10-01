@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/06/14 18:36:22 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/10/01 15:59:07 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/10/01 21:07:18 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,14 +57,14 @@ static int	node_expansion(t_token *node, t_expand *info, t_data *data)
 	return (0);
 }
 
-int	expand_input(t_data *data, t_token *node, char **env)
+int	expand_input(t_data *data, t_token **node, char **env)
 {
 	t_expand	*info;
 
-	info = init_info(node);
+	info = init_info(*node);
 	if (!info)
 		return (-1);
-	if (node_expansion(node, info, data) == -1)
+	if (node_expansion(*node, info, data) == -1)
 	{
 		free(info);
 		return (-1);
@@ -77,7 +77,9 @@ int	expand_input(t_data *data, t_token *node, char **env)
 			return (-1);
 		}
 	}
-	node = info->head;
+	if (empty_words(info->head) == true)
+		remove_empty_words(&(info->head));
+	*node = info->head;
 	free(info);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/08/22 18:14:21 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/30 17:20:15 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/10/01 21:15:51 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,25 +14,25 @@
 
 // Checks for space-input only and
 // pipe_usage.
-int	not_just_spaces(t_token *nodes)
+int	not_just_spaces(t_token **nodes)
 {
 	int		count;
 	bool	flag;
-	t_token	*copy;
+	t_token	*current;
 
 	count = 0;
 	flag = false;
-	copy = nodes;
-	while (nodes)
+	current = *nodes;
+	while (current)
 	{
-		if (nodes->type == SEPARATOR)
+		if (current->type == SEPARATOR)
 			flag = true;
 		count++;
-		nodes = nodes->next;
+		current = current->next;
 	}
 	if (flag && count == 1)
 		return (0);
-	remove_spaces(copy);
+	*nodes = remove_spaces(*nodes);
 	return (1);
 }
 

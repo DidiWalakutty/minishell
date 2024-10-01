@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/24 12:50:46 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/27 20:34:58 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/10/01 22:01:25 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,8 @@ static void	handle_before(t_joined *var, t_expand *info)
 	}
 }
 
-static bool	handle_expanded(t_joined *var, t_dollar *dol, t_expand *info)
+static bool	handle_expanded(t_joined *var, t_dollar *dol, \
+							t_expand *info)
 {
 	char	*temp;
 
