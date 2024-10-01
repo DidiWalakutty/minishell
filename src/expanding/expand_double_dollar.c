@@ -17,10 +17,10 @@ bool	is_double_dollar(t_token *node, bool heredoc)
 	int	i;
 
 	i = 0;
-	if (node->type != WORD && node->type != DOUBLE_QUOTE || \
+	if ((node->type != WORD && node->type != DOUBLE_QUOTE) || \
 		heredoc == true)
 		return (false);
-	while (i < ft_strlen(node->str))
+	while (i < (int)ft_strlen(node->str))
 	{
 		if (node->str[i] == '$' && (node->str[i + 1] == '$' || \
 			(node->str[i + 2] && node->str[i + 1] == '{' && \
@@ -51,7 +51,7 @@ t_dollar	*init_double_dol(t_token *node)
 	return (double_dollar);
 }
 
-static void	expand_pid(t_token *node, t_dollar *dol, t_expand *info)
+static void	expand_pid(t_token *node, t_dollar *dol)
 {
 	dol->start_env = dol->i + 1;
 	if (node->str[dol->start_env] == '{')
@@ -76,9 +76,7 @@ int	expand_pid_and_node(t_token *node, t_dollar *dol, t_expand *info)
 		if (node->str[dol->i] == '$' && (node->str[dol->i + 1] == '$' || \
 			(node->str[dol->i + 1] == '{' && node->str[dol-> i + 2] == '$')))
 		{
-			expand_pid(node, dol, info);
-			if (info->mal_fail)
-				return (-1);
+			expand_pid(node, dol);
 			expand_node(node, dol, info);
 			if (info->mal_fail)
 				return (-1);

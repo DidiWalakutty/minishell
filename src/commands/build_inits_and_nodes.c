@@ -38,10 +38,3 @@ t_cmd	*init_cmds(t_data *data)
 	command->next = NULL;
 	return (command);
 }
-
-static int	of_typ(t_type type)
-{
-	if (type == WORD || type == DOUBLE_QUOTE || type == SINGLE_QUOTE)
-		return (1);
-	return (0);
-}

@@ -6,13 +6,13 @@
 /*   By: diwalaku <diwalaku@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/24 19:30:27 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/10/01 21:56:44 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/10/01 22:22:02 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	handle_here_before(t_joined *var, t_h_dol *info, bool *mal_fail)
+static void	handle_here_before(t_joined *var, bool *mal_fail)
 {
 	if (var->before && var->before[0] != '\0')
 	{
@@ -45,7 +45,7 @@ static bool	handle_here_expanded(t_joined *var, t_h_dol *info, bool *mal_fail)
 	return (true);
 }
 
-static bool	handle_here_remainder(t_joined *var, t_h_dol *info, bool *mal_fail)
+static bool	handle_here_remainder(t_joined *var, bool *mal_fail)
 {
 	char	*temp;
 
@@ -66,12 +66,12 @@ static bool	handle_here_remainder(t_joined *var, t_h_dol *info, bool *mal_fail)
 
 void	handle_here_joined_string(t_joined *var, t_h_dol *info, bool *mal_fail)
 {
-	handle_here_before(var, info, mal_fail);
+	handle_here_before(var, mal_fail);
 	if (*mal_fail)
 		return ;
 	if (!handle_here_expanded(var, info, mal_fail) || *mal_fail)
 		return ;
-	if (!handle_here_remainder(var, info, mal_fail) || *mal_fail)
+	if (!handle_here_remainder(var, mal_fail) || *mal_fail)
 		return ;
 	if (!var->joined)
 	{

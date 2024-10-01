@@ -6,7 +6,7 @@
 /*   By: didi <didi@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/16 20:16:15 by didi          #+#    #+#                 */
-/*   Updated: 2024/09/26 20:17:14 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/10/01 22:22:28 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ t_h_dol	*init_here_exit(char *str, int exit)
 	return (new);
 }
 
-void	process_here_exit(char **copy, t_h_dol *info, bool *mal_fail)
+void	process_here_exit(t_h_dol *info, bool *mal_fail)
 {
 	while (info->i < info->str_len)
 	{

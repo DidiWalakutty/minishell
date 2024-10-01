@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                       ::::::::             */
-/*   nia_signals.c                                     :+:    :+:             */
-/*                                                    +:+                     */
-/*   By: sreerink <sreerink@student.codam.nl>        +#+                      */
-/*                                                  +#+                       */
+/*                                                        ::::::::            */
+/*   nia_signals.c                                      :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: sreerink <sreerink@student.codam.nl>         +#+                     */
+/*                                                   +#+                      */
 /*   Created: 2024/09/13 17:50:26 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/09/27 16:18:51 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/10/01 22:25:21 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,13 @@
 
 void	nia_sigint_handler(int sig)
 {
+	(void)sig;
 	write(STDERR_FILENO, "\n", 1);
 }
 
 void	nia_sigquit_handler(int sig)
 {
+	(void)sig;
 	write(STDERR_FILENO, "Quit (core dumped)\n", 19);
 }
 

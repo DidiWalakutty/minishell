@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/08/23 13:07:59 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/09/24 17:08:32 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/10/01 22:23:35 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ bool	a_redirection(t_type type)
 	return (false);
 }
 
-static t_redir_type	set_type(t_type type, t_cmd *command)
+static t_redir_type	set_type(t_type type)
 {
 	t_redir_type	redir_type;
 
@@ -74,7 +74,7 @@ int	handle_redirect(t_token **token, t_cmd **command)
 	{
 		if (a_redirection((*token)->type))
 		{
-			type = set_type((*token)->type, cmd);
+			type = set_type((*token)->type);
 			(*token) = (*token)->next;
 			if (get_filename(*token, cmd, type) == 1)
 			{

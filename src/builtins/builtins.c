@@ -16,6 +16,7 @@ int	execute_builtin(t_cmd *cmd, t_data *data)
 {
 	int		exit_status;
 
+	exit_status = 0;
 	if (cmd->builtin == CD)
 		exit_status = cd_builtin(cmd, data);
 	else if (cmd->builtin == ECHO_BUILTIN)

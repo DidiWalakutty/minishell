@@ -6,7 +6,7 @@
 /*   By: didi <didi@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 16:29:08 by didi          #+#    #+#                 */
-/*   Updated: 2024/10/01 16:48:34 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/10/01 22:19:37 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,8 +107,7 @@ void	set_env_and_expand(char *str, t_h_dol *info, char **env, bool *mal_fail)
 	expand_heredoc_string(str, info, mal_fail);
 }
 
-void	process_here_dollar(char **copy, t_h_dol *info, char **env, \
-							bool *mal_fail)
+void	process_here_dollar(t_h_dol *info, char **env, bool *mal_fail)
 {
 	while (info->i < info->str_len)
 	{

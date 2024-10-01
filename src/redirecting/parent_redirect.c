@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                       ::::::::             */
-/*   parent_redirect.c                                 :+:    :+:             */
-/*                                                    +:+                     */
-/*   By: sreerink <sreerink@student.codam.nl>        +#+                      */
-/*                                                  +#+                       */
+/*                                                        ::::::::            */
+/*   parent_redirect.c                                  :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: sreerink <sreerink@student.codam.nl>         +#+                     */
+/*                                                   +#+                      */
 /*   Created: 2024/09/27 19:40:40 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/09/30 00:33:54 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/10/01 22:24:13 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 
 int	redirect_input_parent(t_redin *redir_in)
 {
-	int	file;
-
 	if (!redir_in)
 		return (EXIT_SUCCESS);
 	if (redirect_redir_in(redir_in) == 1)

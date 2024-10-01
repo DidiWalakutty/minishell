@@ -6,7 +6,7 @@
 /*   By: diwalaku <diwalaku@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/10 18:10:20 by diwalaku      #+#    #+#                 */
-/*   Updated: 2024/10/01 17:52:28 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/10/01 22:22:33 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static void	set_heredoc_dollar(char **copy, char **env, bool *mal_fail)
 		*mal_fail = true;
 		return ;
 	}
-	process_here_dollar(copy, info, env, mal_fail);
+	process_here_dollar(info, env, mal_fail);
 	if (*mal_fail)
 	{
 		free_heredoc_info(info);
@@ -40,7 +40,7 @@ static void	set_heredoc_dollar(char **copy, char **env, bool *mal_fail)
 	free_heredoc_info(info);
 }
 
-static void	set_heredoc_pid(char **copy, char **env, bool *mal_fail)
+static void	set_heredoc_pid(char **copy, bool *mal_fail)
 {
 	t_h_dol	*info;
 
@@ -51,7 +51,7 @@ static void	set_heredoc_pid(char **copy, char **env, bool *mal_fail)
 		*mal_fail = true;
 		return ;
 	}
-	process_here_pid(copy, info, mal_fail);
+	process_here_pid(info, mal_fail);
 	if (*mal_fail)
 	{
 		free_heredoc_info(info);
@@ -79,7 +79,7 @@ static void	set_heredoc_exit(char **copy, t_data *data, bool *mal_fail)
 		*mal_fail = true;
 		return ;
 	}
-	process_here_exit(copy, info, mal_fail);
+	process_here_exit(info, mal_fail);
 	if (*mal_fail)
 	{
 		free_heredoc_info(info);
@@ -113,7 +113,7 @@ char	*heredoc_expanding(char *str, t_data *data)
 		if (is_heredoc_dollar(copy, i))
 			set_heredoc_dollar(&copy, data->env, &mal_fail);
 		if (is_heredoc_double(copy, i))
-			set_heredoc_pid(&copy, data->env, &mal_fail);
+			set_heredoc_pid(&copy, &mal_fail);
 		if (is_heredoc_exit(copy, i))
 			set_heredoc_exit(&copy, data, &mal_fail);
 		if (mal_fail == true)

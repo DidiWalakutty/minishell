@@ -17,10 +17,10 @@ bool	is_exit_status(t_token *node, bool heredoc)
 	int	i;
 
 	i = 0;
-	if (node->type != WORD && node->type != DOUBLE_QUOTE || \
+	if ((node->type != WORD && node->type != DOUBLE_QUOTE) || \
 		heredoc == true)
 		return (false);
-	while (i < ft_strlen(node->str))
+	while (i < (int)ft_strlen(node->str))
 	{
 		if (node->str[i] == '$' && (node->str[i + 1] == '?' || \
 			(node->str[i + 2] && node->str[i + 1] == '{' && \
