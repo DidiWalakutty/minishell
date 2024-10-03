@@ -15,10 +15,8 @@
 bool	quote_type_present(t_token *node)
 {
 	int	i;
-	int	quote_num;
 
 	i = 0;
-	quote_num = 0;
 	while (node)
 	{
 		if (node->type == SINGLE_QUOTE || node->type == DOUBLE_QUOTE || \
