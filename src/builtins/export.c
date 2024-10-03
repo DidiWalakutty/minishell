@@ -6,20 +6,16 @@
 /*   By: sreerink <sreerink@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2024/08/27 19:22:55 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/10/03 18:58:56 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/10/03 22:40:00 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static char	**parse_export_arg(char *arg, size_t i)
+static bool	parse_export_arg(char *arg, char **result, size_t i)
 {
 	size_t	len;
-	char	**result;
 
-	result = ft_calloc(3, sizeof(char *));
-	if (!result)
-		return (NULL);
 	len = i;
 	if (arg[i - 1] == '+')
 	{
@@ -30,14 +26,14 @@ static char	**parse_export_arg(char *arg, size_t i)
 	}
 	result[1] = ft_strndup(arg, len);
 	if (!result[1])
-		return (NULL);
+		return (false);
 	if (arg[i + 1])
 	{
 		result[2] = ft_strdup(arg + i + 1);
 		if (!result[2])
-			return (NULL);
+			return (false);
 	}
-	return (result);
+	return (true);
 }
 
 static size_t	export_check_chars(char *arg)
@@ -67,11 +63,16 @@ static char	**check_export_arg(char *arg)
 	char	**result;
 	size_t	i;
 
+	result = ft_calloc(3, sizeof(char *));
+	if (!result)
+		return (NULL);
 	i = export_check_chars(arg);
 	if (i == 0)
+	{
+		free(result);
 		return (export_error_msg(arg));
-	result = parse_export_arg(arg, i);
-	if (!result)
+	}
+	if (!parse_export_arg(arg, result, i))
 	{
 		free(result[1]);
 		free(result[2]);
