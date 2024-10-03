@@ -6,7 +6,7 @@
 /*   By: sreerink <sreerink@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2024/08/27 19:22:55 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/09/30 23:27:35 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/10/03 18:58:56 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,31 +40,45 @@ static char	**parse_export_arg(char *arg, size_t i)
 	return (result);
 }
 
-static char	**check_export_arg(char *arg)
+static size_t	export_check_chars(char *arg)
 {
 	size_t	i;
-	char	**result;
 
-	i = 0;
+	i = 1;
+	if (ft_isdigit(arg[0]) || (!ft_isalpha(arg[0]) && arg[0] != '_'))
+		return (0);
 	while (arg[i])
 	{
 		if (arg[i] == '=')
+			return (i);
+		if (!is_alph_or_num(arg[i]) && arg[i] != '_')
 		{
-			if (i == 0 || (!is_alph_or_num(arg[i - 1]) && arg[i - 1] != '+'))
-				return (export_error_msg(arg));
-			result = parse_export_arg(arg, i);
-			if (!result)
-			{
-				free(result[1]);
-				free(result[2]);
-				free(result);
-				return (NULL);
-			}
-			return (result);
+			if (arg[i] == '+' && arg[i + 1] == '=')
+				return (i + 1);
+			return (0);
 		}
 		i++;
 	}
-	return (NULL);
+	return (0);
+}
+
+static char	**check_export_arg(char *arg)
+{
+	char	**result;
+	size_t	i;
+
+	i = export_check_chars(arg);
+	if (i == 0)
+		return (export_error_msg(arg));
+	result = parse_export_arg(arg, i);
+	if (!result)
+	{
+		free(result[1]);
+		free(result[2]);
+		free(result);
+		return (NULL);
+	}
+	return (result);
 }
 
 static void	update_env_export(char **export_args, t_cmd *cmd, t_data *data)
