@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                       ::::::::             */
-/*   modify_env.c                                      :+:    :+:             */
+/*   modify_env.c                                        :+:    :+:           */
 /*                                                    +:+                     */
 /*   By: sreerink <sreerink@student.codam.nl>        +#+                      */
 /*                                                  +#+                       */
 /*   Created: 2024/08/17 00:13:39 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/09/28 00:18:57 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/10/03 15:28:57 by diwalaku       ########   odam.nl        */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ bool	add_var_value(char *new_value, char *var_dst, char **env)
 		return (false);
 	free(env[i]);
 	env[i] = ft_strjoin(var_temp, new_value);
+	free(var_temp);
 	if (!env[i])
 		return (false);
 	return (true);
