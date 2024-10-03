@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   execute.c                                          :+:    :+:            */
+/*   execute.c                                         :+:    :+:             */
 /*                                                     +:+                    */
 /*   By: sreerink <sreerink@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/27 18:06:24 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/10/03 17:54:30 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/10/03 21:53:45 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,9 +81,15 @@ static int	wait_childs(t_cmd *cmds)
 	if (WIFSIGNALED(status))
 	{
 		if (WTERMSIG(status) == SIGINT)
+		{
+			write(STDERR_FILENO, "\n", 1);
 			exit_status = 130;
+		}
 		if (WTERMSIG(status) == SIGQUIT)
+		{
+			write(STDERR_FILENO, "Quit (core dumped)\n", 19);
 			exit_status = 131;
+		}
 	}
 	return (exit_status);
 }
