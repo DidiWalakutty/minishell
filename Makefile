@@ -81,7 +81,6 @@ OBJDIR	= obj
 
 # Objectives
 all: $(LIBFT) $(OBJDIR) $(NAME)
-	@echo "Compilation Done"
 
 $(NAME): $(LIBFT) $(OBJ)
 	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT) $(LFLAGS) -o $(NAME)

@@ -6,7 +6,7 @@
 /*   By: didi <didi@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/14 16:18:18 by didi          #+#    #+#                 */
-/*   Updated: 2024/10/01 22:00:00 by diwalaku      ########   odam.nl         */
+/*   Updated: 2024/10/03 17:55:00 by diwalaku      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,41 +61,21 @@ void	extract_env_variable(t_token *node, t_dollar *dol)
 		dol->no_closing_bracket = true;
 }
 
-static void	remove_node(t_token **head, t_token **prev, t_token **current)
-{
-	if (*prev == NULL)
-	{
-		*head = (*current)->next;
-		free_node(*current);
-		*current = *head;
-	}
-	else
-	{
-		(*prev)->next = (*current)->next;
-		free_node(*current);
-		*current = (*prev)->next;
-	}
-}
-
 void	remove_empty_words(t_token **head)
 {
 	t_token	*current;
-	t_token	*prev;
 
 	current = *head;
-	prev = NULL;
 	while (current)
 	{
-		if (current->type == WORD && ft_strcmp(current->str, "") == 0)
+		if ((current->type == WORD || current->type == DOUBLE_QUOTE) && \
+			ft_strcmp(current->str, "") == 0)
 		{
-			if (prev == NULL)
-				remove_node(head, &prev, &current);
+			free(current->str);
+			current->type = SEPARATOR;
+			current->str = ft_strdup(" ");
 		}
-		else
-		{
-			prev = current;
-			current = current->next;
-		}
+		current = current->next;
 	}
 }
 
