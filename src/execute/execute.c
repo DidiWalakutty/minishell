@@ -6,7 +6,7 @@
 /*   By: sreerink <sreerink@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/27 18:06:24 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/10/03 21:53:45 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/10/04 20:29:42 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ static int	wait_childs(t_cmd *cmds)
 	int	status;
 	int	exit_status;
 
+	exit_status = 0;
 	while (cmds)
 	{
 		waitpid(cmds->pid, &status, 0);
