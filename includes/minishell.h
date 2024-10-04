@@ -26,10 +26,7 @@
 # include <fcntl.h>
 # include <sys/wait.h>
 
-// Defining ANSI colors
-//
-
-# define SHELL_NAME "Minishell$ " // which name, colors?
+# define SHELL_NAME "Minishell$ "
 
 typedef enum s_type			t_type;
 typedef enum s_exp			t_exp;
@@ -53,10 +50,10 @@ typedef enum s_type
 	PIPE,
 	DOUBLE_QUOTE,
 	SINGLE_QUOTE,
-	REDIR_IN,		// <  in
-	REDIR_OUT,		// >  out
-	HERE_DOC,		// << heredoc
-	APPEND,			// >> append
+	REDIR_IN,
+	REDIR_OUT,
+	HERE_DOC,
+	APPEND,
 }	t_type;
 
 typedef enum s_exp
