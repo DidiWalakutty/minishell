@@ -36,7 +36,7 @@ how shells interact with the operating system.
 
 To try our Minishell yourself, please follow the next steps:
 
-1.  Compile the game with the following command:
+1.  Compile our shell with the following command:
 ```
 $ make
 ```
